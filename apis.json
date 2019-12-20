@@ -1,0 +1,72 @@
+{
+    "name": "Uploadcare",
+    "description": "<p>Beautiful HTML5 widget, API to manage files in cloud storage, smart and fast CDN to deliver them to your end users. Crop, resize and transform uploaded images using URL commands. Transfer entire HD videos, documents and huge sets of photos, upload media from different sources. With Uploadcare your users can upload files up to 5 TB in size.<\/p>",
+    "image": "http:\/\/kinlane-productions.s3.amazonaws.com\/api-evangelist-site\/company\/logos\/uploadcare-logo.png",
+    "tags": [
+        "apis.io import",
+        "cloud",
+        "cloud storage",
+        "conversions",
+        "files",
+        "have api",
+        "media management",
+        "storage",
+        "thumbnails",
+        "uploads"
+    ],
+    "created": "2019-12-19",
+    "modified": "2019-12-19",
+    "url": "https:\/\/raw.githubusercontent.com\/api-evangelist\/uploadcare\/master\/apis.json",
+    "specificationVersion": "0.14",
+    "apis": [
+        {
+            "name": "Uploadcare",
+            "description": null,
+            "image": "http:\/\/kinlane-productions.s3.amazonaws.com\/api-evangelist-site\/company\/logos\/uploadcare-logo.png",
+            "humanURL": "http:\/\/uploadcare.com",
+            "baseURL": "",
+            "tags": [],
+            "properties": [
+                {
+                    "type": "x-openapi",
+                    "url": "https:\/\/raw.githubusercontent.com\/api-evangelist\/1forge\/master\/uploadcare-openapi.json"
+                }
+            ]
+        }
+    ],
+    "include": [],
+    "x-common": [
+        {
+            "type": "API.json - Authoritative",
+            "url": "https:\/\/uploadcare.com\/apis.json"
+        },
+        {
+            "type": "Blog",
+            "url": "http:\/\/blog.uploadcare.com\/"
+        },
+        {
+            "type": "Blog RSS",
+            "url": "http:\/\/blog.uploadcare.com\/rss\/"
+        },
+        {
+            "type": "Github",
+            "url": "https:\/\/github.com\/uploadcare"
+        },
+        {
+            "type": "Pricing",
+            "url": "https:\/\/uploadcare.com\/pricing\/"
+        },
+        {
+            "type": "Twitter",
+            "url": "https:\/\/twitter.com\/uploadcare"
+        },
+        {
+            "type": "Website",
+            "url": "https:\/\/uploadcare.com\/"
+        },
+        {
+            "type": "Website",
+            "url": "http:\/\/uploadcare.com"
+        }
+    ]
+}
