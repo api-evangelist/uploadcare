@@ -1,0 +1,173 @@
+specificationVersion: "0.1"
+id: uploadcare-plans-pricing
+name: Uploadcare Plans & Pricing
+description: >-
+  Uploadcare offers tiered pricing plans based on monthly operations, storage,
+  bandwidth, and maximum file size. Plans range from a free tier for
+  development/testing to enterprise-grade custom pricing.
+url: https://uploadcare.com/pricing/
+currency: USD
+plans:
+  - name: Free
+    description: >-
+      Free plan for getting started with Uploadcare. Includes core upload and
+      CDN delivery features with limited operations and file size.
+    price: 0
+    billing: monthly
+    features:
+      - name: Operations
+        description: Monthly file operations (uploads, transformations, deliveries)
+        value: "1,000"
+      - name: Max File Size
+        description: Maximum size per uploaded file
+        value: 10 MB
+      - name: Storage
+        description: Included file storage
+        value: 1 GB
+      - name: CDN Delivery
+        description: Global Smart CDN delivery
+        value: Included
+      - name: Upload Widget
+        description: Embeddable file upload widget
+        value: Included
+      - name: Upload API Access
+        description: Programmatic upload API access
+        value: Included
+      - name: REST API Access
+        description: REST API for file management
+        value: Included
+
+  - name: Pro
+    description: >-
+      Professional plan for growing products with higher operation limits, larger
+      file sizes, and additional features. Annual billing saves 16%.
+    price: 66
+    billing: monthly
+    annualPrice: 55.44
+    features:
+      - name: Operations
+        description: Monthly file operations
+        value: "100,000"
+      - name: Max File Size
+        description: Maximum size per uploaded file
+        value: 1 GB
+      - name: Storage
+        description: Included file storage
+        value: 10 GB
+      - name: Bandwidth
+        description: Included CDN traffic
+        value: 50 GB
+      - name: CDN Delivery
+        description: Global Smart CDN delivery
+        value: Included
+      - name: Upload Widget
+        description: Embeddable file upload widget
+        value: Included
+      - name: REST API Access
+        description: Full REST API access
+        value: Included
+      - name: Webhooks
+        description: Event-driven webhook notifications
+        value: Included
+      - name: Add-ons
+        description: Platform add-ons (malware scan, background removal, etc.)
+        value: Available
+      - name: Image Transformations
+        description: On-the-fly CDN image transformations
+        value: Included
+      - name: Operations Overage
+        description: Cost per 1,000 additional operations
+        value: "$0.50"
+      - name: Storage Overage
+        description: Cost per additional GB of storage
+        value: "$0.10"
+
+  - name: Business
+    description: >-
+      Business plan for high-volume production workloads with premium features
+      including custom domains, whitelabeling, and dedicated support. Annual
+      billing saves 16%.
+    price: 166
+    billing: monthly
+    annualPrice: 139.44
+    features:
+      - name: Operations
+        description: Monthly file operations
+        value: "250,000"
+      - name: Max File Size
+        description: Maximum size per uploaded file
+        value: 10 GB
+      - name: Storage
+        description: Included file storage
+        value: 100 GB
+      - name: Bandwidth
+        description: Included CDN traffic
+        value: 500 GB
+      - name: CDN Delivery
+        description: Global Smart CDN delivery
+        value: Included
+      - name: Custom API Domain
+        description: Use your own custom domain for API calls
+        value: Included
+      - name: Custom CDN Domain
+        description: Use your own custom CDN domain
+        value: Included
+      - name: Whitelabeling
+        description: White-label upload widget (no Uploadcare branding)
+        value: Included
+      - name: Custom OAuth Apps
+        description: Create custom OAuth applications
+        value: Included
+      - name: Dedicated Solution Engineer
+        description: Access to dedicated technical support engineer
+        value: Included
+      - name: Webhooks
+        description: Event-driven webhook notifications
+        value: Included
+      - name: Add-ons
+        description: Platform add-ons
+        value: Available
+      - name: Operations Overage
+        description: Cost per 1,000 additional operations
+        value: "$0.45"
+      - name: Storage Overage
+        description: Cost per additional GB of storage
+        value: "$0.08"
+
+  - name: Enterprise
+    description: >-
+      Custom enterprise plan for large-scale deployments requiring dedicated
+      infrastructure, SLAs, compliance, and tailored support agreements.
+    price: custom
+    billing: custom
+    features:
+      - name: Operations
+        description: Custom monthly operation limits
+        value: Custom
+      - name: Max File Size
+        description: Maximum size per uploaded file
+        value: Up to 5 TB
+      - name: Storage
+        description: Custom storage allocation
+        value: Custom
+      - name: Bandwidth
+        description: Custom CDN traffic allocation
+        value: Custom
+      - name: Dedicated Infrastructure
+        description: Dedicated or isolated infrastructure options
+        value: Available
+      - name: SLA
+        description: Custom Service Level Agreements
+        value: Available
+      - name: Compliance
+        description: Custom compliance and data residency options
+        value: Available
+      - name: Custom Domains
+        description: Custom API and CDN domains
+        value: Included
+      - name: Whitelabeling
+        description: Full white-label capabilities
+        value: Included
+      - name: Enterprise Support
+        description: Dedicated enterprise support team
+        value: Included

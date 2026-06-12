@@ -1,0 +1,189 @@
+specificationVersion: "1.0"
+id: uploadcare-finops
+name: Uploadcare FinOps
+description: >-
+  FinOps cost management framework for Uploadcare API consumption. Covers cost
+  drivers, optimization strategies, allocation approaches, and budgeting for
+  file upload, storage, transformation, and CDN delivery workloads.
+url: https://uploadcare.com/pricing/
+framework: FinOps Foundation FOCUS 1.0
+
+costDrivers:
+  - name: Operations
+    description: >-
+      The primary cost unit. Each file upload, transformation, or platform action
+      counts as one or more operations against your monthly quota. Overages are
+      billed at per-1,000 rates.
+    unit: operations
+    pricingModel: tiered
+    tiers:
+      - plan: Free
+        included: 1000
+        overage: N/A
+      - plan: Pro
+        included: 100000
+        overage: 0.50
+        overageUnit: per 1,000 operations
+      - plan: Business
+        included: 250000
+        overage: 0.45
+        overageUnit: per 1,000 operations
+      - plan: Enterprise
+        included: custom
+        overage: negotiated
+
+  - name: Storage
+    description: >-
+      Persistent file storage costs for uploaded files. Storage is measured in
+      GB-months. Transformed/cached CDN variants do not count against storage.
+    unit: GB/month
+    pricingModel: tiered
+    tiers:
+      - plan: Free
+        included: 1
+        overage: N/A
+      - plan: Pro
+        included: 10
+        overage: 0.10
+        overageUnit: per GB
+      - plan: Business
+        included: 100
+        overage: 0.08
+        overageUnit: per GB
+      - plan: Enterprise
+        included: custom
+        overage: negotiated
+
+  - name: CDN Bandwidth
+    description: >-
+      Egress bandwidth consumed by CDN file delivery to end users. On-the-fly
+      image transformation variants served from CDN edge nodes count toward
+      bandwidth. Measured in GB transferred per month.
+    unit: GB/month
+    pricingModel: tiered
+    tiers:
+      - plan: Free
+        included: 1
+        overage: N/A
+      - plan: Pro
+        included: 50
+        overage: contact
+      - plan: Business
+        included: 500
+        overage: negotiated
+      - plan: Enterprise
+        included: custom
+        overage: negotiated
+
+  - name: Add-on Usage
+    description: >-
+      Premium add-ons for extended processing: malware scanning, background
+      removal, object recognition, document conversion. Each add-on invocation
+      may consume additional operations or carry its own per-use fee.
+    unit: per invocation
+    pricingModel: consumption
+    examples:
+      - name: Malware Scanning
+        description: ClamAV-based malware scan per file
+        billing: per operation
+      - name: Background Removal
+        description: AI-powered background removal for images
+        billing: per operation
+      - name: Document Conversion
+        description: Convert documents (PDF, DOCX) to image formats
+        billing: per conversion
+      - name: Video Encoding
+        description: Video transcoding and format conversion
+        billing: per encoding job
+
+optimization:
+  - name: Use CDN Caching to Reduce Repeat Operations
+    description: >-
+      Image transformation results are cached on CDN edge nodes after the first
+      request. Repeated requests for the same transformation URL do not generate
+      additional operations, significantly reducing costs for frequently accessed
+      transformed images.
+    impact: high
+
+  - name: Serve Transformations via URL Parameters
+    description: >-
+      Use Uploadcare's URL-based image transformation API (CDN operations)
+      instead of pre-generating variants. CDN-cached results are not counted
+      toward storage, keeping storage costs minimal while enabling format
+      flexibility.
+    impact: high
+
+  - name: Annual Billing Discount
+    description: >-
+      Opting for annual billing saves 16% versus monthly billing. For a Pro plan
+      at $66/month, annual billing reduces the cost to $55.44/month, saving
+      $126.72/year.
+    impact: medium
+    savings: 16%
+
+  - name: Right-size Plan Based on Operations
+    description: >-
+      Monitor monthly operations usage via the Uploadcare dashboard. If usage
+      consistently remains below the included threshold, downgrade to a lower
+      plan. If overages are frequent, upgrade to avoid per-1,000 overage charges.
+    impact: high
+
+  - name: Optimize File Sizes Before Upload
+    description: >-
+      Use client-side compression or resizing before uploading to reduce storage
+      consumption and bandwidth costs. Smaller source files reduce storage costs
+      and CDN delivery costs.
+    impact: medium
+
+  - name: Clean Up Unused Files
+    description: >-
+      Regularly audit and delete files no longer in use via the REST API file
+      delete endpoint. Unused files continue to consume storage quota and drive
+      monthly costs.
+    impact: medium
+
+  - name: Use Multipart Upload for Large Files Efficiently
+    description: >-
+      For files over 100 MB, use multipart uploads to improve reliability.
+      Failed partial uploads should be cleaned up to avoid accumulating
+      incomplete file storage charges.
+    impact: low
+
+allocation:
+  - name: Project-level Segregation
+    description: >-
+      Uploadcare organizes files and API keys by project. Use separate projects
+      for different applications, teams, or environments (dev/staging/prod) to
+      track cost allocation and operations consumption independently.
+
+  - name: Webhook-driven Usage Tracking
+    description: >-
+      Configure webhooks to receive notifications for file upload events. Use
+      these events to track which application components or user actions are
+      generating operations, enabling fine-grained cost attribution.
+
+  - name: Metadata Tagging
+    description: >-
+      Attach file metadata (via REST API) such as application name, user ID, or
+      feature flag to uploaded files. Query metadata to correlate storage and
+      operation usage with specific product areas or customers.
+
+budgeting:
+  - name: Monitor Operations Consumption
+    description: >-
+      Track monthly operations usage through the Uploadcare dashboard. Set
+      internal alerts when usage approaches 80% of the monthly included quota
+      to avoid unexpected overage charges.
+
+  - name: Forecast Based on User Growth
+    description: >-
+      Operations typically scale with user-generated content and active users.
+      Model expected operations growth against user acquisition projections to
+      forecast when plan upgrades will be needed.
+
+  - name: Overage Buffer Planning
+    description: >-
+      Budget for a 10-20% overage buffer above included plan limits during
+      traffic spikes, product launches, or seasonal demand increases. Overage
+      rates on Pro ($0.50/1k ops) and Business ($0.45/1k ops) can add
+      meaningfully to monthly bills during peak periods.

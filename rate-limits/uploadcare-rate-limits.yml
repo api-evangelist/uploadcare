@@ -1,0 +1,128 @@
+specificationVersion: "0.1"
+id: uploadcare-rate-limits
+name: Uploadcare Rate Limits
+description: >-
+  Uploadcare enforces rate limits and operational quotas across its REST API,
+  Upload API, and CDN delivery layer. Limits vary by pricing plan. Throttled
+  requests trigger automatic retry behavior in official SDKs.
+url: https://uploadcare.com/docs/billing/
+rateLimits:
+  - name: Monthly Operations Quota
+    description: >-
+      Total monthly operations count covering uploads, transformations, and
+      other platform actions. Tracked per billing period. Overage charges apply
+      when the quota is exceeded.
+    scope: account
+    plans:
+      - plan: Free
+        value: 1000
+        unit: operations/month
+      - plan: Pro
+        value: 100000
+        unit: operations/month
+        overage: "$0.50 per 1,000 operations"
+      - plan: Business
+        value: 250000
+        unit: operations/month
+        overage: "$0.45 per 1,000 operations"
+      - plan: Enterprise
+        value: custom
+        unit: operations/month
+
+  - name: Maximum File Size
+    description: >-
+      Maximum size of a single file that can be uploaded. Files exceeding this
+      limit will be rejected. Enterprise customers can upload files up to 5 TB
+      with special arrangement.
+    scope: request
+    plans:
+      - plan: Free
+        value: 10
+        unit: MB
+      - plan: Pro
+        value: 1
+        unit: GB
+      - plan: Business
+        value: 10
+        unit: GB
+      - plan: Enterprise
+        value: 5
+        unit: TB (with arrangement)
+
+  - name: REST API Request Throttling
+    description: >-
+      REST API requests that trigger high server load may be throttled. The
+      official Uploadcare SDKs automatically retry throttled requests using
+      exponential backoff. The HTTP 429 status code is returned when the rate
+      limit is exceeded.
+    scope: api
+    httpStatus: 429
+    retryBehavior: >-
+      Official SDKs retry throttled requests automatically up to the configured
+      retryThrottledRequestMaxTimes limit with backoff.
+
+  - name: Concurrent Uploads
+    description: >-
+      Uploadcare Upload API supports parallel concurrent file uploads. Each
+      upload creates a unique UUID-tracked entry. Multiple files can be uploaded
+      simultaneously from the upload widget or API clients.
+    scope: request
+    behavior: Parallel concurrent uploads supported
+
+  - name: Multipart Upload Chunk Size
+    description: >-
+      For large file uploads via multipart upload, files are split into chunks.
+      Standard chunk size for multipart uploads.
+    scope: request
+    value: 5
+    unit: MB per part (minimum)
+
+  - name: Monthly Storage Quota
+    description: >-
+      Included file storage per billing period. Storage overage charges apply
+      when quota is exceeded.
+    scope: account
+    plans:
+      - plan: Free
+        value: 1
+        unit: GB/month
+        overage: N/A (upgrade required)
+      - plan: Pro
+        value: 10
+        unit: GB/month
+        overage: "$0.10 per additional GB"
+      - plan: Business
+        value: 100
+        unit: GB/month
+        overage: "$0.08 per additional GB"
+      - plan: Enterprise
+        value: custom
+        unit: GB/month
+
+  - name: Monthly CDN Bandwidth Quota
+    description: >-
+      Included CDN delivery bandwidth per billing period. Overage charges apply
+      when quota is exceeded.
+    scope: account
+    plans:
+      - plan: Free
+        value: 1
+        unit: GB/month
+      - plan: Pro
+        value: 50
+        unit: GB/month
+      - plan: Business
+        value: 500
+        unit: GB/month
+      - plan: Enterprise
+        value: custom
+        unit: GB/month
+
+  - name: API Version Support Window
+    description: >-
+      When backward-incompatible changes are introduced, new major API versions
+      are released. Each published version is supported for a minimum of 2 years
+      before deprecation.
+    scope: platform
+    value: 2
+    unit: years per API version
