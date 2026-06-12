@@ -1,0 +1,228 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://uploadcare.com/schemas/file",
+  "title": "Uploadcare File",
+  "description": "Uploadcare file schema",
+  "type": "object",
+  "required": [
+    "datetime_removed",
+    "datetime_stored",
+    "datetime_uploaded",
+    "is_image",
+    "is_ready",
+    "mime_type",
+    "original_file_url",
+    "original_filename",
+    "size",
+    "url",
+    "uuid",
+    "variations",
+    "content_info",
+    "metadata"
+  ],
+  "properties": {
+    "datetime_removed": {
+      "type": "string",
+      "format": "date-time",
+      "nullable": true,
+      "description": "Date and time when a file was removed, if any."
+    },
+    "datetime_stored": {
+      "type": "string",
+      "format": "date-time",
+      "nullable": true,
+      "description": "Date and time of the last store request, if any."
+    },
+    "datetime_uploaded": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Date and time when a file was uploaded."
+    },
+    "is_image": {
+      "type": "boolean",
+      "description": "Is file is image.",
+      "example": true
+    },
+    "is_ready": {
+      "type": "boolean",
+      "description": "Is file is ready to be used after upload.",
+      "example": true
+    },
+    "mime_type": {
+      "type": "string",
+      "description": "File MIME-type.",
+      "example": "image/jpeg"
+    },
+    "original_file_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "Publicly available file CDN URL. Available if a file is not deleted.",
+      "nullable": true,
+      "example": "https://ucarecdn.com/e575ed4e8-f4e8-4c14-a58b-1527b6d9ee46/EU_4.jpg"
+    },
+    "original_filename": {
+      "type": "string",
+      "description": "Original file name taken from uploaded file.",
+      "example": "EU_4.jpg"
+    },
+    "size": {
+      "type": "integer",
+      "description": "File size in bytes.",
+      "example": 145212
+    },
+    "url": {
+      "type": "string",
+      "format": "uri",
+      "description": "API resource URL for a particular file.",
+      "example": "https://api.uploadcare.com/files/e10ce759-42c3-4185-bae5-e22a9143d68f/"
+    },
+    "uuid": {
+      "type": "string",
+      "format": "uuid",
+      "description": "File UUID.",
+      "example": "575ed4e8-f4e8-4c14-a58b-1527b6d9ee46"
+    },
+    "appdata": {
+      "$ref": "#/components/schemas/applicationDataObject"
+    },
+    "variations": {
+      "type": "object",
+      "nullable": true,
+      "description": "Dictionary of other files that were created using this file as a source. It's used for video processing and document conversion jobs. E.g., `<conversion_path>: <uuid>`."
+    },
+    "content_info": {
+      "$ref": "#/components/schemas/contentInfo"
+    },
+    "metadata": {
+      "$ref": "#/components/schemas/metadata"
+    }
+  },
+  "example": {
+    "datetime_removed": null,
+    "datetime_stored": "2018-11-26T12:49:10.477888Z",
+    "datetime_uploaded": "2018-11-26T12:49:09.945335Z",
+    "variations": null,
+    "is_image": true,
+    "is_ready": true,
+    "mime_type": "image/jpeg",
+    "original_file_url": "https://ucarecdn.com/22240276-2f06-41f8-9411-755c8ce926ed/pineapple.jpg",
+    "original_filename": "pineapple.jpg",
+    "size": 642,
+    "url": "https://api.uploadcare.com/files/22240276-2f06-41f8-9411-755c8ce926ed/",
+    "uuid": "22240276-2f06-41f8-9411-755c8ce926ed",
+    "content_info": {
+      "mime": {
+        "mime": "image/jpeg",
+        "type": "image",
+        "subtype": "jpeg"
+      },
+      "image": {
+        "format": "JPEG",
+        "width": 500,
+        "height": 500,
+        "sequence": false,
+        "color_mode": "RGB",
+        "orientation": 6,
+        "geo_location": {
+          "latitude": 55.62013611111111,
+          "longitude": 37.66299166666666
+        },
+        "datetime_original": "2018-08-20T08:59:50",
+        "dpi": [
+          72,
+          72
+        ]
+      }
+    },
+    "metadata": {
+      "subsystem": "uploader",
+      "pet": "cat"
+    },
+    "appdata": {
+      "aws_rekognition_detect_labels": {
+        "data": {
+          "LabelModelVersion": "2.0",
+          "Labels": [
+            {
+              "Confidence": 93.41645812988281,
+              "Instances": [],
+              "Name": "Home Decor",
+              "Parents": []
+            },
+            {
+              "Confidence": 70.75951385498047,
+              "Instances": [],
+              "Name": "Linen",
+              "Parents": [
+                {
+                  "Name": "Home Decor"
+                }
+              ]
+            },
+            {
+              "Confidence": 64.7123794555664,
+              "Instances": [],
+              "Name": "Sunlight",
+              "Parents": []
+            },
+            {
+              "Confidence": 56.264793395996094,
+              "Instances": [],
+              "Name": "Flare",
+              "Parents": [
+                {
+                  "Name": "Light"
+                }
+              ]
+            },
+            {
+              "Confidence": 50.47153854370117,
+              "Instances": [],
+              "Name": "Tree",
+              "Parents": [
+                {
+                  "Name": "Plant"
+                }
+              ]
+            }
+          ]
+        },
+        "version": "2016-06-27",
+        "datetime_created": "2021-09-21T11:25:31.259763Z",
+        "datetime_updated": "2021-09-21T11:27:33.359763Z"
+      },
+      "aws_rekognition_detect_moderation_labels": {
+        "data": {
+          "ModerationModelVersion": "6.0",
+          "ModerationLabels": [
+            {
+              "Confidence": 93.41645812988281,
+              "Name": "Weapons",
+              "ParentName": "Violence"
+            }
+          ]
+        },
+        "version": "2016-06-27",
+        "datetime_created": "2023-02-21T11:25:31.259763Z",
+        "datetime_updated": "2023-02-21T11:27:33.359763Z"
+      },
+      "remove_bg": {
+        "data": {
+          "foreground_type": "person"
+        },
+        "version": "1.0",
+        "datetime_created": "2021-07-25T12:24:33.159663Z",
+        "datetime_updated": "2021-07-25T12:24:33.159663Z"
+      },
+      "uc_clamav_virus_scan": {
+        "data": {
+          "infected": true,
+          "infected_with": "Win.Test.EICAR_HDB-1"
+        },
+        "version": "0.104.2",
+        "datetime_created": "2021-09-21T11:24:33.159663Z",
+        "datetime_updated": "2021-09-21T11:24:33.159663Z"
+      }
+    }
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://uploadcare.com/schemas/contentInfo",
+  "title": "Uploadcare Contentinfo",
+  "description": "Information about file content.",
+  "type": "object",
+  "nullable": true,
+  "properties": {
+    "mime": {
+      "type": "object",
+      "description": "MIME type.",
+      "required": [
+        "mime",
+        "type",
+        "subtype"
+      ],
+      "properties": {
+        "mime": {
+          "type": "string",
+          "description": "Full MIME type.",
+          "example": "image/jpeg"
+        },
+        "type": {
+          "type": "string",
+          "description": "Type of MIME type.",
+          "example": "image"
+        },
+        "subtype": {
+          "type": "string",
+          "description": "Subtype of MIME type.",
+          "example": "jpeg"
+        }
+      }
+    },
+    "image": {
+      "$ref": "#/components/schemas/imageInfo"
+    },
+    "video": {
+      "$ref": "#/components/schemas/videoInfo"
+    }
+  }
+}

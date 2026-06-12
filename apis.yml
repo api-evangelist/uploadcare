@@ -46,6 +46,8 @@ apis:
         url: https://uploadcare.com/docs/rest_api/
       - type: OpenAPI
         url: https://uploadcare.com/api-refs/rest-api/v0.7.0/
+      - type: OpenAPI
+        url: openapi/uploadcare-rest-api-openapi.yml
 
   - aid: uploadcare:upload-api
     name: Uploadcare Upload API
@@ -67,6 +69,8 @@ apis:
         url: https://uploadcare.com/docs/api/upload/
       - type: OpenAPI
         url: https://uploadcare.com/api-refs/upload-api/
+      - type: OpenAPI
+        url: openapi/uploadcare-upload-api-openapi.yml
 
   - aid: uploadcare:cdn-api
     name: Uploadcare CDN & Image Transformation API
@@ -87,6 +91,8 @@ apis:
     properties:
       - type: Documentation
         url: https://uploadcare.com/docs/api_reference/cdn/
+      - type: OpenAPI
+        url: openapi/uploadcare-cdn-api-openapi.yml
 
 common:
   - type: Website
@@ -111,6 +117,22 @@ common:
     url: rate-limits/uploadcare-rate-limits.yml
   - type: FinOps
     url: finops/uploadcare-finops.yml
+  - type: Vocabulary
+    url: vocabulary/uploadcare-vocabulary.yml
+  - type: JSONSchema
+    url: json-schema/uploadcare-file.json
+  - type: JSONSchema
+    url: json-schema/uploadcare-group.json
+  - type: JSONSchema
+    url: json-schema/uploadcare-project.json
+  - type: JSONSchema
+    url: json-schema/uploadcare-webhook.json
+  - type: JSONLd
+    url: json-ld/uploadcare-context.jsonld
+  - type: BlogRSS
+    url: https://uploadcare.com/blog/rss.xml
+  - type: Blogs
+    url: blogs/blogs.json
 
 maintainers:
   - FN: Kin Lane

@@ -1,0 +1,198 @@
+{
+  "provider": "uploadcare",
+  "lastFetched": "2026-06-12T00:00:00Z",
+  "feeds": [
+    {
+      "url": "https://uploadcare.com/blog/rss.xml",
+      "type": "rss",
+      "title": "Uploadcare Blog",
+      "description": "News, tips, and how-tos about optimizing media flow for your website.",
+      "link": "https://uploadcare.com/blog",
+      "language": "en",
+      "lastBuildDate": "Fri, 22 May 2026 09:10:01 GMT",
+      "status": "active"
+    }
+  ],
+  "posts": [
+    {
+      "title": "Managing forms and file uploads in\u00a0React using useActionState",
+      "link": "https://uploadcare.com/blog/react-useactionstate-file-uploads/",
+      "description": "Learn how to\u00a0use React 19\u2019s useActionState hook to\u00a0manage form state, handle file uploads, show pending states, and integrate with Uploadcare for production-ready file submissions.",
+      "pubDate": "Thu, 21 May 2026 00:00:00 GMT",
+      "category": "uploading",
+      "author": "Trust Jamin Okpukoro",
+      "guid": "https://uploadcare.com/blog/react-useactionstate-file-uploads/"
+    },
+    {
+      "title": "Introducing the Uploadcare CLI: automate file workflows from the terminal",
+      "link": "https://uploadcare.com/blog/introducing-uploadcare-cli/",
+      "description": "The Uploadcare CLI lets you upload, manage, and automate file workflows from your terminal. One binary, no\u00a0dependencies. Works in\u00a0scripts, CI/CD, and\u00a0AI agent workflows.",
+      "pubDate": "Fri, 08 May 2026 00:00:00 GMT",
+      "category": "uploading",
+      "author": "Trust Jamin Okpukoro",
+      "guid": "https://uploadcare.com/blog/introducing-uploadcare-cli/"
+    },
+    {
+      "title": "Best image cropping tools for developers in\u00a02026",
+      "link": "https://uploadcare.com/blog/best-tools-for-image-cropping/",
+      "description": "Compare the best image cropping tools for developers: Cropper.js, react-easy-crop, Sharp, ImageMagick, Thumbor, Uploadcare, Cloudinary, and imgix. Find the right fit for your stack.",
+      "pubDate": "Fri, 01 May 2026 00:00:00 GMT",
+      "category": "web-performance",
+      "author": "Arthur Khayrullin",
+      "guid": "https://uploadcare.com/blog/best-tools-for-image-cropping/"
+    },
+    {
+      "title": "How to\u00a0use Uploadcare with React Hook Form",
+      "link": "https://uploadcare.com/blog/how-to-use-uploadcare-react-hook-form/",
+      "description": "Integrate Uploadcare\u2019s FileUploaderRegular with React Hook Form using Controller. Includes TypeScript, file validation, error handling, and production-ready patterns.",
+      "pubDate": "Thu, 09 Apr 2026 00:00:00 GMT",
+      "category": "web-performance",
+      "author": "Trust Jamin Okpukoro",
+      "guid": "https://uploadcare.com/blog/how-to-use-uploadcare-react-hook-form/"
+    },
+    {
+      "title": "How to\u00a0restrict file types in\u00a0an\u00a0Uploadcare uploader",
+      "link": "https://uploadcare.com/blog/how-to-restrict-file-types-uploadcare-uploader/",
+      "description": "Restrict file uploads by\u00a0MIME type using the accept prop and Uploadcare dashboard rules. Covers client-side and server-side enforcement with troubleshooting tips.",
+      "pubDate": "Thu, 09 Apr 2026 00:00:00 GMT",
+      "category": "web-performance",
+      "author": "Trust Jamin Okpukoro",
+      "guid": "https://uploadcare.com/blog/how-to-restrict-file-types-uploadcare-uploader/"
+    },
+    {
+      "title": "How to\u00a0handle file uploads in\u00a0Node.js Express with Uploadcare",
+      "link": "https://uploadcare.com/blog/how-to-handle-file-uploads-nodejs-express-uploadcare/",
+      "description": "Use multer and the Uploadcare SDK to\u00a0handle file uploads in\u00a0Node.js Express. Includes signed uploads, MIME type validation, and production-ready error handling.",
+      "pubDate": "Thu, 09 Apr 2026 00:00:00 GMT",
+      "category": "web-performance",
+      "author": "Trust Jamin Okpukoro",
+      "guid": "https://uploadcare.com/blog/how-to-handle-file-uploads-nodejs-express-uploadcare/"
+    },
+    {
+      "title": "How to\u00a0add signed uploads to\u00a0a\u00a0Next.js app with Uploadcare",
+      "link": "https://uploadcare.com/blog/how-to-add-signed-uploads-nextjs-uploadcare/",
+      "description": "Implement HMAC-SHA256 signed uploads in\u00a0Next.js with Uploadcare. Covers the React uploader, server-side signature generation, and production-ready security patterns.",
+      "pubDate": "Thu, 09 Apr 2026 00:00:00 GMT",
+      "category": "web-performance",
+      "author": "Trust Jamin Okpukoro",
+      "guid": "https://uploadcare.com/blog/how-to-add-signed-uploads-nextjs-uploadcare/"
+    },
+    {
+      "title": "Speculation Rules API: The new alternative to\u00a0prerender",
+      "link": "https://uploadcare.com/blog/speculation-rules-api-guide/",
+      "description": "Learn what the Speculation Rules API\u00a0is, how it\u00a0differs from prefetch and prerender, and how to\u00a0use it\u00a0to\u00a0improve web performance.",
+      "pubDate": "Fri, 20 Mar 2026 00:00:00 GMT",
+      "category": "web-performance",
+      "author": "Trust Jamin Okpukoro",
+      "guid": "https://uploadcare.com/blog/speculation-rules-api-guide/"
+    },
+    {
+      "title": "How to\u00a0upload files in\u00a0Laravel with Uploadcare",
+      "link": "https://uploadcare.com/blog/upload-files-laravel-uploadcare/",
+      "description": "Learn how to\u00a0upload files in\u00a0Laravel using Uploadcare. Step-by-step setup, secure uploads, image handling, and best practices.",
+      "pubDate": "Tue, 24 Feb 2026 00:00:00 GMT",
+      "category": "uploading",
+      "author": "Trust Jamin Okpukoro",
+      "guid": "https://uploadcare.com/blog/upload-files-laravel-uploadcare/"
+    },
+    {
+      "title": "Image transformations for developers: A\u00a0complete guide",
+      "link": "https://uploadcare.com/blog/image-transformations-developer-guide/",
+      "description": "Learn how image sharpening works, why it\u00a0matters, and how to\u00a0use Uploadcare to\u00a0sharpen images at\u00a0scale with transformations and API examples.",
+      "pubDate": "Thu, 29 Jan 2026 00:00:00 GMT",
+      "category": "processing-and-transformations",
+      "author": "Arthur Khayrullin",
+      "guid": "https://uploadcare.com/blog/image-transformations-developer-guide/"
+    },
+    {
+      "title": "How to\u00a0integrate Uploadcare with n8n for file uploads",
+      "link": "https://uploadcare.com/blog/n8n-uploadcare-integration/",
+      "description": "Set up\u00a0Uploadcare in\u00a0n8n for secure file uploads. Learn binary handling, multipart/form-data, and a\u00a0complete working workflow with examples",
+      "pubDate": "Wed, 28 Jan 2026 00:00:00 GMT",
+      "category": "uploading",
+      "author": "Trust Jamin Okpukoro",
+      "guid": "https://uploadcare.com/blog/n8n-uploadcare-integration/"
+    },
+    {
+      "title": "Uploadcare\u2019s 2025 year in\u00a0review",
+      "link": "https://uploadcare.com/blog/year-in-review-2025/",
+      "description": "Learn about Uploadcare\u2019s major releases in\u00a02025, including adaptive bitrate streaming, improved upload experiences, AI-powered image transformations, and enhanced security features.",
+      "pubDate": "Tue, 16 Dec 2025 00:00:00 GMT",
+      "category": "company",
+      "author": "Tolya Chernyakov",
+      "guid": "https://uploadcare.com/blog/year-in-review-2025/"
+    },
+    {
+      "title": "How to\u00a0crop an\u00a0image in\u00a0HTML and CSS",
+      "link": "https://uploadcare.com/blog/how-to-crop-an-image-in-html-and-css/",
+      "description": "Learn how to\u00a0crop images in\u00a0HTML\u00a0& CSS with object-fit, background, clip-path, aspect-ratio, and more. Code examples and best practices included",
+      "pubDate": "Mon, 08 Dec 2025 00:00:00 GMT",
+      "category": "processing-and-transformations",
+      "author": "Trust Jamin Okpukoro",
+      "guid": "https://uploadcare.com/blog/how-to-crop-an-image-in-html-and-css/"
+    },
+    {
+      "title": "How to\u00a0sharpen images online with Uploadcare (Guide + API)",
+      "link": "https://uploadcare.com/blog/how-to-sharpen-images/",
+      "description": "Learn how image sharpening works, why it\u00a0matters, and how to\u00a0use Uploadcare to\u00a0sharpen images at\u00a0scale with transformations and API examples.",
+      "pubDate": "Tue, 25 Nov 2025 00:00:00 GMT",
+      "category": "processing-and-transformations",
+      "author": "Arthur Khayrullin",
+      "guid": "https://uploadcare.com/blog/how-to-sharpen-images/"
+    },
+    {
+      "title": "How to\u00a0serve video &\u00a0audio with Uploadcare video CDN",
+      "link": "https://uploadcare.com/blog/serve-video-audio-uploadcare-video-cdn/",
+      "description": "Learn how to\u00a0deliver high-quality video and audio content with adaptive HLS streaming, secure delivery, fast global caching, and seamless player integration.",
+      "pubDate": "Tue, 28 Oct 2025 00:00:00 GMT",
+      "category": "web-performance",
+      "author": "Trust Jamin Okpukoro",
+      "guid": "https://uploadcare.com/blog/serve-video-audio-uploadcare-video-cdn/"
+    },
+    {
+      "title": "AVIF vs JPEG XL vs JPEG: Best image format in 2025?",
+      "link": "https://uploadcare.com/blog/avif-vs-jpeg-comparison/",
+      "description": "Compare AVIF, JPEG XL, and JPEG image formats for compression, quality, and web use. Find out which one suits your needs in 2025.",
+      "pubDate": "Fri, 24 Oct 2025 00:00:00 GMT",
+      "category": "web-performance",
+      "author": "Arthur Khayrullin",
+      "guid": "https://uploadcare.com/blog/avif-vs-jpeg-comparison/"
+    },
+    {
+      "title": "Multipart file uploads: Scaling large file transfers",
+      "link": "https://uploadcare.com/blog/multipart-file-uploads-scaling-large-file-transfers/",
+      "description": "Learn how multipart uploads and Uploadcare accelerate large file transfers with chunking and Transfer Acceleration for faster, reliable delivery.",
+      "pubDate": "Wed, 22 Oct 2025 00:00:00 GMT",
+      "category": "uploading",
+      "author": "Trust Jamin Okpukoro",
+      "guid": "https://uploadcare.com/blog/multipart-file-uploads-scaling-large-file-transfers/"
+    },
+    {
+      "title": "How to\u00a0upload file to\u00a0WordPress: Secure file uploads",
+      "link": "https://uploadcare.com/blog/how-to-upload-file-to-wordpress/",
+      "description": "Learn how to\u00a0upload files to\u00a0WordPress securely using Uploadcare. Step-by-step guide for developers and no-code users to\u00a0add safe, flexible file uploads",
+      "pubDate": "Thu, 16 Oct 2025 00:00:00 GMT",
+      "category": "uploading",
+      "author": "Trust Jamin Okpukoro",
+      "guid": "https://uploadcare.com/blog/how-to-upload-file-to-wordpress/"
+    },
+    {
+      "title": "How to\u00a0create automatic profile pictures with smart cropping",
+      "link": "https://uploadcare.com/blog/automatic-profile-pictures-guide/",
+      "description": "Learn how to\u00a0generate automatic profile pictures with Uploadcare. Crop profile pictures automatically and standardize avatars for your app.",
+      "pubDate": "Tue, 23 Sep 2025 00:00:00 GMT",
+      "category": "processing-and-transformations",
+      "author": "Trust Jamin Okpukoro",
+      "guid": "https://uploadcare.com/blog/automatic-profile-pictures-guide/"
+    },
+    {
+      "title": "Color recognition: Extract dominant colors from any image automatically",
+      "link": "https://uploadcare.com/blog/color-recognition-extract-dominant-colors-from-any-image-automatically/",
+      "description": "Learn how to\u00a0extract colors from images automatically. Identify dominant colors, find the most common shades, and build palettes for design.",
+      "pubDate": "Wed, 10 Sep 2025 00:00:00 GMT",
+      "category": "processing-and-transformations",
+      "author": "Trust Jamin Okpukoro",
+      "guid": "https://uploadcare.com/blog/color-recognition-extract-dominant-colors-from-any-image-automatically/"
+    }
+  ]
+}

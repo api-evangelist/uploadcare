@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://uploadcare.com/schemas/group",
+  "title": "Uploadcare Group",
+  "description": "Uploadcare group schema",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Group's identifier."
+    },
+    "datetime_created": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO-8601 date and time when the group was created."
+    },
+    "files_count": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Number of the files in the group."
+    },
+    "cdn_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "Group's CDN URL."
+    },
+    "url": {
+      "type": "string",
+      "format": "uri",
+      "description": "Group's API resource URL."
+    }
+  },
+  "example": {
+    "id": "dd43982b-5447-44b2-86f6-1c3b52afa0ff~1",
+    "datetime_created": "2018-11-27T14:14:37.583654Z",
+    "files_count": 1,
+    "cdn_url": "https://ucarecdn.com/dd43982b-5447-44b2-86f6-1c3b52afa0ff~1/",
+    "url": "https://api.uploadcare.com/groups/dd43982b-5447-44b2-86f6-1c3b52afa0ff~1/"
+  }
+}

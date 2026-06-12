@@ -1,0 +1,8 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://uploadcare.com/schemas/metadata",
+  "title": "Uploadcare Metadata",
+  "description": "Arbitrary metadata associated with a file.",
+  "type": "object",
+  "nullable": true
+}

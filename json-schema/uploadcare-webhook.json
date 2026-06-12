@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://uploadcare.com/schemas/webhook",
+  "title": "Uploadcare Webhook",
+  "description": "Webhook.",
+  "type": "object",
+  "properties": {
+    "id": {
+      "$ref": "#/components/schemas/webhook_id"
+    },
+    "project": {
+      "$ref": "#/components/schemas/webhook_project"
+    },
+    "created": {
+      "$ref": "#/components/schemas/webhook_created"
+    },
+    "updated": {
+      "$ref": "#/components/schemas/webhook_updated"
+    },
+    "event": {
+      "$ref": "#/components/schemas/webhook_event"
+    },
+    "target_url": {
+      "$ref": "#/components/schemas/webhook_target"
+    },
+    "is_active": {
+      "$ref": "#/components/schemas/webhook_is_active"
+    },
+    "version": {
+      "$ref": "#/components/schemas/webhook_version"
+    },
+    "signing_secret": {
+      "$ref": "#/components/schemas/webhook_signing_secret"
+    }
+  },
+  "example": {
+    "id": 1,
+    "project": 13,
+    "created": "2016-04-27T11:49:54.948615Z",
+    "updated": "2016-04-27T12:04:57.819933Z",
+    "event": "file.infected",
+    "target_url": "http://example.com/hooks/receiver",
+    "is_active": true,
+    "signing_secret": "7kMVZivndx0ErgvhRKAr",
+    "version": "0.7"
+  }
+}

@@ -1,0 +1,111 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://uploadcare.com/schemas/imageInfo",
+  "title": "Uploadcare Imageinfo",
+  "description": "Image metadata.",
+  "type": "object",
+  "required": [
+    "color_mode",
+    "orientation",
+    "format",
+    "height",
+    "width",
+    "geo_location",
+    "datetime_original",
+    "dpi",
+    "sequence"
+  ],
+  "properties": {
+    "color_mode": {
+      "type": "string",
+      "description": "Image color mode.",
+      "enum": [
+        "RGB",
+        "RGBA",
+        "RGBa",
+        "RGBX",
+        "L",
+        "LA",
+        "La",
+        "P",
+        "PA",
+        "CMYK",
+        "YCbCr",
+        "HSV",
+        "LAB"
+      ],
+      "example": "RGBA"
+    },
+    "orientation": {
+      "type": "integer",
+      "description": "Image orientation from EXIF.",
+      "nullable": true,
+      "minimum": 0,
+      "maximum": 8,
+      "example": 6
+    },
+    "format": {
+      "type": "string",
+      "description": "Image format.",
+      "example": "JPEG"
+    },
+    "sequence": {
+      "type": "boolean",
+      "description": "Set to true if a file contains a sequence of images (GIF for example).",
+      "example": false
+    },
+    "height": {
+      "type": "integer",
+      "description": "Image height in pixels.",
+      "example": 2352
+    },
+    "width": {
+      "type": "integer",
+      "description": "Image width in pixels.",
+      "example": 2935
+    },
+    "geo_location": {
+      "description": "Geo-location of image from EXIF.",
+      "type": "object",
+      "nullable": true,
+      "required": [
+        "latitude",
+        "longitude"
+      ],
+      "properties": {
+        "latitude": {
+          "type": "number",
+          "description": "Location latitude.",
+          "example": -1.1884555555555556
+        },
+        "longitude": {
+          "type": "number",
+          "description": "Location longitude.",
+          "example": 52.66996666666667
+        }
+      }
+    },
+    "datetime_original": {
+      "type": "string",
+      "description": "Image date and time from EXIF. Please be aware that this data is not always formatted and displayed exactly as it appears in the EXIF.",
+      "nullable": true,
+      "format": "date-time",
+      "example": "2018-09-13T16:23:40"
+    },
+    "dpi": {
+      "type": "array",
+      "description": "Image DPI for two dimensions.",
+      "nullable": true,
+      "items": {
+        "type": "number",
+        "example": 72
+      },
+      "minItems": 2,
+      "maxItems": 2,
+      "example": [
+        72,
+        72
+      ]
+    }
+  }
+}

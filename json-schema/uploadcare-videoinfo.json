@@ -1,0 +1,115 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://uploadcare.com/schemas/videoInfo",
+  "title": "Uploadcare Videoinfo",
+  "description": "Video metadata.",
+  "type": "object",
+  "required": [
+    "duration",
+    "format",
+    "bitrate",
+    "audio",
+    "video"
+  ],
+  "properties": {
+    "duration": {
+      "type": "integer",
+      "description": "Video file's duration in milliseconds.",
+      "nullable": true,
+      "example": 261827
+    },
+    "format": {
+      "type": "string",
+      "description": "Video file's format.",
+      "example": "mp4"
+    },
+    "bitrate": {
+      "type": "integer",
+      "description": "Video file's bitrate.",
+      "nullable": true,
+      "example": 393
+    },
+    "audio": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "description": "Audio stream's metadata.",
+        "required": [
+          "bitrate",
+          "codec",
+          "sample_rate",
+          "channels"
+        ],
+        "properties": {
+          "bitrate": {
+            "type": "integer",
+            "description": "Audio stream's bitrate.",
+            "nullable": true,
+            "example": 78
+          },
+          "codec": {
+            "type": "string",
+            "description": "Audio stream's codec.",
+            "nullable": true,
+            "example": "aac"
+          },
+          "sample_rate": {
+            "type": "integer",
+            "description": "Audio stream's sample rate.",
+            "nullable": true,
+            "example": 44100
+          },
+          "channels": {
+            "type": "integer",
+            "description": "Audio stream's number of channels.",
+            "nullable": true,
+            "example": 2
+          }
+        }
+      }
+    },
+    "video": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "description": "Video stream's metadata.",
+        "required": [
+          "height",
+          "width",
+          "frame_rate",
+          "bitrate",
+          "codec"
+        ],
+        "properties": {
+          "height": {
+            "type": "integer",
+            "description": "Video stream's image height.",
+            "example": 360
+          },
+          "width": {
+            "type": "integer",
+            "description": "Video stream's image width.",
+            "example": 640
+          },
+          "frame_rate": {
+            "type": "number",
+            "description": "Video stream's frame rate.",
+            "example": 30
+          },
+          "bitrate": {
+            "type": "integer",
+            "description": "Video stream's bitrate.",
+            "nullable": true,
+            "example": 315
+          },
+          "codec": {
+            "type": "string",
+            "description": "Video stream's codec.",
+            "nullable": true,
+            "example": "h264"
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://uploadcare.com/schemas/applicationData",
+  "title": "Uploadcare Applicationdata",
+  "description": "Uploadcare applicationData schema",
+  "type": "object",
+  "properties": {
+    "version": {
+      "type": "string",
+      "description": "An application version."
+    },
+    "datetime_created": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Date and time when an application data was created."
+    },
+    "datetime_updated": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Date and time when an application data was updated."
+    },
+    "data": {
+      "type": "object",
+      "description": "Dictionary with a result of an application execution result."
+    }
+  },
+  "required": [
+    "version",
+    "datetime_created",
+    "datetime_updated",
+    "data"
+  ]
+}

@@ -1,0 +1,190 @@
+{
+  "@context": {
+    "@version": 1.1,
+    "schema": "https://schema.org/",
+    "uploadcare": "https://uploadcare.com/vocab/",
+    "api": "https://uploadcare.com/api/",
+
+    "name": "schema:name",
+    "description": "schema:description",
+    "url": "schema:url",
+    "version": "schema:version",
+    "dateModified": "schema:dateModified",
+
+    "uuid": {
+      "@id": "uploadcare:uuid",
+      "@type": "@id"
+    },
+    "cdnUrl": {
+      "@id": "uploadcare:cdnUrl",
+      "@type": "schema:URL"
+    },
+    "originalFilename": "uploadcare:originalFilename",
+    "mimeType": "uploadcare:mimeType",
+    "size": {
+      "@id": "uploadcare:size",
+      "@type": "schema:Integer"
+    },
+    "isStored": {
+      "@id": "uploadcare:isStored",
+      "@type": "schema:Boolean"
+    },
+    "isReady": {
+      "@id": "uploadcare:isReady",
+      "@type": "schema:Boolean"
+    },
+    "isImage": {
+      "@id": "uploadcare:isImage",
+      "@type": "schema:Boolean"
+    },
+    "datetimeUploaded": {
+      "@id": "uploadcare:datetimeUploaded",
+      "@type": "schema:DateTime"
+    },
+    "datetimeStored": {
+      "@id": "uploadcare:datetimeStored",
+      "@type": "schema:DateTime"
+    },
+
+    "imageInfo": {
+      "@id": "uploadcare:imageInfo",
+      "@type": "uploadcare:ImageInfo"
+    },
+    "ImageInfo": "uploadcare:ImageInfo",
+    "width": {
+      "@id": "schema:width",
+      "@type": "schema:Integer"
+    },
+    "height": {
+      "@id": "schema:height",
+      "@type": "schema:Integer"
+    },
+    "format": "uploadcare:format",
+    "colorMode": "uploadcare:colorMode",
+    "orientation": "uploadcare:orientation",
+    "dpi": "uploadcare:dpi",
+    "geoLocation": "uploadcare:geoLocation",
+    "datetimeOriginal": {
+      "@id": "uploadcare:datetimeOriginal",
+      "@type": "schema:DateTime"
+    },
+
+    "videoInfo": {
+      "@id": "uploadcare:videoInfo",
+      "@type": "uploadcare:VideoInfo"
+    },
+    "VideoInfo": "uploadcare:VideoInfo",
+    "duration": {
+      "@id": "schema:duration",
+      "@type": "schema:Integer"
+    },
+    "bitrate": "uploadcare:bitrate",
+    "video": "uploadcare:video",
+    "audio": "uploadcare:audio",
+
+    "FileGroup": "uploadcare:FileGroup",
+    "fileCount": {
+      "@id": "uploadcare:fileCount",
+      "@type": "schema:Integer"
+    },
+    "files": {
+      "@id": "uploadcare:files",
+      "@type": "@id",
+      "@container": "@list"
+    },
+
+    "Project": "uploadcare:Project",
+    "publicKey": "uploadcare:publicKey",
+    "collaborators": "uploadcare:collaborators",
+    "autoStoreEnabled": {
+      "@id": "uploadcare:autoStoreEnabled",
+      "@type": "schema:Boolean"
+    },
+
+    "Webhook": "uploadcare:Webhook",
+    "targetUrl": {
+      "@id": "uploadcare:targetUrl",
+      "@type": "schema:URL"
+    },
+    "event": "uploadcare:event",
+    "isActive": {
+      "@id": "uploadcare:isActive",
+      "@type": "schema:Boolean"
+    },
+    "signingSecret": "uploadcare:signingSecret",
+
+    "AddOn": "uploadcare:AddOn",
+    "addonName": "uploadcare:addonName",
+    "executionId": "uploadcare:executionId",
+    "status": "uploadcare:status",
+
+    "ConversionJob": "uploadcare:ConversionJob",
+    "jobId": "uploadcare:jobId",
+    "token": "uploadcare:token",
+    "resultUuid": {
+      "@id": "uploadcare:resultUuid",
+      "@type": "@id"
+    },
+
+    "Metadata": "uploadcare:Metadata",
+    "key": "uploadcare:key",
+    "value": "uploadcare:value",
+
+    "CdnOperation": "uploadcare:CdnOperation",
+    "operationType": "uploadcare:operationType",
+    "params": "uploadcare:params",
+
+    "UploadcareAPI": {
+      "@id": "schema:WebAPI",
+      "@type": "schema:WebAPI"
+    },
+    "provider": {
+      "@id": "schema:provider",
+      "@type": "schema:Organization"
+    }
+  },
+
+  "@type": "UploadcareAPI",
+  "@id": "https://uploadcare.com",
+  "name": "Uploadcare",
+  "description": "File uploading and processing platform providing REST APIs for file management, CDN delivery, image transformations, document conversion, video encoding, and malware scanning.",
+  "url": "https://uploadcare.com",
+  "version": "2026-06-12",
+  "provider": {
+    "@type": "schema:Organization",
+    "name": "Uploadcare",
+    "url": "https://uploadcare.com",
+    "sameAs": [
+      "https://github.com/uploadcare",
+      "https://twitter.com/uploadcare",
+      "https://www.linkedin.com/company/uploadcare"
+    ]
+  },
+  "documentation": {
+    "@type": "schema:TechArticle",
+    "url": "https://uploadcare.com/docs/"
+  },
+  "hasAPI": [
+    {
+      "@type": "schema:WebAPI",
+      "name": "Uploadcare REST API",
+      "@id": "https://api.uploadcare.com",
+      "url": "https://uploadcare.com/api-refs/rest-api/v0.7.0/",
+      "version": "0.7"
+    },
+    {
+      "@type": "schema:WebAPI",
+      "name": "Uploadcare Upload API",
+      "@id": "https://upload.uploadcare.com",
+      "url": "https://uploadcare.com/api-refs/upload-api/",
+      "version": "2024-02-12"
+    },
+    {
+      "@type": "schema:WebAPI",
+      "name": "Uploadcare CDN & URL API",
+      "@id": "https://ucarecdn.com",
+      "url": "https://uploadcare.com/docs/transformations/image/",
+      "version": "2022-11-28"
+    }
+  ]
+}

@@ -1,0 +1,442 @@
+[
+  {
+    "api": "rest",
+    "method": "GET",
+    "path": "/files/",
+    "summary": "List of files",
+    "operationId": "filesList",
+    "tags": [
+      "File"
+    ]
+  },
+  {
+    "api": "rest",
+    "method": "PUT",
+    "path": "/files/{uuid}/storage/",
+    "summary": "Store file",
+    "operationId": "storeFile",
+    "tags": [
+      "File"
+    ]
+  },
+  {
+    "api": "rest",
+    "method": "DELETE",
+    "path": "/files/{uuid}/storage/",
+    "summary": "Delete file",
+    "operationId": "deleteFileStorage",
+    "tags": [
+      "File"
+    ]
+  },
+  {
+    "api": "rest",
+    "method": "GET",
+    "path": "/files/{uuid}/",
+    "summary": "File info",
+    "operationId": "fileInfo",
+    "tags": [
+      "File"
+    ]
+  },
+  {
+    "api": "rest",
+    "method": "PUT",
+    "path": "/files/storage/",
+    "summary": "Batch file storing",
+    "operationId": "filesStoring",
+    "tags": [
+      "File"
+    ]
+  },
+  {
+    "api": "rest",
+    "method": "DELETE",
+    "path": "/files/storage/",
+    "summary": "Batch file delete",
+    "operationId": "filesDelete",
+    "tags": [
+      "File"
+    ]
+  },
+  {
+    "api": "rest",
+    "method": "POST",
+    "path": "/files/local_copy/",
+    "summary": "Copy file to local storage",
+    "operationId": "createLocalCopy",
+    "tags": [
+      "File"
+    ]
+  },
+  {
+    "api": "rest",
+    "method": "POST",
+    "path": "/files/remote_copy/",
+    "summary": "Copy file to remote storage",
+    "operationId": "createRemoteCopy",
+    "tags": [
+      "File"
+    ]
+  },
+  {
+    "api": "rest",
+    "method": "POST",
+    "path": "/addons/aws_rekognition_detect_labels/execute/",
+    "summary": "Execute AWS Rekognition",
+    "operationId": "awsRekognitionExecute",
+    "tags": [
+      "Add-Ons"
+    ]
+  },
+  {
+    "api": "rest",
+    "method": "GET",
+    "path": "/addons/aws_rekognition_detect_labels/execute/status/",
+    "summary": "Check AWS Rekognition execution status",
+    "operationId": "awsRekognitionExecutionStatus",
+    "tags": [
+      "Add-Ons"
+    ]
+  },
+  {
+    "api": "rest",
+    "method": "POST",
+    "path": "/addons/aws_rekognition_detect_moderation_labels/execute/",
+    "summary": "Execute AWS Rekognition Moderation",
+    "operationId": "awsRekognitionDetectModerationLabelsExecute",
+    "tags": [
+      "Add-Ons"
+    ]
+  },
+  {
+    "api": "rest",
+    "method": "GET",
+    "path": "/addons/aws_rekognition_detect_moderation_labels/execute/status/",
+    "summary": "Check AWS Rekognition Moderation execution status",
+    "operationId": "awsRekognitionDetectModerationLabelsExecutionStatus",
+    "tags": [
+      "Add-Ons"
+    ]
+  },
+  {
+    "api": "rest",
+    "method": "POST",
+    "path": "/addons/uc_clamav_virus_scan/execute/",
+    "summary": "Execute ClamAV",
+    "operationId": "ucClamavVirusScanExecute",
+    "tags": [
+      "Add-Ons"
+    ]
+  },
+  {
+    "api": "rest",
+    "method": "GET",
+    "path": "/addons/uc_clamav_virus_scan/execute/status/",
+    "summary": "Check ClamAV execution status",
+    "operationId": "ucClamavVirusScanExecutionStatus",
+    "tags": [
+      "Add-Ons"
+    ]
+  },
+  {
+    "api": "rest",
+    "method": "POST",
+    "path": "/addons/remove_bg/execute/",
+    "summary": "Execute Remove.bg",
+    "operationId": "removeBgExecute",
+    "tags": [
+      "Add-Ons"
+    ]
+  },
+  {
+    "api": "rest",
+    "method": "GET",
+    "path": "/addons/remove_bg/execute/status/",
+    "summary": "Check Remove.bg execution status",
+    "operationId": "removeBgExecutionStatus",
+    "tags": [
+      "Add-Ons"
+    ]
+  },
+  {
+    "api": "rest",
+    "method": "GET",
+    "path": "/files/{uuid}/metadata/",
+    "summary": "Get file's metadata",
+    "operationId": "_fileMetadata",
+    "tags": [
+      "File metadata"
+    ]
+  },
+  {
+    "api": "rest",
+    "method": "GET",
+    "path": "/files/{uuid}/metadata/{key}/",
+    "summary": "Get metadata key's value",
+    "operationId": "fileMetadataKey",
+    "tags": [
+      "File metadata"
+    ]
+  },
+  {
+    "api": "rest",
+    "method": "PUT",
+    "path": "/files/{uuid}/metadata/{key}/",
+    "summary": "Update metadata key's value",
+    "operationId": "updateFileMetadataKey",
+    "tags": [
+      "File metadata"
+    ]
+  },
+  {
+    "api": "rest",
+    "method": "DELETE",
+    "path": "/files/{uuid}/metadata/{key}/",
+    "summary": "Delete metadata key",
+    "operationId": "deleteFileMetadataKey",
+    "tags": [
+      "File metadata"
+    ]
+  },
+  {
+    "api": "rest",
+    "method": "GET",
+    "path": "/groups/",
+    "summary": "List of groups",
+    "operationId": "groupsList",
+    "tags": [
+      "Group"
+    ]
+  },
+  {
+    "api": "rest",
+    "method": "GET",
+    "path": "/groups/{uuid}/",
+    "summary": "Group info",
+    "operationId": "groupInfo",
+    "tags": [
+      "Group"
+    ]
+  },
+  {
+    "api": "rest",
+    "method": "DELETE",
+    "path": "/groups/{uuid}/",
+    "summary": "Delete group",
+    "operationId": "deleteGroup",
+    "tags": [
+      "Group"
+    ]
+  },
+  {
+    "api": "rest",
+    "method": "GET",
+    "path": "/project/",
+    "summary": "Project info",
+    "operationId": "projectInfo",
+    "tags": [
+      "Project"
+    ]
+  },
+  {
+    "api": "rest",
+    "method": "GET",
+    "path": "/webhooks/",
+    "summary": "List of webhooks",
+    "operationId": "webhooksList",
+    "tags": [
+      "Webhook"
+    ]
+  },
+  {
+    "api": "rest",
+    "method": "POST",
+    "path": "/webhooks/",
+    "summary": "Create webhook",
+    "operationId": "webhookCreate",
+    "tags": [
+      "Webhook"
+    ]
+  },
+  {
+    "api": "rest",
+    "method": "PUT",
+    "path": "/webhooks/{id}/",
+    "summary": "Update webhook",
+    "operationId": "updateWebhook",
+    "tags": [
+      "Webhook"
+    ]
+  },
+  {
+    "api": "rest",
+    "method": "DELETE",
+    "path": "/webhooks/unsubscribe/",
+    "summary": "Delete webhook",
+    "operationId": "webhookUnsubscribe",
+    "tags": [
+      "Webhook"
+    ]
+  },
+  {
+    "api": "rest",
+    "method": "GET",
+    "path": "/convert/document/{uuid}/",
+    "summary": "Document info",
+    "operationId": "documentConvertInfo",
+    "tags": [
+      "Conversion"
+    ]
+  },
+  {
+    "api": "rest",
+    "method": "POST",
+    "path": "/convert/document/",
+    "summary": "Convert document",
+    "operationId": "documentConvert",
+    "tags": [
+      "Conversion"
+    ]
+  },
+  {
+    "api": "rest",
+    "method": "GET",
+    "path": "/convert/document/status/{token}/",
+    "summary": "Document conversion job status",
+    "operationId": "documentConvertStatus",
+    "tags": [
+      "Conversion"
+    ]
+  },
+  {
+    "api": "rest",
+    "method": "POST",
+    "path": "/convert/video/",
+    "summary": "Convert video",
+    "operationId": "videoConvert",
+    "tags": [
+      "Conversion"
+    ]
+  },
+  {
+    "api": "rest",
+    "method": "GET",
+    "path": "/convert/video/status/{token}/",
+    "summary": "Video conversion job status",
+    "operationId": "videoConvertStatus",
+    "tags": [
+      "Conversion"
+    ]
+  },
+  {
+    "api": "upload",
+    "method": "POST",
+    "path": "/base/",
+    "summary": "Direct uploads",
+    "operationId": "baseUpload",
+    "tags": [
+      "Upload"
+    ]
+  },
+  {
+    "api": "upload",
+    "method": "POST",
+    "path": "/multipart/start/",
+    "summary": "Start multipart upload",
+    "operationId": "multipartFileUploadStart",
+    "tags": [
+      "Upload"
+    ]
+  },
+  {
+    "api": "upload",
+    "method": "PUT",
+    "path": "/<presigned-url-x>",
+    "summary": "Upload individual file parts",
+    "operationId": "multipartFileUploadPart",
+    "tags": [
+      "Upload"
+    ]
+  },
+  {
+    "api": "upload",
+    "method": "POST",
+    "path": "/multipart/complete/",
+    "summary": "Complete multipart upload",
+    "operationId": "multipartFileUploadComplete",
+    "tags": [
+      "Upload"
+    ]
+  },
+  {
+    "api": "upload",
+    "method": "POST",
+    "path": "/from_url/",
+    "summary": "Upload files from URLs",
+    "operationId": "fromURLUpload",
+    "tags": [
+      "Upload"
+    ]
+  },
+  {
+    "api": "upload",
+    "method": "GET",
+    "path": "/from_url/status/",
+    "summary": "Check the status of a task to fetch/upload a file from a URL",
+    "operationId": "fromURLUploadStatus",
+    "tags": [
+      "Upload"
+    ]
+  },
+  {
+    "api": "upload",
+    "method": "GET",
+    "path": "/info/",
+    "summary": "Get information about an uploaded file",
+    "operationId": "fileUploadInfo",
+    "tags": [
+      "Upload"
+    ]
+  },
+  {
+    "api": "upload",
+    "method": "POST",
+    "path": "/group/",
+    "summary": "Create a file group",
+    "operationId": "createFilesGroup",
+    "tags": [
+      "Groups"
+    ]
+  },
+  {
+    "api": "upload",
+    "method": "GET",
+    "path": "/group/info/",
+    "summary": "Get information about a file group",
+    "operationId": "filesGroupInfo",
+    "tags": [
+      "Groups"
+    ]
+  },
+  {
+    "api": "cdn",
+    "method": "GET",
+    "path": "/{uuid}/-/json/",
+    "summary": "File info as JSON",
+    "operationId": "fileInfoJson",
+    "tags": [
+      "File information"
+    ]
+  },
+  {
+    "api": "cdn",
+    "method": "GET",
+    "path": "/{uuid}/{filename}",
+    "summary": "File with a custom name",
+    "operationId": "fileWithName",
+    "tags": [
+      "File names"
+    ]
+  }
+]

@@ -1,0 +1,171 @@
+vocabulary:
+  name: Uploadcare API Vocabulary
+  description: Key terms and concepts used across the Uploadcare platform APIs
+  version: "2026-06-12"
+  source: https://uploadcare.com/docs/
+
+terms:
+
+  - term: uuid
+    label: UUID
+    description: >-
+      Unique identifier assigned to every file uploaded to Uploadcare. Used across
+      REST API, Upload API, and CDN URL paths to reference a specific file.
+    type: identifier
+    usedIn:
+      - rest-api
+      - upload-api
+      - cdn-api
+
+  - term: cdn_url
+    label: CDN URL
+    description: >-
+      Public URL for accessing a file on Uploadcare's Smart CDN. Format:
+      https://ucarecdn.com/:uuid/. May include CDN operation directives.
+    type: url
+    usedIn:
+      - cdn-api
+      - rest-api
+
+  - term: public_key
+    label: Public Key
+    description: >-
+      API key used to authenticate Upload API requests and identify the project.
+      Exposed client-side as it only permits uploading.
+    type: credential
+    usedIn:
+      - upload-api
+      - rest-api
+
+  - term: secret_key
+    label: Secret Key
+    description: >-
+      Private API key used for REST API authentication via HMAC/SHA256 signing.
+      Must never be exposed client-side.
+    type: credential
+    usedIn:
+      - rest-api
+
+  - term: store
+    label: Store
+    description: >-
+      Flag controlling whether an uploaded file is permanently stored or treated
+      as temporary. Temporary files are deleted after 24 hours.
+      Values: 1 (store), 0 (do not store), auto (use project setting).
+    type: flag
+    usedIn:
+      - upload-api
+      - rest-api
+
+  - term: file_group
+    label: File Group
+    description: >-
+      An ordered collection of files represented as a single entity with a
+      group ID. Groups allow managing multiple files together.
+    type: entity
+    usedIn:
+      - upload-api
+      - rest-api
+
+  - term: multipart_upload
+    label: Multipart Upload
+    description: >-
+      Upload method for large files (up to 5 TB) that splits the file into
+      chunks uploaded in parallel. Requires initiating, uploading parts, and
+      completing the upload.
+    type: operation
+    usedIn:
+      - upload-api
+
+  - term: cdn_operation
+    label: CDN Operation
+    description: >-
+      Image or file processing directive applied via URL path components on the
+      CDN. Examples: resize, crop, format conversion, quality, effects.
+      Format: /-/:operation/:params/
+    type: operation
+    usedIn:
+      - cdn-api
+
+  - term: signed_url
+    label: Signed URL
+    description: >-
+      A CDN URL with a security token and expiry timestamp that restricts access
+      to authorized users. Used to protect private files.
+    type: security
+    usedIn:
+      - cdn-api
+
+  - term: add_on
+    label: Add-On
+    description: >-
+      Extended processing capability that can be applied to a file via the REST
+      API. Examples: malware scanning (ClamAV), background removal (Remove.bg),
+      object recognition (AWS Rekognition).
+    type: feature
+    usedIn:
+      - rest-api
+
+  - term: webhook
+    label: Webhook
+    description: >-
+      HTTP callback registered to receive Uploadcare event notifications (e.g.,
+      file uploaded, scan completed). Configured via REST API with target URL,
+      event type, and optional signing secret.
+    type: integration
+    usedIn:
+      - rest-api
+
+  - term: metadata
+    label: Metadata
+    description: >-
+      Arbitrary key-value pairs that can be attached to files for custom
+      categorization, search, and business logic. Managed via REST API.
+    type: data
+    usedIn:
+      - rest-api
+
+  - term: document_conversion
+    label: Document Conversion
+    description: >-
+      REST API feature to convert documents (PDF, DOC, etc.) to other formats
+      (PDF, PNG, JPG) asynchronously via conversion jobs.
+    type: feature
+    usedIn:
+      - rest-api
+
+  - term: video_encoding
+    label: Video Encoding
+    description: >-
+      REST API feature to transcode, cut, and resize video files asynchronously
+      via encoding jobs with configurable quality and format settings.
+    type: feature
+    usedIn:
+      - rest-api
+
+  - term: image_transformation
+    label: Image Transformation
+    description: >-
+      On-the-fly image processing applied via CDN URL directives. Includes
+      resize, crop, rotate, format conversion, compression, and visual effects.
+    type: feature
+    usedIn:
+      - cdn-api
+
+  - term: smart_cdn
+    label: Smart CDN
+    description: >-
+      Uploadcare's global content delivery network that serves and caches
+      transformed files. Transformed images do not count toward storage limits.
+    type: infrastructure
+    usedIn:
+      - cdn-api
+
+  - term: project
+    label: Project
+    description: >-
+      Top-level container in Uploadcare that groups files and configurations.
+      Identified by its public and secret API keys.
+    type: entity
+    usedIn:
+      - rest-api
