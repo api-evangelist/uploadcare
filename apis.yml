@@ -1,139 +1,132 @@
 aid: uploadcare
 name: Uploadcare
-description: >-
-  Uploadcare is a file uploading and processing platform that provides REST APIs
-  for file management, CDN delivery, image transformations, document conversion,
-  video encoding, and malware scanning. Developers can integrate file upload
-  widgets, manage files and metadata, apply on-the-fly image transformations via
-  URL-based CDN API, handle multipart uploads for large files, configure
-  webhooks, and leverage add-ons for extended processing capabilities.
+description: Uploadcare is a file uploading and processing platform that provides
+  REST APIs for file management, CDN delivery, image transformations, document conversion,
+  video encoding, and malware scanning. Developers can integrate file upload widgets,
+  manage files and metadata, apply on-the-fly image transformations via URL-based
+  CDN API, handle multipart uploads for large files, configure webhooks, and leverage
+  add-ons for extended processing capabilities.
 type: Index
 image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
 url: https://raw.githubusercontent.com/api-evangelist/uploadcare/refs/heads/main/apis.yml
 created: 2026-06-12
 modified: 2026-06-12
-specificationVersion: "0.19"
+specificationVersion: '0.19'
 tags:
-  - File Upload
-  - File Management
+- File Upload
+- File Management
+- CDN
+- Image Transformation
+- Document Conversion
+- Video Encoding
+- Malware Scanning
+- Storage
+- Webhooks
+apis:
+- aid: uploadcare:rest-api
+  name: Uploadcare REST API
+  description: Low-level REST API providing access to Uploadcare platform features
+    including managing files, metadata, groups, add-ons, projects, webhooks, file
+    conversions, and video encoding. All requests must be signed with HMAC/SHA256
+    authentication.
+  image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+  humanURL: https://uploadcare.com/api-refs/rest-api/v0.7.0/
+  baseURL: https://api.uploadcare.com
+  tags:
+  - Files
+  - Groups
+  - Webhooks
+  - Add-ons
+  - Conversions
+  - Video
+  properties:
+  - type: Documentation
+    url: https://uploadcare.com/docs/rest_api/
+  - type: OpenAPI
+    url: https://uploadcare.com/api-refs/rest-api/v0.7.0/
+  - type: OpenAPI
+    url: openapi/uploadcare-rest-api-openapi.yml
+  - url: graphql/uploadcare-graphql.md
+    type: GraphQL
+- aid: uploadcare:upload-api
+  name: Uploadcare Upload API
+  description: Upload API for direct binary file uploads, multipart uploads for large
+    files (up to 5 TB), URL-based uploads, UUID-based uploads, and file group creation.
+    Supports direct uploads from browser or server without routing files through your
+    own infrastructure.
+  image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+  humanURL: https://uploadcare.com/api-refs/upload-api/
+  baseURL: https://upload.uploadcare.com
+  tags:
+  - Upload
+  - Multipart
+  - Large Files
+  - File Groups
+  properties:
+  - type: Documentation
+    url: https://uploadcare.com/docs/api/upload/
+  - type: OpenAPI
+    url: https://uploadcare.com/api-refs/upload-api/
+  - type: OpenAPI
+    url: openapi/uploadcare-upload-api-openapi.yml
+- aid: uploadcare:cdn-api
+  name: Uploadcare CDN & Image Transformation API
+  description: URL-based CDN API for on-the-fly image transformations including resizing,
+    cropping, format conversion, compression, and effects. Transformed images are
+    cached on the global Smart CDN network and not counted toward storage limits.
+  image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+  humanURL: https://uploadcare.com/docs/transformations/image/
+  baseURL: https://ucarecdn.com
+  tags:
   - CDN
   - Image Transformation
-  - Document Conversion
-  - Video Encoding
-  - Malware Scanning
-  - Storage
-  - Webhooks
-apis:
-  - aid: uploadcare:rest-api
-    name: Uploadcare REST API
-    description: >-
-      Low-level REST API providing access to Uploadcare platform features
-      including managing files, metadata, groups, add-ons, projects, webhooks,
-      file conversions, and video encoding. All requests must be signed with
-      HMAC/SHA256 authentication.
-    image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
-    humanURL: https://uploadcare.com/api-refs/rest-api/v0.7.0/
-    baseURL: https://api.uploadcare.com
-    tags:
-      - Files
-      - Groups
-      - Webhooks
-      - Add-ons
-      - Conversions
-      - Video
-    properties:
-      - type: Documentation
-        url: https://uploadcare.com/docs/rest_api/
-      - type: OpenAPI
-        url: https://uploadcare.com/api-refs/rest-api/v0.7.0/
-      - type: OpenAPI
-        url: openapi/uploadcare-rest-api-openapi.yml
-
-  - aid: uploadcare:upload-api
-    name: Uploadcare Upload API
-    description: >-
-      Upload API for direct binary file uploads, multipart uploads for large
-      files (up to 5 TB), URL-based uploads, UUID-based uploads, and file group
-      creation. Supports direct uploads from browser or server without routing
-      files through your own infrastructure.
-    image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
-    humanURL: https://uploadcare.com/api-refs/upload-api/
-    baseURL: https://upload.uploadcare.com
-    tags:
-      - Upload
-      - Multipart
-      - Large Files
-      - File Groups
-    properties:
-      - type: Documentation
-        url: https://uploadcare.com/docs/api/upload/
-      - type: OpenAPI
-        url: https://uploadcare.com/api-refs/upload-api/
-      - type: OpenAPI
-        url: openapi/uploadcare-upload-api-openapi.yml
-
-  - aid: uploadcare:cdn-api
-    name: Uploadcare CDN & Image Transformation API
-    description: >-
-      URL-based CDN API for on-the-fly image transformations including resizing,
-      cropping, format conversion, compression, and effects. Transformed images
-      are cached on the global Smart CDN network and not counted toward storage
-      limits.
-    image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
-    humanURL: https://uploadcare.com/docs/transformations/image/
-    baseURL: https://ucarecdn.com
-    tags:
-      - CDN
-      - Image Transformation
-      - Resize
-      - Crop
-      - Format Conversion
-    properties:
-      - type: Documentation
-        url: https://uploadcare.com/docs/api_reference/cdn/
-      - type: OpenAPI
-        url: openapi/uploadcare-cdn-api-openapi.yml
-
-common:
-  - type: Website
-    url: https://uploadcare.com/
+  - Resize
+  - Crop
+  - Format Conversion
+  properties:
   - type: Documentation
-    url: https://uploadcare.com/docs/
-  - type: GitHub
-    url: https://github.com/uploadcare
-  - type: LinkedIn
-    url: https://www.linkedin.com/company/uploadcare
-  - type: Blog
-    url: https://uploadcare.com/blog/
-  - type: Pricing
-    url: https://uploadcare.com/pricing/
-  - type: StatusPage
-    url: https://status.uploadcare.com/
-  - type: X
-    url: https://twitter.com/uploadcare
-  - type: Plans
-    url: plans/uploadcare-plans-pricing.yml
-  - type: RateLimits
-    url: rate-limits/uploadcare-rate-limits.yml
-  - type: FinOps
-    url: finops/uploadcare-finops.yml
-  - type: Vocabulary
-    url: vocabulary/uploadcare-vocabulary.yml
-  - type: JSONSchema
-    url: json-schema/uploadcare-file.json
-  - type: JSONSchema
-    url: json-schema/uploadcare-group.json
-  - type: JSONSchema
-    url: json-schema/uploadcare-project.json
-  - type: JSONSchema
-    url: json-schema/uploadcare-webhook.json
-  - type: JSONLd
-    url: json-ld/uploadcare-context.jsonld
-  - type: BlogRSS
-    url: https://uploadcare.com/blog/rss.xml
-  - type: Blogs
-    url: blogs/blogs.json
-
+    url: https://uploadcare.com/docs/api_reference/cdn/
+  - type: OpenAPI
+    url: openapi/uploadcare-cdn-api-openapi.yml
+common:
+- type: Website
+  url: https://uploadcare.com/
+- type: Documentation
+  url: https://uploadcare.com/docs/
+- type: GitHub
+  url: https://github.com/uploadcare
+- type: LinkedIn
+  url: https://www.linkedin.com/company/uploadcare
+- type: Blog
+  url: https://uploadcare.com/blog/
+- type: Pricing
+  url: https://uploadcare.com/pricing/
+- type: StatusPage
+  url: https://status.uploadcare.com/
+- type: X
+  url: https://twitter.com/uploadcare
+- type: Plans
+  url: plans/uploadcare-plans-pricing.yml
+- type: RateLimits
+  url: rate-limits/uploadcare-rate-limits.yml
+- type: FinOps
+  url: finops/uploadcare-finops.yml
+- type: Vocabulary
+  url: vocabulary/uploadcare-vocabulary.yml
+- type: JSONSchema
+  url: json-schema/uploadcare-file.json
+- type: JSONSchema
+  url: json-schema/uploadcare-group.json
+- type: JSONSchema
+  url: json-schema/uploadcare-project.json
+- type: JSONSchema
+  url: json-schema/uploadcare-webhook.json
+- type: JSONLd
+  url: json-ld/uploadcare-context.jsonld
+- type: BlogRSS
+  url: https://uploadcare.com/blog/rss.xml
+- type: Blogs
+  url: blogs/blogs.json
 maintainers:
-  - FN: Kin Lane
-    email: kin@apievangelist.com
+- FN: Kin Lane
+  email: kin@apievangelist.com

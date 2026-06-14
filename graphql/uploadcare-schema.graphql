@@ -1,0 +1,631 @@
+"""
+Uploadcare GraphQL Schema
+Conceptual schema derived from the Uploadcare REST API, Upload API, and CDN API.
+Source: https://uploadcare.com/api-refs/rest-api/
+"""
+
+# ── Scalars ──────────────────────────────────────────────────────────────────
+
+scalar DateTime
+scalar UUID
+scalar URL
+scalar JSON
+
+# ── Enums ────────────────────────────────────────────────────────────────────
+
+enum FileStatus {
+  STORED
+  READY
+  REMOVED
+  WAITING
+  FAILED
+  UNKNOWN
+}
+
+enum WebhookStatus {
+  ENABLED
+  DISABLED
+}
+
+enum WebhookEvent {
+  FILE_UPLOADED
+  FILE_STORED
+  FILE_DELETED
+  FILE_INFO_UPDATED
+  GROUP_CREATED
+}
+
+enum CollaboratorRole {
+  OWNER
+  ADMIN
+  EDITOR
+  VIEWER
+}
+
+enum TransformationStatus {
+  PENDING
+  IN_PROGRESS
+  DONE
+  FAILED
+  CANCELLED
+}
+
+enum ImageFormat {
+  JPEG
+  PNG
+  WEBP
+  AVIF
+  GIF
+  SVG
+  AUTO
+}
+
+enum VideoFormat {
+  MP4
+  WEBM
+  OGG
+  AVI
+  MOV
+}
+
+enum DocumentFormat {
+  PDF
+  DOC
+  DOCX
+  XLS
+  XLSX
+  PPT
+  PPTX
+  TXT
+  ODT
+}
+
+enum ResizeMode {
+  SCALE_CROP
+  CHANGE_RATIO
+  SMART
+  SMART_FACES_ONLY
+}
+
+enum RotateAngle {
+  R90
+  R180
+  R270
+  AUTO
+}
+
+enum MimeCategory {
+  IMAGE
+  VIDEO
+  AUDIO
+  DOCUMENT
+  ARCHIVE
+  OTHER
+}
+
+# ── File core types ───────────────────────────────────────────────────────────
+
+type FileName {
+  original: String!
+  sanitized: String!
+  extension: String
+}
+
+type FileSize {
+  bytes: Int!
+  kilobytes: Float!
+  megabytes: Float!
+}
+
+type MimeType {
+  full: String!
+  category: MimeCategory!
+  subtype: String!
+}
+
+type FileURL {
+  cdn: CDNUrl!
+  original: OriginalUrl!
+  signed: SignedURL
+}
+
+type CDNUrl {
+  base: URL!
+  withTransformations: URL
+}
+
+type OriginalUrl {
+  value: URL!
+}
+
+type FileInfo {
+  uuid: UUID!
+  name: FileName!
+  size: FileSize!
+  mimeType: MimeType!
+  isStored: Boolean!
+  isReady: Boolean!
+  isImage: Boolean!
+  datetime_uploaded: DateTime!
+  datetime_stored: DateTime
+  url: FileURL!
+  metadata: MetaData
+  appData: AppData
+}
+
+type FileDetails {
+  uuid: UUID!
+  name: FileName!
+  size: FileSize!
+  mimeType: MimeType!
+  status: FileStatus!
+  isStored: Boolean!
+  isReady: Boolean!
+  isImage: Boolean!
+  datetimeUploaded: DateTime!
+  datetimeStored: DateTime
+  datetimeRemoved: DateTime
+  source: String
+  variations: [FileInfo!]
+  rekognitionInfo: JSON
+  url: FileURL!
+  metadata: MetaData
+  appData: AppData
+}
+
+type File {
+  uuid: UUID!
+  info: FileDetails!
+  url: FileURL!
+  status: FileStatus!
+}
+
+# ── Upload types ──────────────────────────────────────────────────────────────
+
+type UploadToken {
+  value: String!
+  expiresAt: DateTime
+}
+
+type UploadSession {
+  uuid: UUID!
+  token: UploadToken!
+  expiresAt: DateTime!
+  uploadURL: URL!
+}
+
+type MultipartSession {
+  uuid: UUID!
+  parts: Int!
+  partSize: Int!
+  presignedUrls: [URL!]!
+  completeURL: URL!
+}
+
+type UploadDetails {
+  uuid: UUID!
+  file: FileDetails!
+  session: UploadSession
+  multipart: MultipartSession
+  status: FileStatus!
+  createdAt: DateTime!
+}
+
+type Uploader {
+  type: String!
+  name: String
+  userAgent: String
+}
+
+# ── Group types ───────────────────────────────────────────────────────────────
+
+type GroupURL {
+  cdn: URL!
+  api: URL!
+}
+
+type GroupFiles {
+  count: Int!
+  files: [FileDetails!]!
+  totalSize: FileSize!
+}
+
+type GroupDetails {
+  id: String!
+  datetimeCreated: DateTime!
+  datetimeStored: DateTime
+  filesCount: Int!
+  url: GroupURL!
+  files: GroupFiles!
+}
+
+type Group {
+  id: String!
+  details: GroupDetails!
+  files: GroupFiles!
+  url: GroupURL!
+  datetimeCreated: DateTime!
+}
+
+# ── Transformation types ──────────────────────────────────────────────────────
+
+type Resize {
+  width: Int
+  height: Int
+  mode: ResizeMode!
+}
+
+type Crop {
+  width: Int!
+  height: Int!
+  offsetX: Int
+  offsetY: Int
+  center: Boolean
+}
+
+type Grayscale {
+  enabled: Boolean!
+}
+
+type Rotate {
+  angle: RotateAngle!
+}
+
+type Flip {
+  enabled: Boolean!
+}
+
+type Flop {
+  enabled: Boolean!
+}
+
+type Overlay {
+  uuid: UUID!
+  width: String
+  height: String
+  x: String
+  y: String
+  opacity: Float
+}
+
+type Blur {
+  strength: Int!
+  radius: Int
+}
+
+type Preview {
+  width: Int!
+  height: Int!
+}
+
+type Format {
+  value: ImageFormat!
+}
+
+type AutoFormat {
+  enabled: Boolean!
+  fallback: ImageFormat
+}
+
+type AutoCompress {
+  enabled: Boolean!
+  quality: Int
+}
+
+type ImageTransform {
+  resize: Resize
+  crop: Crop
+  grayscale: Grayscale
+  rotate: Rotate
+  flip: Flip
+  flop: Flop
+  overlay: [Overlay!]
+  blur: Blur
+  preview: Preview
+  format: Format
+  autoFormat: AutoFormat
+  autoCompress: AutoCompress
+  resultUrl: URL
+}
+
+type VideoTransform {
+  format: VideoFormat
+  quality: String
+  size: Resize
+  cut: String
+  thumbs: Int
+  status: TransformationStatus!
+  resultUrl: URL
+}
+
+type DocumentTransform {
+  format: DocumentFormat
+  page: Int
+  status: TransformationStatus!
+  resultUrl: URL
+}
+
+type TransformationDetails {
+  id: UUID!
+  sourceUUID: UUID!
+  type: String!
+  status: TransformationStatus!
+  error: String
+  createdAt: DateTime!
+  finishedAt: DateTime
+}
+
+type Transformation {
+  id: UUID!
+  details: TransformationDetails!
+  image: ImageTransform
+  video: VideoTransform
+  document: DocumentTransform
+}
+
+# ── Webhook types ─────────────────────────────────────────────────────────────
+
+type WebhookDetails {
+  id: Int!
+  event: WebhookEvent!
+  targetUrl: URL!
+  isActive: Boolean!
+  signatureSecret: String
+  version: String
+  createdAt: DateTime!
+}
+
+type Webhook {
+  id: Int!
+  details: WebhookDetails!
+  status: WebhookStatus!
+  event: WebhookEvent!
+  targetUrl: URL!
+}
+
+# ── Project types ─────────────────────────────────────────────────────────────
+
+type Collaborator {
+  email: String!
+  name: String
+  role: CollaboratorRole!
+  joinedAt: DateTime
+}
+
+type CollaboratorRole {
+  name: String!
+  permissions: [String!]!
+}
+
+type ProjectDetails {
+  name: String!
+  pubKey: PublicKey!
+  collaborators: [Collaborator!]!
+  autoStoreEnabled: Boolean!
+  maxFileSizeBytes: Int
+  createdAt: DateTime
+}
+
+type Project {
+  name: String!
+  details: ProjectDetails!
+  collaborators: [Collaborator!]!
+  keys: [APIKey!]!
+}
+
+# ── Auth & Security types ──────────────────────────────────────────────────────
+
+type PublicKey {
+  value: String!
+}
+
+type SecretKey {
+  hint: String!
+  createdAt: DateTime!
+}
+
+type APIKey {
+  publicKey: PublicKey!
+  secretKey: SecretKey!
+  label: String
+  createdAt: DateTime!
+}
+
+type AuthDetails {
+  scheme: String!
+  publicKey: PublicKey!
+  signature: String
+  expire: DateTime
+}
+
+type Auth {
+  details: AuthDetails!
+  isValid: Boolean!
+}
+
+type SignedURL {
+  value: URL!
+  expiresAt: DateTime!
+  signature: String!
+}
+
+type SecureURL {
+  original: URL!
+  signed: SignedURL!
+  deliveryType: String
+}
+
+type SecureDelivery {
+  enabled: Boolean!
+  algorithm: String!
+  tokenLifetime: Int
+  ipFilterEnabled: Boolean
+}
+
+# ── CDN types ─────────────────────────────────────────────────────────────────
+
+type CDNDetails {
+  baseUrl: URL!
+  cname: String
+  geoDistribution: Boolean!
+  cacheControlMaxAge: Int
+  secureDelivery: SecureDelivery
+}
+
+type CDN {
+  uuid: UUID!
+  details: CDNDetails!
+  secureDelivery: SecureDelivery
+}
+
+# ── Metadata types ─────────────────────────────────────────────────────────────
+
+type MetaDataSchema {
+  key: String!
+  valueType: String!
+  required: Boolean!
+}
+
+type MetaData {
+  entries: JSON
+  schema: [MetaDataSchema!]
+}
+
+type AppDetails {
+  appName: String!
+  version: String
+  description: String
+}
+
+type AppData {
+  app: AppDetails!
+  data: JSON
+  datetimeCreated: DateTime!
+  datetimeUpdated: DateTime
+}
+
+# ── Pagination wrapper ────────────────────────────────────────────────────────
+
+type PageInfo {
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  total: Int!
+  count: Int!
+  next: String
+  previous: String
+}
+
+type FileConnection {
+  pageInfo: PageInfo!
+  results: [FileDetails!]!
+}
+
+type GroupConnection {
+  pageInfo: PageInfo!
+  results: [GroupDetails!]!
+}
+
+type WebhookConnection {
+  pageInfo: PageInfo!
+  results: [Webhook!]!
+}
+
+# ── Query ─────────────────────────────────────────────────────────────────────
+
+type Query {
+  """Get a single file by UUID."""
+  file(uuid: UUID!): FileDetails
+
+  """List all files with optional filters."""
+  files(
+    stored: Boolean
+    removed: Boolean
+    limit: Int
+    offset: Int
+    fromDate: DateTime
+    toDate: DateTime
+    orderBy: String
+  ): FileConnection!
+
+  """Get a file group by ID."""
+  group(id: String!): GroupDetails
+
+  """List all file groups."""
+  groups(limit: Int, offset: Int, fromDate: DateTime, toDate: DateTime): GroupConnection!
+
+  """Get a webhook by ID."""
+  webhook(id: Int!): Webhook
+
+  """List all webhooks."""
+  webhooks: WebhookConnection!
+
+  """Get current project information."""
+  project: ProjectDetails!
+
+  """Get CDN configuration."""
+  cdn: CDNDetails!
+
+  """Get metadata for a file."""
+  fileMetadata(uuid: UUID!, key: String): MetaData
+
+  """Get app data for a file."""
+  fileAppData(uuid: UUID!, appName: String!): AppData
+
+  """Get transformation details."""
+  transformation(id: UUID!): Transformation
+
+  """Get a signed / secure delivery URL for a file."""
+  secureUrl(uuid: UUID!, ttl: Int): SecureURL
+}
+
+# ── Mutation ──────────────────────────────────────────────────────────────────
+
+type Mutation {
+  """Store a previously-uploaded file permanently."""
+  storeFile(uuid: UUID!): FileDetails!
+
+  """Delete a file by UUID."""
+  deleteFile(uuid: UUID!): FileDetails!
+
+  """Copy a file to remote storage."""
+  copyFile(uuid: UUID!, target: String!, makePublic: Boolean): FileDetails!
+
+  """Create a file group from a list of UUIDs."""
+  createGroup(fileUuids: [UUID!]!): GroupDetails!
+
+  """Store a file group."""
+  storeGroup(id: String!): GroupDetails!
+
+  """Delete a file group."""
+  deleteGroup(id: String!): GroupDetails!
+
+  """Create a webhook."""
+  createWebhook(event: WebhookEvent!, targetUrl: URL!, isActive: Boolean, signatureSecret: String): Webhook!
+
+  """Update a webhook."""
+  updateWebhook(id: Int!, event: WebhookEvent, targetUrl: URL, isActive: Boolean, signatureSecret: String): Webhook!
+
+  """Delete a webhook."""
+  deleteWebhook(id: Int!): Boolean!
+
+  """Set metadata key-value pair on a file."""
+  setFileMetadata(uuid: UUID!, key: String!, value: String!): MetaData!
+
+  """Delete a metadata key from a file."""
+  deleteFileMetadata(uuid: UUID!, key: String!): Boolean!
+
+  """Initiate an image transformation."""
+  transformImage(uuid: UUID!, operations: String!): ImageTransform!
+
+  """Initiate a video conversion."""
+  convertVideo(uuid: UUID!, targetFormat: VideoFormat!, quality: String): VideoTransform!
+
+  """Initiate a document conversion."""
+  convertDocument(uuid: UUID!, targetFormat: DocumentFormat!, page: Int): DocumentTransform!
+
+  """Start a multipart upload session for large files."""
+  startMultipartUpload(filename: String!, size: Int!, mimeType: String!, parts: Int!): MultipartSession!
+
+  """Complete a multipart upload."""
+  completeMultipartUpload(uuid: UUID!): FileDetails!
+}
