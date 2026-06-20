@@ -7,7 +7,7 @@ description: Uploadcare is a file uploading and processing platform that provide
   CDN API, handle multipart uploads for large files, configure webhooks, and leverage
   add-ons for extended processing capabilities.
 type: Index
-image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
 url: https://raw.githubusercontent.com/api-evangelist/uploadcare/refs/heads/main/apis.yml
 created: 2026-06-12
 modified: 2026-06-12
@@ -29,7 +29,7 @@ apis:
     including managing files, metadata, groups, add-ons, projects, webhooks, file
     conversions, and video encoding. All requests must be signed with HMAC/SHA256
     authentication.
-  image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
   humanURL: https://uploadcare.com/api-refs/rest-api/v0.7.0/
   baseURL: https://api.uploadcare.com
   tags:
@@ -54,7 +54,7 @@ apis:
     files (up to 5 TB), URL-based uploads, UUID-based uploads, and file group creation.
     Supports direct uploads from browser or server without routing files through your
     own infrastructure.
-  image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
   humanURL: https://uploadcare.com/api-refs/upload-api/
   baseURL: https://upload.uploadcare.com
   tags:
@@ -74,7 +74,7 @@ apis:
   description: URL-based CDN API for on-the-fly image transformations including resizing,
     cropping, format conversion, compression, and effects. Transformed images are
     cached on the global Smart CDN network and not counted toward storage limits.
-  image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
   humanURL: https://uploadcare.com/docs/transformations/image/
   baseURL: https://ucarecdn.com
   tags:
