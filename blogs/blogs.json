@@ -3,18 +3,27 @@
   "lastFetched": "2026-06-12T00:00:00Z",
   "feeds": [
     {
-      "source": "https://www.linkedin.com/company/uploadcare",
-      "error": "HTTPError"
-    },
-    {
       "source": "https://uploadcare.com/blog/rss.xml",
       "feed_url": "https://uploadcare.com/blog/rss.xml",
       "title": "",
       "saved": 0,
       "method": "feed"
+    },
+    {
+      "source": "https://www.linkedin.com/company/uploadcare",
+      "error": "HTTPError"
     }
   ],
   "posts": [
+    {
+      "title": "Automate document conversion to PDF and image previews in n8n with Uploadcare",
+      "link": "https://uploadcare.com/blog/n8n-document-conversion-pdf-uploadcare/",
+      "description": "Build an n8n workflow that converts DOCX to PDF and PDF pages to PNG with the Uploadcare Conversion API.",
+      "pubDate": "Tue, 16 Jun 2026 00:00:00 GMT",
+      "category": "uploading",
+      "author": "Trust Jamin Okpukoro",
+      "guid": "https://uploadcare.com/blog/n8n-document-conversion-pdf-uploadcare/"
+    },
     {
       "title": "Managing forms and file uploads in\u00a0React using useActionState",
       "link": "https://uploadcare.com/blog/react-useactionstate-file-uploads/",
@@ -197,6 +206,6 @@
     }
   ],
   "repo": "uploadcare",
-  "post_count": 0,
-  "fetched": "2026-06-14T20:42:17Z"
+  "post_count": 1,
+  "fetched": "2026-06-27T12:03:07Z"
 }
