@@ -1,0 +1,49 @@
+generated: '2026-07-11'
+method: derived
+source: openapi/uploadcare-rest-api-openapi.yml
+summary:
+  types:
+  - apiKey
+  api_key_in:
+  - header
+schemes:
+- name: apiKeyAuth
+  type: apiKey
+  in: header
+  parameter: Authorization
+  description: |-
+    Every request made to `https://api.uploadcare.com/` MUST be signed. HTTPS SHOULD be used with any authorization scheme.
+
+    Requests MUST contain the `Authorization` header defining `auth-scheme` and `auth-param`: `Authorization: auth-scheme auth-param`.
+
+    Every request MUST contain the `Accept` header identifying the REST API version: `Accept: application/vnd.uploadcare-v0.7+json`.
+
+    There are two ava
+  sources:
+  - openapi/uploadcare-rest-api-openapi.yml
+- name: Uploadcare
+  type: apiKey
+  in: header
+  parameter: Uploadcare
+  description: |-
+    With the `Uploadcare` authentication method:
+    * `auth-param` is a `public_key:signature` pair, where your `secret_key` is used to derive `signature` but is _not included in every request_ itself.
+    * You MUST also provide the `Date` header in [RFC2822](https://datatracker.ietf.org/doc/html/rfc2822#section-3.3) format with the time zone set to `GMT` (see the example below).
+    * The date you provide MUST
+  sources:
+  - openapi/uploadcare-rest-api-openapi.yml
+- name: Uploadcare.Simple
+  type: apiKey
+  in: header
+  parameter: Uploadcare.Simple
+  description: |-
+    Note: We DO NOT recommend using this authentication method in production.
+
+    With the `Uploadcare.Simple` authentication method, `auth-param` is your `public_key:secret_key` pair. Note that in this scheme, your Uploadcare project `secret_key` is  _included in every request as plain text_.
+
+    ```http
+    Accept: application/vnd.uploadcare-v0.7+json
+    Authorization: Uploadcare.Simple public_key:secret_key
+    ```
+  sources:
+  - openapi/uploadcare-rest-api-openapi.yml

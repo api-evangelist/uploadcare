@@ -89,6 +89,12 @@ apis:
   - type: OpenAPI
     url: openapi/uploadcare-cdn-api-openapi.yml
 common:
+- type: VulnerabilityDisclosure
+  url: security/uploadcare-vulnerability-disclosure.yml
+- type: DomainSecurity
+  url: security/uploadcare-domain-security.yml
+- type: Authentication
+  url: authentication/uploadcare-authentication.yml
 - type: Website
   url: https://uploadcare.com/
 - type: Documentation
