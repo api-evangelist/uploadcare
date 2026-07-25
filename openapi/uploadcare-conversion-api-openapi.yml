@@ -1,0 +1,945 @@
+openapi: 3.0.0
+info:
+  title: URL API Reference Add-Ons Conversion API
+  version: '2022-11-28'
+  description: 'Every uploaded file is immediately available on the Uploadcare CDN.
+
+    The CDN includes on-the-fly processing features and can work as a proxy.
+
+
+    ## API endpoints
+
+    Access files in Uploadcare CDN at `ucarecdn.com` over HTTP/HTTPS like this:
+
+    ```https://ucarecdn.com/:uuid/```
+
+
+    You can add CDN operations by including directives in the CDN URL:
+
+    ```https://ucarecdn.com/:uuid/-/:operation/:params/:filename```
+
+
+    * `:uuid` stands for the unique file identifier, UUID, assigned on upload.
+
+    * `/-/` is a mandatory parsing delimiter to divide operations and other path components.
+
+    * `:operation/:params/` is a CDN operation directive with parameters.
+
+    * `:filename` is an optional filename you can add after a trailing slash /.
+
+
+    You can stack two and more operations like this:
+
+    ```-/:operation/:params/-/:operation/:params/```
+
+    '
+  contact:
+    name: API support
+    email: help@uploadcare.com
+  x-logo:
+    url: https://ucarecdn.com/12e3af14-392d-416f-8542-f210c2eb6ec4/logourlapi.svg
+    backgroundColor: '#fafafa'
+    altText: Uploadcare URL API Reference
+  x-meta:
+    title: URL API Reference — Uploadcare
+    description: A reference documentation for the Uploadcare's URL API.
+servers:
+- url: https://ucarecdn.com
+  description: Production server
+tags:
+- name: Conversion
+paths:
+  /convert/document/{uuid}/:
+    get:
+      tags:
+      - Conversion
+      summary: Document info
+      description: The endpoint allows you to determine the document format and possible conversion formats.
+      operationId: documentConvertInfo
+      x-codeSamples:
+      - lang: cURL
+        label: cURL
+        source: "curl -X GET \"https://api.uploadcare.com/convert/document/UUID/\" \\\n     -H \"Content-Type: application/json\" \\\n     -H \"Accept: application/vnd.uploadcare-v0.7+json\" \\\n     -H \"Authorization: Uploadcare.Simple YOUR_PUBLIC_KEY:YOUR_SECRET_KEY\"\n"
+      - lang: Python
+        label: Python
+        source: 'from pyuploadcare import Uploadcare
+
+          uploadcare = Uploadcare(public_key=''YOUR_PUBLIC_KEY'', secret_key=''YOUR_SECRET_KEY'')
+
+
+          uuid = ''740e1b8c-1ad8-4324-b7ec-112c79d8eac2''
+
+          document_convert_info = uploadcare.document_convert_api.retrieve(uuid)
+
+          print(document_convert_info)
+
+          '
+      - lang: Ruby
+        label: Ruby
+        source: 'require ''uploadcare''
+
+          Uploadcare.config.public_key = ''YOUR_PUBLIC_KEY''
+
+          Uploadcare.config.secret_key = ''YOUR_SECRET_KEY''
+
+
+          uuid = ''740e1b8c-1ad8-4324-b7ec-112c79d8eac2''
+
+          puts Uploadcare::DocumentConverter.info(uuid)
+
+          '
+      - lang: Swift
+        label: Swift
+        source: 'import Uploadcare
+
+
+          let uploadcare = Uploadcare(withPublicKey: "YOUR_PUBLIC_KEY", secretKey: "YOUR_SECRET_KEY")
+
+
+          let conversionToken = "YOUR_CONVERSION_TOKEN"
+
+          let conversionStatus = try await uploadcare.documentConversionJobStatus(token: conversionToken)
+
+          print(conversionStatus)
+
+          '
+      - lang: Kotlin
+        label: Kotlin
+        source: 'import com.uploadcare.android.library.api.UploadcareClient
+
+
+          val uploadcare = UploadcareClient(publicKey = "YOUR_PUBLIC_KEY", secretKey = "YOUR_SECRET_KEY")
+
+
+          val documentInfo = uploadcare.getDocumentConversionInfo("YOUR_FILE_UUID")
+
+          Log.d("TAG", status.toString())
+
+          '
+      parameters:
+      - $ref: '#/components/parameters/acceptHeader'
+      - name: uuid
+        description: File uuid.
+        in: path
+        required: true
+        schema:
+          type: string
+          example: 86c91c35-58e1-41f7-9b23-2d7652cfcd17
+      responses:
+        '200':
+          $ref: '#/components/responses/documentInfoResponse'
+        '400':
+          description: Simple HTTP Auth or document conversion permission errors.
+          content:
+            application/json:
+              schema:
+                oneOf:
+                - $ref: '#/components/schemas/simpleAuthHTTPForbidden'
+                - $ref: '#/components/schemas/cantUseDocsConversionError'
+              examples:
+                Authentication Error:
+                  $ref: '#/components/examples/simpleAuthHTTPForbidden'
+                Permission Error:
+                  $ref: '#/components/examples/cantUseDocsConversionError'
+        '401':
+          $ref: '#/components/responses/authorizationProblemsResponse'
+        '404':
+          description: Document with specified ID is not found.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  detail:
+                    type: string
+                    example: Not found.
+                    default: Not found.
+        '406':
+          $ref: '#/components/responses/invalidAcceptHeader'
+        '429':
+          $ref: '#/components/responses/requestWasThrottledError'
+        '503':
+          description: Conversion service error.
+          content:
+            text/plain:
+              schema:
+                type: string
+  /convert/document/:
+    post:
+      tags:
+      - Conversion
+      summary: Convert document
+      description: Uploadcare allows you to convert files to different target formats. Check out the [conversion capabilities](https://uploadcare.com/docs/transformations/file-conversion/#document-file-formats) for each supported format.
+      operationId: documentConvert
+      parameters:
+      - $ref: '#/components/parameters/acceptHeader'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/documentJobSubmitParameters'
+      responses:
+        '200':
+          $ref: '#/components/responses/documentJobSubmitResponse'
+        '400':
+          description: Simple HTTP Auth or document conversion permission errors.
+          content:
+            application/json:
+              schema:
+                oneOf:
+                - $ref: '#/components/schemas/simpleAuthHTTPForbidden'
+                - $ref: '#/components/schemas/cantUseDocsConversionError'
+                - $ref: '#/components/schemas/jsonObjectParseError'
+                - type: object
+                  properties:
+                    detail:
+                      type: string
+                      default: “paths” parameter is required.
+              examples:
+                Authentication Error:
+                  $ref: '#/components/examples/simpleAuthHTTPForbidden'
+                Permission Error:
+                  $ref: '#/components/examples/cantUseDocsConversionError'
+                json-parse-error:
+                  $ref: '#/components/examples/jsonObjectParseError'
+                path-error:
+                  value:
+                    detail: “paths” parameter is required.
+        '401':
+          $ref: '#/components/responses/authorizationProblemsResponse'
+        '406':
+          $ref: '#/components/responses/invalidAcceptHeader'
+      x-codeSamples:
+      - lang: PHP
+        label: PHP
+        source: "<?php\nuse Uploadcare\\Interfaces\\Conversion\\ConvertedItemInterface;\nuse Uploadcare\\Interfaces\\Response\\ResponseProblemInterface;\n$configuration = Uploadcare\\Configuration::create((string) $_ENV['UPLOADCARE_PUBLIC_KEY'], (string) $_ENV['UPLOADCARE_SECRET_KEY']);\n\n$api = (new Uploadcare\\Api($configuration))->conversion();\n$request = new Uploadcare\\Conversion\\DocumentConversionRequest('pdf');\n$result = $api->convertDocument('1bac376c-aa7e-4356-861b-dd2657b5bfd2', $request);\nif ($result instanceof ConvertedItemInterface) {\n    echo \\sprintf('Conversion requested. Key is \\'%s\\'', $result->getToken());\n}\nif ($result instanceof ResponseProblemInterface) {\n    echo \\sprintf('Error in request: %s', $result->getReason());\n}\n"
+      - lang: Python
+        label: Python
+        source: 'from pyuploadcare import Uploadcare
+
+          uploadcare = Uploadcare(public_key=''YOUR_PUBLIC_KEY'', secret_key=''YOUR_SECRET_KEY'')
+
+
+          file = uploadcare.file(''1bac376c-aa7e-4356-861b-dd2657b5bfd2'')
+
+          transformation = DocumentTransformation().format(DocumentFormat.pdf)
+
+          converted_file = file.convert(transformation)
+
+          print(converted_file.info)
+
+          '
+      - lang: Ruby
+        label: Ruby
+        source: 'require ''uploadcare''
+
+          Uploadcare.config.public_key = ''YOUR_PUBLIC_KEY''
+
+          Uploadcare.config.secret_key = ''YOUR_SECRET_KEY''
+
+
+          document_params = { uuid: ''1bac376c-aa7e-4356-861b-dd2657b5bfd2'', format: :pdf }
+
+          options = { store: true }
+
+          Uploadcare::DocumentConverter.convert(document_params, options)
+
+          '
+      - lang: Swift
+        label: Swift
+        source: "import Uploadcare\n\nlet uploadcare = Uploadcare(withPublicKey: \"YOUR_PUBLIC_KEY\", secretKey: \"YOUR_SECRET_KEY\")\n\nlet file = try await uploadcare.fileInfo(withUUID: \"1bac376c-aa7e-4356-861b-dd2657b5bfd2\")\nlet settings = DocumentConversionJobSettings(forFile: file)\n  .format(.pdf)\n  \nlet response = try await uploadcare.convertDocumentsWithSettings([settings])\nprint(response)\n"
+      - lang: Kotlin
+        label: Kotlin
+        source: "import com.uploadcare.android.library.api.UploadcareClient\n\nval uploadcare = UploadcareClient(publicKey = \"YOUR_PUBLIC_KEY\", secretKey = \"YOUR_SECRET_KEY\")\n\nval conversionJob = DocumentConversionJob(fileId = \"1bac376c-aa7e-4356-861b-dd2657b5bfd2\")\n    .apply { setFormat(DocumentFormat.PDF) }\nval converter = DocumentConverter(uploadcare, listOf(conversionJob))\nval response = converter.convertWithResultData()\nLog.d(\"TAG\", response.toString())\n"
+  /convert/document/status/{token}/:
+    get:
+      tags:
+      - Conversion
+      summary: Document conversion job status
+      description: Once you get a conversion job result, you can acquire a conversion job status via token. Just put it in your request URL as `:token`.
+      operationId: documentConvertStatus
+      parameters:
+      - $ref: '#/components/parameters/acceptHeader'
+      - name: token
+        description: Job token.
+        in: path
+        schema:
+          type: integer
+        required: true
+        example: 426339926
+      responses:
+        '200':
+          $ref: '#/components/responses/documentJobStatusResponse'
+        '400':
+          description: Simple HTTP Auth or document conversion permission errors.
+          content:
+            application/json:
+              schema:
+                oneOf:
+                - $ref: '#/components/schemas/simpleAuthHTTPForbidden'
+                - $ref: '#/components/schemas/cantUseDocsConversionError'
+              examples:
+                Authentication Error:
+                  $ref: '#/components/examples/simpleAuthHTTPForbidden'
+                Permission Error:
+                  $ref: '#/components/examples/cantUseDocsConversionError'
+        '401':
+          $ref: '#/components/responses/authorizationProblemsResponse'
+        '404':
+          description: Job with specified ID is not found.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  detail:
+                    type: string
+                    example: Not found.
+                    default: Not found.
+        '406':
+          $ref: '#/components/responses/invalidAcceptHeader'
+        '429':
+          $ref: '#/components/responses/requestWasThrottledError'
+        '503':
+          description: Conversion service error.
+          content:
+            text/plain:
+              schema:
+                type: string
+      x-codeSamples:
+      - lang: JavaScript
+        label: JS
+        source: "import {\n  conversionJobStatus,\n  ConversionType,\n  UploadcareSimpleAuthSchema,\n} from '@uploadcare/rest-client';\n\nconst uploadcareSimpleAuthSchema = new UploadcareSimpleAuthSchema({\n  publicKey: 'YOUR_PUBLIC_KEY',\n  secretKey: 'YOUR_SECRET_KEY',\n});\n\nconst result = await conversionJobStatus(\n  {\n    type: ConversionType.DOCUMENT,\n    token: 32921143\n  },\n  { authSchema: uploadcareSimpleAuthSchema }\n)\n"
+      - lang: PHP
+        label: PHP
+        source: '<?php
+
+          $configuration = Uploadcare\Configuration::create((string) $_ENV[''UPLOADCARE_PUBLIC_KEY''], (string) $_ENV[''UPLOADCARE_SECRET_KEY'']);
+
+
+          $api = (new Uploadcare\Api($configuration))->conversion();
+
+          $status = $api->documentJobStatus(32921143);
+
+          echo \sprintf(''Conversion status: %s'', $status->getError() ?? $status->getStatus());
+
+          '
+      - lang: Python
+        label: Python
+        source: 'from pyuploadcare import Uploadcare
+
+          uploadcare = Uploadcare(public_key=''YOUR_PUBLIC_KEY'', secret_key=''YOUR_SECRET_KEY'')
+
+
+          token = 32921143
+
+          document_convert_status = uploadcare.document_convert_api.status(token)
+
+          print(document_convert_status.status)
+
+          '
+      - lang: Ruby
+        label: Ruby
+        source: 'require ''uploadcare''
+
+          Uploadcare.config.public_key = ''YOUR_PUBLIC_KEY''
+
+          Uploadcare.config.secret_key = ''YOUR_SECRET_KEY''
+
+
+          token = 32_921_143
+
+          puts Uploadcare::DocumentConverter.status(token)
+
+          '
+      - lang: Swift
+        label: Swift
+        source: 'import Uploadcare
+
+
+          let uploadcare = Uploadcare(withPublicKey: "YOUR_PUBLIC_KEY", secretKey: "YOUR_SECRET_KEY")
+
+
+          let job = try await uploadcare.documentConversionJobStatus(token: 32921143)
+
+          print(job.statusString)
+
+          '
+      - lang: Kotlin
+        label: Kotlin
+        source: 'import com.uploadcare.android.library.api.UploadcareClient
+
+
+          val uploadcare = UploadcareClient(publicKey = "YOUR_PUBLIC_KEY", secretKey = "YOUR_SECRET_KEY")
+
+
+          val status = uploadcare.getDocumentConversionStatus(token = 32921143)
+
+          Log.d("TAG", status.toString())
+
+          '
+  /convert/video/:
+    post:
+      tags:
+      - Conversion
+      summary: Convert video
+      description: Uploadcare video processing adjusts video quality, format (mp4, webm, ogg), and size, cuts it, and generates thumbnails. Processed video is instantly available over CDN.
+      operationId: videoConvert
+      parameters:
+      - $ref: '#/components/parameters/acceptHeader'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/videoJobSubmitParameters'
+      responses:
+        '200':
+          $ref: '#/components/responses/videoJobSubmitResponse'
+        '400':
+          description: Simple HTTP Auth or video conversion permission errors.
+          content:
+            application/json:
+              schema:
+                oneOf:
+                - $ref: '#/components/schemas/simpleAuthHTTPForbidden'
+                - $ref: '#/components/schemas/cantUseVideoConversionError'
+                - $ref: '#/components/schemas/jsonObjectParseError'
+                - type: object
+                  properties:
+                    detail:
+                      type: string
+                      default: “paths” parameter is required.
+              examples:
+                Authentication Error:
+                  $ref: '#/components/examples/simpleAuthHTTPForbidden'
+                Permission Error:
+                  $ref: '#/components/examples/cantUseVideoConversionError'
+                json-parse-error:
+                  $ref: '#/components/examples/jsonObjectParseError'
+                path-error:
+                  value:
+                    detail: “paths” parameter is required.
+        '401':
+          $ref: '#/components/responses/authorizationProblemsResponse'
+        '406':
+          $ref: '#/components/responses/invalidAcceptHeader'
+      x-codeSamples:
+      - lang: PHP
+        label: PHP
+        source: "<?php\nuse Uploadcare\\Interfaces\\Conversion\\ConvertedItemInterface;\nuse Uploadcare\\Interfaces\\Response\\ResponseProblemInterface;\n$configuration = Uploadcare\\Configuration::create((string) $_ENV['UPLOADCARE_PUBLIC_KEY'], (string) $_ENV['UPLOADCARE_SECRET_KEY']);\n\n$api = (new Uploadcare\\Api($configuration))->conversion();\n$request = (new Uploadcare\\Conversion\\VideoEncodingRequest())\n    ->setHorizontalSize(1024)\n    ->setVerticalSize(768)\n    ->setResizeMode('preserve_ratio')\n    ->setTargetFormat('mp4');\n$result = $api->convertVideo('1bac376c-aa7e-4356-861b-dd2657b5bfd2', $request);\nif ($result instanceof ConvertedItemInterface) {\n    echo \\sprintf('Conversion requested. Key is \\'%s\\'', $result->getToken());\n}\nif ($result instanceof ResponseProblemInterface) {\n    echo \\sprintf('Error in request: %s', $result->getReason());\n}\n"
+      - lang: Python
+        label: Python
+        source: "from pyuploadcare import Uploadcare\nuploadcare = Uploadcare(public_key='YOUR_PUBLIC_KEY', secret_key='YOUR_SECRET_KEY')\n\ntransformation = (\n    VideoTransformation()\n    .format(VideoFormat.mp4)\n    .size(width=640, height=480, resize_mode=ResizeMode.add_padding)\n    .quality(Quality.lighter)\n    .cut(start_time=\"0:1.535\", length=\"0:10.0\")\n    .thumbs(10)\n)\n\npath = transformation.path('1bac376c-aa7e-4356-861b-dd2657b5bfd2')\nresponse = uploadcare.video_convert_api.convert([path])\nvideo_convert_info = response.result[0]\nconverted_file = uploadcare.file(video_convert_info.uuid)\nvideo_convert_status = uploadcare.video_convert_api.status(video_convert_info.token)\n"
+      - lang: Ruby
+        label: Ruby
+        source: "require 'uploadcare'\nUploadcare.config.public_key = 'YOUR_PUBLIC_KEY'\nUploadcare.config.secret_key = 'YOUR_SECRET_KEY'\n\nvideo_params = {\n  uuid: '1bac376c-aa7e-4356-861b-dd2657b5bfd2',\n  format: :mp4,\n  quality: :lighter\n}\noptions = { store: true }\nUploadcare::VideoConverter.convert(video_params, options)\n"
+      - lang: Swift
+        label: Swift
+        source: "import Uploadcare\n\nlet uploadcare = Uploadcare(withPublicKey: \"YOUR_PUBLIC_KEY\", secretKey: \"YOUR_SECRET_KEY\")\n\nlet file = try await uploadcare.fileInfo(withUUID: \"1bac376c-aa7e-4356-861b-dd2657b5bfd2\")\nlet settings = VideoConversionJobSettings(forFile: videoFile)\n  .format(.mp4)\n  .size(VideoSize(width: 640, height: 480))\n  .resizeMode(.addPadding)\n  .quality(.lighter)\n  .cut( VideoCut(startTime: \"0:0:5.000\", length: \"15\") )\n  .thumbs(10)\n\nlet response = try await uploadcare.convertVideosWithSettings([settings])\nprint(response)\n"
+      - lang: Kotlin
+        label: Kotlin
+        source: "import com.uploadcare.android.library.api.UploadcareClient\n\nval uploadcare = UploadcareClient(publicKey = \"YOUR_PUBLIC_KEY\", secretKey = \"YOUR_SECRET_KEY\")\n\nval conversionJob = VideoConversionJob(fileId = \"1bac376c-aa7e-4356-861b-dd2657b5bfd2\")\n    .apply {\n        setFormat(VideoFormat.MP4)\n        resize(width = 640, height = 480, resizeMode = VideoResizeMode.LETTERBOX)\n        quality(VideoQuality.LIGHTER)\n        cut(startTime = \"0:0:5.000\", length = \"15\")\n        thumbnails(10)\n    }\nval converter = VideoConverter(uploadcare, listOf(conversionJob))\nval response = converter.convertWithResultData()\nLog.d(\"TAG\", response.toString())\n"
+  /convert/video/status/{token}/:
+    get:
+      tags:
+      - Conversion
+      summary: Video conversion job status
+      description: Once you get a processing job result, you can acquire a processing job status via token. Just put it in your request URL as `:token`.
+      operationId: videoConvertStatus
+      parameters:
+      - $ref: '#/components/parameters/acceptHeader'
+      - name: token
+        description: Job token.
+        in: path
+        schema:
+          type: integer
+        required: true
+        example: 426339926
+      responses:
+        '200':
+          $ref: '#/components/responses/videoJobStatusResponse'
+        '400':
+          description: Simple HTTP Auth or video conversion permission errors.
+          content:
+            application/json:
+              schema:
+                oneOf:
+                - $ref: '#/components/schemas/simpleAuthHTTPForbidden'
+                - $ref: '#/components/schemas/cantUseVideoConversionError'
+              examples:
+                Authentication Error:
+                  $ref: '#/components/examples/simpleAuthHTTPForbidden'
+                Permission Error:
+                  $ref: '#/components/examples/cantUseVideoConversionError'
+        '401':
+          $ref: '#/components/responses/authorizationProblemsResponse'
+        '404':
+          description: Job with specified ID is not found.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  detail:
+                    type: string
+                    example: Not found.
+                    default: Not found.
+        '406':
+          $ref: '#/components/responses/invalidAcceptHeader'
+        '429':
+          $ref: '#/components/responses/requestWasThrottledError'
+        '503':
+          description: Conversion service error.
+          content:
+            text/plain:
+              schema:
+                type: string
+      x-codeSamples:
+      - lang: JavaScript
+        label: JS
+        source: "import {\n  conversionJobStatus,\n  ConversionType,\n  UploadcareSimpleAuthSchema,\n} from '@uploadcare/rest-client';\n\nconst uploadcareSimpleAuthSchema = new UploadcareSimpleAuthSchema({\n  publicKey: 'YOUR_PUBLIC_KEY',\n  secretKey: 'YOUR_SECRET_KEY',\n});\n\nconst result = await conversionJobStatus(\n  {\n    type: ConversionType.VIDEO,\n    token: 1201016744\n  },\n  { authSchema: uploadcareSimpleAuthSchema }\n)\n"
+      - lang: PHP
+        label: PHP
+        source: '<?php
+
+          $configuration = Uploadcare\Configuration::create((string) $_ENV[''UPLOADCARE_PUBLIC_KEY''], (string) $_ENV[''UPLOADCARE_SECRET_KEY'']);
+
+
+          $api = (new Uploadcare\Api($configuration))->conversion();
+
+          $status = $api->videoJobStatus(1201016744);
+
+          echo \sprintf(''Conversion status: %s'', $status->getError() ?? $status->getStatus());
+
+          '
+      - lang: Python
+        label: Python
+        source: 'from pyuploadcare import Uploadcare
+
+          uploadcare = Uploadcare(public_key=''YOUR_PUBLIC_KEY'', secret_key=''YOUR_SECRET_KEY'')
+
+
+          token = 1201016744
+
+          video_convert_status = uploadcare.video_convert_api.status(token)
+
+          print(video_convert_status.status)
+
+          '
+      - lang: Ruby
+        label: Ruby
+        source: 'require ''uploadcare''
+
+          Uploadcare.config.public_key = ''YOUR_PUBLIC_KEY''
+
+          Uploadcare.config.secret_key = ''YOUR_SECRET_KEY''
+
+
+          token = 1_201_016_744
+
+          puts Uploadcare::VideoConverter.status(token)
+
+          '
+      - lang: Swift
+        label: Swift
+        source: 'import Uploadcare
+
+
+          let uploadcare = Uploadcare(withPublicKey: "YOUR_PUBLIC_KEY", secretKey: "YOUR_SECRET_KEY")
+
+
+          let job = try await uploadcare.videoConversionJobStatus(token: 1201016744)
+
+          print(job.statusString)
+
+          '
+      - lang: Kotlin
+        label: Kotlin
+        source: 'import com.uploadcare.android.library.api.UploadcareClient
+
+
+          val uploadcare = UploadcareClient(publicKey = "YOUR_PUBLIC_KEY", secretKey = "YOUR_SECRET_KEY")
+
+
+          val status = uploadcare.getVideoConversionStatus(token = 1201016744)
+
+          Log.d("TAG", status.toString())
+
+          '
+components:
+  schemas:
+    cantUseDocsConversionError:
+      type: object
+      properties:
+        detail:
+          type: string
+          default: Document conversion feature is not available for this project.
+      example:
+        detail: Document conversion feature is not available for this project.
+    cantUseVideoConversionError:
+      type: object
+      properties:
+        detail:
+          type: string
+          default: Video conversion feature is not available for this project.
+      example:
+        detail: Video conversion feature is not available for this project.
+    documentJobSubmitParameters:
+      type: object
+      properties:
+        paths:
+          description: An array of UUIDs of your source documents to convert together with the specified target format (see [documentation](https://uploadcare.com/docs/transformations/file-conversion/)).
+          type: array
+          items:
+            type: string
+          example:
+          - https://cdn.uploadcare.com/5ffa2545-ea40-4e71-a9e4-3a8e49b7b737/document/-/format/jpg/-/page/1/
+          - 18574696-50b5-4d6a-84c2-48ffc3de1d40/document/-/format/jpg/-/dpi/150/
+          - 18574696-50b5-4d6a-84c2-48ffc3de1d40/document/-/format/jpg/-/quality/80/
+          - 18574696-50b5-4d6a-84c2-48ffc3de1d40/document/-/format/jpg/-/dpi/200/-/quality/90/
+          - 88a51210-bd69-4411-bc72-a9952d9512cd/document/-/format/pdf/
+          - 8ddbbb48-0927-4df7-afac-c6031668b01b/document/
+        store:
+          type: string
+          description: 'When `store` is set to `"0"`, the converted files will only be available for 24 hours. `"1"` makes converted files available permanently. If the parameter is omitted, it checks the `Auto file storing` setting of your Uploadcare project identified by the `public_key` provided in the `auth-param`.
+
+            '
+          enum:
+          - '0'
+          - 'false'
+          - '1'
+          - 'true'
+          example: '1'
+        save_in_group:
+          type: string
+          default: '0'
+          description: 'When `save_in_group` is set to `"1"`, multi-page documents additionally will be saved as a file group.
+
+            '
+          enum:
+          - '0'
+          - 'false'
+          - '1'
+          - 'true'
+          example: '1'
+      example:
+        paths:
+        - https://cdn.uploadcare.com/5ffa2545-ea40-4e71-a9e4-3a8e49b7b737/document/-/format/jpg/-/page/1/
+        - 18574696-50b5-4d6a-84c2-48ffc3de1d40/document/-/format/jpg/-/dpi/150/
+        - 18574696-50b5-4d6a-84c2-48ffc3de1d40/document/-/format/jpg/-/quality/80/
+        - 18574696-50b5-4d6a-84c2-48ffc3de1d40/document/-/format/jpg/-/dpi/200/-/quality/90/
+        - 88a51210-bd69-4411-bc72-a9952d9512cd/document/-/format/pdf/
+        - 8ddbbb48-0927-4df7-afac-c6031668b01b/document/
+        store: 1
+        save_in_group: '1'
+    jsonObjectParseError:
+      type: object
+      properties:
+        detail:
+          type: string
+          description: Expected JSON object.
+      example:
+        detail: Expected JSON object.
+    videoJobSubmitParameters:
+      type: object
+      properties:
+        paths:
+          description: An array of UUIDs of your video files to process together with a set of assigned operations (see [documentation](https://uploadcare.com/docs/transformations/video-encoding/)).
+          type: array
+          items:
+            type: string
+          example:
+          - https://cdn.uploadcare.com/5ffa2545-ea40-4e71-a9e4-3a8e49b7b737/video/-/format/webm/
+          - 88a51210-bd69-4411-bc72-a9952d9512cd/video/-/format/ogg/-/quality/best/
+          - 8ddbbb48-0927-4df7-afac-c6031668b01b/video/
+        store:
+          type: string
+          description: 'When `store` is set to `"0"`, the converted files will only be available for 24 hours. `"1"` makes converted files available permanently. If the parameter is omitted, it checks the `Auto file storing` setting of your Uploadcare project identified by the `public_key` provided in the `auth-param`.
+
+            '
+          enum:
+          - '0'
+          - 'false'
+          - '1'
+          - 'true'
+          example: '1'
+      example:
+        paths:
+        - d52d7136-a2e5-4338-9f45-affbf83b857d/video/
+        - d52d7136-a2e5-4338-9f45-affbf83b857d/video/-/format/ogg/-/quality/best/
+        - 28843a09-dd3d-4b8a-ad4f-8aa5f8f60ff2
+        store: '1'
+    simpleAuthHTTPForbidden:
+      type: object
+      properties:
+        detail:
+          type: string
+          default: Simple authentication over HTTP is forbidden. Please, use HTTPS or signed requests instead.
+      example:
+        detail: Simple authentication over HTTP is forbidden. Please, use HTTPS or signed requests instead.
+  responses:
+    videoJobStatusResponse:
+      description: Success.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+                description: 'Processing job status, can have one of the following values: - `pending` — video file is being prepared for conversion. - `processing` — video file processing is in progress. - `finished` — the processing is finished. - `failed` — we failed to process the video, see `error` for details. - `canceled` — video processing was canceled.'
+                enum:
+                - pending
+                - processing
+                - finished
+                - failed
+                - cancelled
+              error:
+                type: string
+                nullable: true
+                description: Holds a processing error if we failed to handle your video.
+              result:
+                type: object
+                description: Repeats the contents of your processing output.
+                properties:
+                  uuid:
+                    type: string
+                    format: uuid
+                    description: A UUID of your processed video file.
+                  thumbnails_group_uuid:
+                    type: string
+                    format: uuid
+                    description: A UUID of a file group with thumbnails for an output video, based on the `thumbs` operation parameters.
+            example:
+              status: processing
+              error: null
+              result:
+                thumbnails_group_uuid: 575ed4e8-f4e8-4c14-a58b-1527b6d9ee46~1
+                uuid: 500196bc-9da5-4aaf-8f3e-70a4ce86edae
+    invalidAcceptHeader:
+      description: Invalid version header `Accept` for this endpoint.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              detail:
+                type: string
+                example: Incorrect Accept header provided. Make sure to specify API version. Refer to REST API docs for details.
+                default: Incorrect Accept header provided. Make sure to specify API version. Refer to REST API docs for details.
+    documentJobSubmitResponse:
+      description: Success.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              problems:
+                type: object
+                description: Dictionary of problems related to your processing job, if any. A key is the `path` you requested.
+                additionalProperties:
+                  type: string
+                  format: uuid
+              result:
+                type: array
+                description: Result for each requested path, in case of no errors for that path.
+                items:
+                  type: object
+                  properties:
+                    original_source:
+                      type: string
+                      description: Source file identifier including a target format, if present.
+                    uuid:
+                      type: string
+                      description: A UUID of your converted document.
+                      format: uuid
+                    token:
+                      type: integer
+                      description: A conversion job token that can be used to get a job status.
+            example:
+              problems:
+                8ddbbb48-0927-4df7-afac-c6031668b01b: Bad path "8ddbbb48-0927-4df7-afac-c6031668b01b". Use UUID or CDN URL
+              result:
+              - original_source: https://cdn.uploadcare.com/5ffa2545-ea40-4e71-a9e4-3a8e49b7b737/document/-/format/jpg/-/page/1/
+                token: 445630631
+                uuid: d52d7136-a2e5-4338-9f45-affbf83b857d
+              - original_source: 88a51210-bd69-4411-bc72-a9952d9512cd/document/-/format/pdf/
+                token: 445630637
+                uuid: 28843a09-dd3d-4b8a-ad4f-8aa5f8f60ff2
+    documentJobStatusResponse:
+      description: Success.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+                description: 'Conversion job status, can have one of the following values: - `pending` — a source file is being prepared for conversion. - `processing` — conversion is in progress. - `finished` — the conversion is finished. - `failed` — failed to convert the source, see `error` for details. - `canceled` — the conversion was canceled.'
+                enum:
+                - pending
+                - processing
+                - finished
+                - failed
+                - cancelled
+              error:
+                type: string
+                nullable: true
+                description: Holds a conversion error if your file can't be handled.
+              result:
+                type: object
+                description: Repeats the contents of your processing output.
+                properties:
+                  uuid:
+                    type: string
+                    format: uuid
+                    description: A UUID of a converted target file.
+            example:
+              status: processing
+              error: null
+              result:
+                uuid: 500196bc-9da5-4aaf-8f3e-70a4ce86edae
+    documentInfoResponse:
+      description: Success.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                nullable: true
+                description: Holds an error if your document can't be handled.
+              format:
+                type: object
+                description: Document format details.
+                properties:
+                  name:
+                    type: string
+                    description: A detected document format.
+                  conversion_formats:
+                    type: array
+                    description: The conversions that are supported for the document.
+                    items:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                          description: Supported target document format.
+              converted_groups:
+                type: object
+                description: Information about already converted groups.
+                properties:
+                  '{conversion_format}':
+                    type: string
+                    description: Converted group UUID.
+            example:
+              error: null
+              format:
+                name: txt
+                conversion_formats:
+                - name: epub
+                - name: pdf
+              converted_groups:
+                pdf: 49732da8-1530-470c-8743-998c4c634718~5
+    requestWasThrottledError:
+      description: Request was throttled.
+      headers:
+        Retry-After:
+          description: Number of seconds to wait before the next request.
+          schema:
+            type: integer
+            example: 10
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              detail:
+                type: string
+                example: Request was throttled. Expected available in 10 seconds.
+    videoJobSubmitResponse:
+      description: Success.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              problems:
+                type: object
+                description: Dictionary of problems related to your processing job, if any. Key is the `path` you requested.
+                additionalProperties:
+                  type: string
+                  format: uuid
+              result:
+                type: array
+                description: Result for each requested path, in case of no errors for that path.
+                items:
+                  type: object
+                  properties:
+                    original_source:
+                      type: string
+                      description: Input file identifier including operations, if present.
+                    uuid:
+                      type: string
+                      description: A UUID of your processed video file.
+                      format: uuid
+                    token:
+                      type: integer
+                      description: A processing job token that can be used to get a job status.
+                    thumbnails_group_uuid:
+                      description: UUID of a file group with thumbnails for an output video, based on the `thumbs` operation parameters.
+                      type: string
+                      format: uuid
+            example:
+              problems:
+                13cd56e2-f6d7-4c66-ab1b-ffd13cd6646d: Bad path "13cd56e2-f6d7-4c66-ab1b-ffd13cd6646d". Use UUID or CDN URL
+              result:
+              - original_source: d52d7136-a2e5-4338-9f45-affbf83b857d/video/-/format/ogg/-/quality/best/
+                token: 445630631
+                thumbnails_group_uuid: 575ed4e8-f4e8-4c14-a58b-1527b6d9ee46~1
+                uuid: d52d7136-a2e5-4338-9f45-affbf83b857d
+              - original_source: 500196bc-9da5-4aaf-8f3e-70a4ce86edae/video/
+                token: 445630637
+                thumbnails_group_uuid: be3b4d5e-179d-460e-8a5d-69112ac86cbb~1
+                uuid: 28843a09-dd3d-4b8a-ad4f-8aa5f8f60ff2
+    authorizationProblemsResponse:
+      description: Authorization errors.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              detail:
+                type: string
+                enum:
+                - Incorrect authentication credentials.
+                - Public key {public_key} not found.
+                - Secret key not found.
+                - Invalid signature. Please check your Secret key.
+                example: Incorrect authentication credentials.
+  examples:
+    simpleAuthHTTPForbidden:
+      value:
+        detail: Simple authentication over HTTP is forbidden. Please, use HTTPS or signed requests instead.
+    cantUseVideoConversionError:
+      value:
+        detail: Video conversion feature is not available for this project.
+    jsonObjectParseError:
+      value:
+        detail: Expected JSON object.
+    cantUseDocsConversionError:
+      value:
+        detail: Document conversion feature is not available for this project.
+  parameters:
+    acceptHeader:
+      in: header
+      name: Accept
+      description: Version header.
+      schema:
+        type: string
+        nullable: true
+        example: application/vnd.uploadcare-v0.7+json
+      required: true

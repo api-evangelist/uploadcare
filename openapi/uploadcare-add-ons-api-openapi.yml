@@ -1,0 +1,1114 @@
+openapi: 3.0.0
+info:
+  title: URL API Reference Add-Ons API
+  version: '2022-11-28'
+  description: 'Every uploaded file is immediately available on the Uploadcare CDN.
+
+    The CDN includes on-the-fly processing features and can work as a proxy.
+
+
+    ## API endpoints
+
+    Access files in Uploadcare CDN at `ucarecdn.com` over HTTP/HTTPS like this:
+
+    ```https://ucarecdn.com/:uuid/```
+
+
+    You can add CDN operations by including directives in the CDN URL:
+
+    ```https://ucarecdn.com/:uuid/-/:operation/:params/:filename```
+
+
+    * `:uuid` stands for the unique file identifier, UUID, assigned on upload.
+
+    * `/-/` is a mandatory parsing delimiter to divide operations and other path components.
+
+    * `:operation/:params/` is a CDN operation directive with parameters.
+
+    * `:filename` is an optional filename you can add after a trailing slash /.
+
+
+    You can stack two and more operations like this:
+
+    ```-/:operation/:params/-/:operation/:params/```
+
+    '
+  contact:
+    name: API support
+    email: help@uploadcare.com
+  x-logo:
+    url: https://ucarecdn.com/12e3af14-392d-416f-8542-f210c2eb6ec4/logourlapi.svg
+    backgroundColor: '#fafafa'
+    altText: Uploadcare URL API Reference
+  x-meta:
+    title: URL API Reference — Uploadcare
+    description: A reference documentation for the Uploadcare's URL API.
+servers:
+- url: https://ucarecdn.com
+  description: Production server
+tags:
+- name: Add-Ons
+  description: 'An `Add-On` is an application implemented by Uploadcare that accepts uploaded files as an
+
+    input and can produce other files and/or [appdata](#operation/fileInfo) as an output.
+
+    '
+paths:
+  /addons/aws_rekognition_detect_labels/execute/:
+    post:
+      summary: Execute AWS Rekognition
+      description: Execute [AWS Rekognition](https://docs.aws.amazon.com/rekognition/latest/dg/labels-detect-labels-image.html) Add-On for a given target to detect labels in an image. **Note:** Detected labels are stored in the file's appdata.
+      tags:
+      - Add-Ons
+      operationId: awsRekognitionExecute
+      parameters:
+      - $ref: '#/components/parameters/acceptHeader'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                target:
+                  description: Unique ID of the file to process
+                  type: string
+                  format: uuid
+                  example: 21975c81-7f57-4c7a-aef9-acfe28779f78
+              required:
+              - target
+      responses:
+        '200':
+          $ref: '#/components/responses/executeAddonResponse'
+        '400':
+          $ref: '#/components/responses/simpleAuthHTTPForbiddenResponse'
+        '401':
+          $ref: '#/components/responses/authorizationProblemsResponse'
+        '406':
+          $ref: '#/components/responses/invalidAcceptHeader'
+        '409':
+          $ref: '#/components/responses/executeAddonConcurrentCallResponse'
+        '429':
+          $ref: '#/components/responses/requestWasThrottledError'
+      x-codeSamples:
+      - lang: PHP
+        label: PHP
+        source: '<?php
+
+          $configuration = Uploadcare\Configuration::create((string) $_ENV[''UPLOADCARE_PUBLIC_KEY''], (string) $_ENV[''UPLOADCARE_SECRET_KEY'']);
+
+
+          $api = (new Uploadcare\Api($configuration))->addons();
+
+          $resultKey = $api->requestAwsRecognition(''1bac376c-aa7e-4356-861b-dd2657b5bfd2'');
+
+          echo \sprintf(''Recognition requested. Key is \''%s\'''', $resultKey);
+
+          '
+      - lang: Python
+        label: Python
+        source: "from pyuploadcare import Uploadcare\nuploadcare = Uploadcare(public_key='YOUR_PUBLIC_KEY', secret_key='YOUR_SECRET_KEY')\n\ntarget_file = uploadcare.file(\"1bac376c-aa7e-4356-861b-dd2657b5bfd2\")\naws_recognition_result = uploadcare.addons_api.execute(\n    target_file,\n    AddonLabels.AWS_LABEL_RECOGNITION,\n)\n"
+      - lang: Ruby
+        label: Ruby
+        source: 'require ''uploadcare''
+
+          Uploadcare.config.public_key = ''YOUR_PUBLIC_KEY''
+
+          Uploadcare.config.secret_key = ''YOUR_SECRET_KEY''
+
+
+          uuid = ''1bac376c-aa7e-4356-861b-dd2657b5bfd2''
+
+          Uploadcare::Addons.ws_rekognition_detect_labels(uuid)
+
+          '
+      - lang: Swift
+        label: Swift
+        source: 'import Uploadcare
+
+
+          let uploadcare = Uploadcare(withPublicKey: "YOUR_PUBLIC_KEY", secretKey: "YOUR_SECRET_KEY")
+
+
+          let response = try await uploadcare.executeAWSRekognition(fileUUID: "1bac376c-aa7e-4356-861b-dd2657b5bfd2")
+
+          print(response) // contains requestID
+
+
+          // Execute and wait for completion:
+
+          let status = try await uploadcare.performAWSRekognition(fileUUID: "1bac376c-aa7e-4356-861b-dd2657b5bfd2")
+
+          print(status)
+
+          '
+      - lang: Kotlin
+        label: Kotlin
+        source: 'import com.uploadcare.android.library.api.UploadcareClient
+
+
+          val uploadcare = UploadcareClient(publicKey = "YOUR_PUBLIC_KEY", secretKey = "YOUR_SECRET_KEY")
+
+
+          val addOn = AWSRekognitionAddOn(uploadcare)
+
+          val response = addOn.execute(fileId = "1bac376c-aa7e-4356-861b-dd2657b5bfd2")
+
+          Log.d("TAG", response.toString())
+
+          '
+  /addons/aws_rekognition_detect_labels/execute/status/:
+    get:
+      summary: Check AWS Rekognition execution status
+      description: 'Check the status of an Add-On execution request that had been started
+
+        using the [Execute Add-On](#operation/awsRekognitionExecute) operation.
+
+        '
+      tags:
+      - Add-Ons
+      operationId: awsRekognitionExecutionStatus
+      parameters:
+      - $ref: '#/components/parameters/acceptHeader'
+      - in: query
+        name: request_id
+        description: 'Request ID returned by the Add-On execution request described above.
+
+          '
+        schema:
+          type: string
+          format: uuid
+        required: true
+      responses:
+        '200':
+          $ref: '#/components/responses/addonExecutionStatusResponse'
+        '400':
+          $ref: '#/components/responses/simpleAuthHTTPForbiddenResponse'
+        '401':
+          $ref: '#/components/responses/authorizationProblemsResponse'
+        '406':
+          $ref: '#/components/responses/invalidAcceptHeader'
+      x-codeSamples:
+      - lang: PHP
+        label: PHP
+        source: '<?php
+
+          $configuration = Uploadcare\Configuration::create((string) $_ENV[''UPLOADCARE_PUBLIC_KEY''], (string) $_ENV[''UPLOADCARE_SECRET_KEY'']);
+
+
+          $api = (new Uploadcare\Api($configuration))->addons();
+
+          $status = $api->checkAwsRecognition(''request-id'');
+
+          echo \sprintf(''Recognition status: %s'', $status);
+
+          '
+      - lang: Python
+        label: Python
+        source: 'from pyuploadcare import Uploadcare
+
+          uploadcare = Uploadcare(public_key=''YOUR_PUBLIC_KEY'', secret_key=''YOUR_SECRET_KEY'')
+
+
+          addon_task_status = uploadcare.addons_api.status(request_id, AddonLabels.AWS_LABEL_RECOGNITION)
+
+          print(addon_task_status)
+
+          '
+      - lang: Ruby
+        label: Ruby
+        source: 'require ''uploadcare''
+
+          Uploadcare.config.public_key = ''YOUR_PUBLIC_KEY''
+
+          Uploadcare.config.secret_key = ''YOUR_SECRET_KEY''
+
+
+          request_id = ''d1fb31c6-ed34-4e21-bdc3-4f1485f58e21''
+
+          result = Uploadcare::Addons.ws_rekognition_detect_labels_status(request_id)
+
+          puts result.status
+
+          '
+      - lang: Swift
+        label: Swift
+        source: 'import Uploadcare
+
+
+          let uploadcare = Uploadcare(withPublicKey: "YOUR_PUBLIC_KEY", secretKey: "YOUR_SECRET_KEY")
+
+
+          let status = try await uploadcare.checkAWSRekognitionStatus(requestID: "requestID")
+
+          print(status)
+
+          '
+      - lang: Kotlin
+        label: Kotlin
+        source: 'import com.uploadcare.android.library.api.UploadcareClient
+
+
+          val uploadcare = UploadcareClient(publicKey = "YOUR_PUBLIC_KEY", secretKey = "YOUR_SECRET_KEY")
+
+
+          val addOn = AWSRekognitionAddOn(uploadcare)
+
+          val status = addOn.check(requestId = "d1fb31c6-ed34-4e21-bdc3-4f1485f58e21")
+
+          Log.d("TAG", status.toString())
+
+          '
+  /addons/aws_rekognition_detect_moderation_labels/execute/:
+    post:
+      summary: Execute AWS Rekognition Moderation
+      description: Execute [AWS Rekognition Moderation](https://docs.aws.amazon.com/rekognition/latest/dg/moderation.html) Add-On for a given target to detect moderation labels in an image. **Note:** Detected moderation labels are stored in the file's appdata.
+      tags:
+      - Add-Ons
+      operationId: awsRekognitionDetectModerationLabelsExecute
+      parameters:
+      - $ref: '#/components/parameters/acceptHeader'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                target:
+                  description: Unique ID of the file to process
+                  type: string
+                  format: uuid
+                  example: 21975c81-7f57-4c7a-aef9-acfe28779f78
+              required:
+              - target
+      responses:
+        '200':
+          $ref: '#/components/responses/executeAddonResponse'
+        '400':
+          $ref: '#/components/responses/simpleAuthHTTPForbiddenResponse'
+        '401':
+          $ref: '#/components/responses/authorizationProblemsResponse'
+        '406':
+          $ref: '#/components/responses/invalidAcceptHeader'
+        '409':
+          $ref: '#/components/responses/executeAddonConcurrentCallResponse'
+        '429':
+          $ref: '#/components/responses/requestWasThrottledError'
+      x-codeSamples:
+      - lang: PHP
+        label: PHP
+        source: '<?php
+
+          $configuration = Uploadcare\Configuration::create((string) $_ENV[''UPLOADCARE_PUBLIC_KEY''], (string) $_ENV[''UPLOADCARE_SECRET_KEY'']);
+
+
+          $api = (new Uploadcare\Api($configuration))->addons();
+
+          $resultKey = $api->requestAwsRecognitionModeration(''1bac376c-aa7e-4356-861b-dd2657b5bfd2'');
+
+          echo \sprintf(''Recognition requested. Key is \''%s\'''', $resultKey);
+
+          '
+      - lang: Python
+        label: Python
+        source: "from pyuploadcare import Uploadcare\nuploadcare = Uploadcare(public_key='YOUR_PUBLIC_KEY', secret_key='YOUR_SECRET_KEY')\n\ntarget_file = uploadcare.file(\"1bac376c-aa7e-4356-861b-dd2657b5bfd2\")\naws_recognition_result = uploadcare.addons_api.execute(\n    target_file,\n    AddonLabels.AWS_MODERATION_LABELS,\n)\n"
+      - lang: Ruby
+        label: Ruby
+        source: 'require ''uploadcare''
+
+          Uploadcare.config.public_key = ''YOUR_PUBLIC_KEY''
+
+          Uploadcare.config.secret_key = ''YOUR_SECRET_KEY''
+
+
+          uuid = ''1bac376c-aa7e-4356-861b-dd2657b5bfd2''
+
+          Uploadcare::Addons.ws_rekognition_detect_moderation_labels(uuid)
+
+          '
+      - lang: Swift
+        label: Swift
+        source: 'import Uploadcare
+
+
+          let uploadcare = Uploadcare(withPublicKey: "YOUR_PUBLIC_KEY", secretKey: "YOUR_SECRET_KEY")
+
+
+          let response = try await uploadcare.executeAWSRekognitionModeration(fileUUID: "1bac376c-aa7e-4356-861b-dd2657b5bfd2")
+
+          print(response) // contains requestID
+
+
+          // Execute and wait for completion:
+
+          let status = try await uploadcare.performAWSRekognitionModeration(fileUUID: "1bac376c-aa7e-4356-861b-dd2657b5bfd2")
+
+          print(status)
+
+          '
+      - lang: Kotlin
+        label: Kotlin
+        source: 'import com.uploadcare.android.library.api.UploadcareClient
+
+
+          val uploadcare = UploadcareClient(publicKey = "YOUR_PUBLIC_KEY", secretKey = "YOUR_SECRET_KEY")
+
+
+          val addOn = AWSRekognitionModerationAddOn(uploadcare)
+
+          val response = addOn.execute(fileId = "1bac376c-aa7e-4356-861b-dd2657b5bfd2")
+
+          Log.d("TAG", response.toString())
+
+          '
+  /addons/aws_rekognition_detect_moderation_labels/execute/status/:
+    get:
+      summary: Check AWS Rekognition Moderation execution status
+      description: 'Check the status of an Add-On execution request that had been started
+
+        using the [Execute Add-On](#operation/awsRekognitionDetectModerationLabelsExecute) operation.
+
+        '
+      tags:
+      - Add-Ons
+      operationId: awsRekognitionDetectModerationLabelsExecutionStatus
+      parameters:
+      - $ref: '#/components/parameters/acceptHeader'
+      - in: query
+        name: request_id
+        description: 'Request ID returned by the Add-On execution request described above.
+
+          '
+        schema:
+          type: string
+          format: uuid
+        required: true
+      responses:
+        '200':
+          $ref: '#/components/responses/addonExecutionStatusResponse'
+        '400':
+          $ref: '#/components/responses/simpleAuthHTTPForbiddenResponse'
+        '401':
+          $ref: '#/components/responses/authorizationProblemsResponse'
+        '406':
+          $ref: '#/components/responses/invalidAcceptHeader'
+      x-codeSamples:
+      - lang: PHP
+        label: PHP
+        source: '<?php
+
+          $configuration = Uploadcare\Configuration::create((string) $_ENV[''UPLOADCARE_PUBLIC_KEY''], (string) $_ENV[''UPLOADCARE_SECRET_KEY'']);
+
+
+          $api = (new Uploadcare\Api($configuration))->addons();
+
+          $status = $api->checkAwsRecognitionModeration(''request-id'');
+
+          echo \sprintf(''Recognition status: %s'', $status);
+
+          '
+      - lang: Python
+        label: Python
+        source: 'from pyuploadcare import Uploadcare
+
+          uploadcare = Uploadcare(public_key=''YOUR_PUBLIC_KEY'', secret_key=''YOUR_SECRET_KEY'')
+
+
+          addon_task_status = uploadcare.addons_api.status(request_id, AddonLabels.AWS_MODERATION_LABEL)
+
+          print(addon_task_status)
+
+          '
+      - lang: Ruby
+        label: Ruby
+        source: 'require ''uploadcare''
+
+          Uploadcare.config.public_key = ''YOUR_PUBLIC_KEY''
+
+          Uploadcare.config.secret_key = ''YOUR_SECRET_KEY''
+
+
+          request_id = ''d1fb31c6-ed34-4e21-bdc3-4f1485f58e21''
+
+          result = Uploadcare::Addons.ws_rekognition_detect_moderation_labels_status(request_id)
+
+          puts result.status
+
+          '
+      - lang: Swift
+        label: Swift
+        source: 'import Uploadcare
+
+
+          let uploadcare = Uploadcare(withPublicKey: "YOUR_PUBLIC_KEY", secretKey: "YOUR_SECRET_KEY")
+
+
+          let status = try await uploadcare.checkAWSRekognitionModerationStatus(requestID: "requestID")
+
+          print(status)
+
+          '
+      - lang: Kotlin
+        label: Kotlin
+        source: 'import com.uploadcare.android.library.api.UploadcareClient
+
+
+          val uploadcare = UploadcareClient(publicKey = "YOUR_PUBLIC_KEY", secretKey = "YOUR_SECRET_KEY")
+
+
+          val addOn = AWSRekognitionModerationAddOn(uploadcare)
+
+          val status = addOn.check(requestId = "d1fb31c6-ed34-4e21-bdc3-4f1485f58e21")
+
+          Log.d("TAG", status.toString())
+
+          '
+  /addons/uc_clamav_virus_scan/execute/:
+    post:
+      summary: Execute ClamAV
+      description: Execute [ClamAV](https://www.clamav.net/) virus checking Add-On for a given target.
+      tags:
+      - Add-Ons
+      operationId: ucClamavVirusScanExecute
+      parameters:
+      - $ref: '#/components/parameters/acceptHeader'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                target:
+                  description: Unique ID of the file to process
+                  type: string
+                  format: uuid
+                  example: 21975c81-7f57-4c7a-aef9-acfe28779f78
+                params:
+                  description: Optional object with Add-On specific parameters
+                  type: object
+                  default: {}
+                  properties:
+                    purge_infected:
+                      type: boolean
+                      description: Purge infected file.
+                      example: true
+                  example:
+                    purge_infected: true
+              required:
+              - target
+      responses:
+        '200':
+          $ref: '#/components/responses/executeAddonResponse'
+        '400':
+          $ref: '#/components/responses/simpleAuthHTTPForbiddenResponse'
+        '401':
+          $ref: '#/components/responses/authorizationProblemsResponse'
+        '406':
+          $ref: '#/components/responses/invalidAcceptHeader'
+        '409':
+          $ref: '#/components/responses/executeAddonConcurrentCallResponse'
+        '429':
+          $ref: '#/components/responses/requestWasThrottledError'
+      x-codeSamples:
+      - lang: JavaScript
+        label: JS
+        source: "import {\n  executeAddon,\n  AddonName,\n  UploadcareSimpleAuthSchema,\n} from '@uploadcare/rest-client';\n\nconst uploadcareSimpleAuthSchema = new UploadcareSimpleAuthSchema({\n  publicKey: 'YOUR_PUBLIC_KEY',\n  secretKey: 'YOUR_SECRET_KEY',\n});\n\nconst result = await executeAddon(\n  {\n    addonName: AddonName.UC_CLAMAV_VIRUS_SCAN,\n    target: '1bac376c-aa7e-4356-861b-dd2657b5bfd2',\n  },\n  { authSchema: uploadcareSimpleAuthSchema }\n)\n"
+      - lang: PHP
+        label: PHP
+        source: '<?php
+
+          $configuration = Uploadcare\Configuration::create((string) $_ENV[''UPLOADCARE_PUBLIC_KEY''], (string) $_ENV[''UPLOADCARE_SECRET_KEY'']);
+
+
+          $api = (new Uploadcare\Api($configuration))->addons();
+
+          $resultKey = $api->requestAntivirusScan(''21975c81-7f57-4c7a-aef9-acfe28779f78'');
+
+          echo \sprintf(''Antivirus scan requested. Key is \''%s\'''', $resultKey);
+
+          '
+      - lang: Python
+        label: Python
+        source: "from pyuploadcare import Uploadcare\nuploadcare = Uploadcare(public_key='YOUR_PUBLIC_KEY', secret_key='YOUR_SECRET_KEY')\n\nclamav_params = AddonClamAVExecutionParams(purge_infected=True)\ntarget_file = uploadcare.file(\"1bac376c-aa7e-4356-861b-dd2657b5bfd2\")\nclamav_result = uploadcare.addons_api.execute(\n    target_file.uuid,\n    AddonLabels.CLAM_AV,\n    clamav_params\n)\n"
+      - lang: Ruby
+        label: Ruby
+        source: 'require ''uploadcare''
+
+          Uploadcare.config.public_key = ''YOUR_PUBLIC_KEY''
+
+          Uploadcare.config.secret_key = ''YOUR_SECRET_KEY''
+
+
+          uuid = ''1bac376c-aa7e-4356-861b-dd2657b5bfd2''
+
+          Uploadcare::Addons.uc_clamav_virus_scan(uuid, purge_infected: true)
+
+          '
+      - lang: Swift
+        label: Swift
+        source: 'import Uploadcare
+
+
+          let uploadcare = Uploadcare(withPublicKey: "YOUR_PUBLIC_KEY", secretKey: "YOUR_SECRET_KEY")
+
+
+          let parameters = ClamAVAddonExecutionParams(purgeInfected: true)
+
+          let response = try await uploadcare.executeClamav(fileUUID: "1bac376c-aa7e-4356-861b-dd2657b5bfd2", parameters: parameters)
+
+          print(response) // contains requestID
+
+
+          // Execute and wait for completion:
+
+          let status = try await uploadcare.performClamav(fileUUID: "1bac376c-aa7e-4356-861b-dd2657b5bfd2", parameters: parameters)
+
+          print(status)
+
+          '
+      - lang: Kotlin
+        label: Kotlin
+        source: 'import com.uploadcare.android.library.api.UploadcareClient
+
+
+          val uploadcare = UploadcareClient(publicKey = "YOUR_PUBLIC_KEY", secretKey = "YOUR_SECRET_KEY")
+
+
+          val addOn = ClamAVAddOn(uploadcare)
+
+          val response = addOn.execute(fileId = "1bac376c-aa7e-4356-861b-dd2657b5bfd2")
+
+          Log.d("TAG", response.toString())
+
+          '
+  /addons/uc_clamav_virus_scan/execute/status/:
+    get:
+      summary: Check ClamAV execution status
+      description: 'Check the status of an Add-On execution request that had been started
+
+        using the [Execute Add-On](#operation/ucClamavVirusScanExecute) operation.
+
+        '
+      tags:
+      - Add-Ons
+      operationId: ucClamavVirusScanExecutionStatus
+      parameters:
+      - $ref: '#/components/parameters/acceptHeader'
+      - in: query
+        name: request_id
+        description: 'Request ID returned by the Add-On execution request described above.
+
+          '
+        schema:
+          type: string
+          format: uuid
+        required: true
+      responses:
+        '200':
+          $ref: '#/components/responses/addonExecutionStatusResponse'
+        '400':
+          $ref: '#/components/responses/simpleAuthHTTPForbiddenResponse'
+        '401':
+          $ref: '#/components/responses/authorizationProblemsResponse'
+        '406':
+          $ref: '#/components/responses/invalidAcceptHeader'
+      x-codeSamples:
+      - lang: JavaScript
+        label: JS
+        source: "import {\n  addonExecutionStatus,\n  AddonName,\n  UploadcareSimpleAuthSchema,\n} from '@uploadcare/rest-client';\n\nconst uploadcareSimpleAuthSchema = new UploadcareSimpleAuthSchema({\n  publicKey: 'YOUR_PUBLIC_KEY',\n  secretKey: 'YOUR_SECRET_KEY',\n});\n\nconst result = await addonExecutionStatus(\n  {\n    addonName: AddonName.UC_CLAMAV_VIRUS_SCAN,\n    requestId: '1bac376c-aa7e-4356-861b-dd2657b5bfd2',\n  },\n  { authSchema: uploadcareSimpleAuthSchema }\n)\n"
+      - lang: PHP
+        label: PHP
+        source: '<?php
+
+          $configuration = Uploadcare\Configuration::create((string) $_ENV[''UPLOADCARE_PUBLIC_KEY''], (string) $_ENV[''UPLOADCARE_SECRET_KEY'']);
+
+
+          $api = (new Uploadcare\Api($configuration))->addons();
+
+          $status = $api->checkAntivirusScan(''request-id'');
+
+          echo \sprintf(''Antivirus scan status: %s'', $status);
+
+          '
+      - lang: Python
+        label: Python
+        source: 'from pyuploadcare import Uploadcare
+
+          uploadcare = Uploadcare(public_key=''YOUR_PUBLIC_KEY'', secret_key=''YOUR_SECRET_KEY'')
+
+
+          addon_task_status = uploadcare.addons_api.status(request_id, AddonLabels.CLAM_AV)
+
+          print(addon_task_status)
+
+          '
+      - lang: Ruby
+        label: Ruby
+        source: 'require ''uploadcare''
+
+          Uploadcare.config.public_key = ''YOUR_PUBLIC_KEY''
+
+          Uploadcare.config.secret_key = ''YOUR_SECRET_KEY''
+
+
+          request_id = ''1bac376c-aa7e-4356-861b-dd2657b5bfd2''
+
+          result = Uploadcare::Addons.uc_clamav_virus_scan_status(request_id)
+
+          puts result.status
+
+          '
+      - lang: Swift
+        label: Swift
+        source: 'import Uploadcare
+
+
+          let uploadcare = Uploadcare(withPublicKey: "YOUR_PUBLIC_KEY", secretKey: "YOUR_SECRET_KEY")
+
+
+          let status = try await uploadcare.checkClamAVStatus(requestID: "requestID")
+
+          print(status)
+
+          '
+      - lang: Kotlin
+        label: Kotlin
+        source: 'import com.uploadcare.android.library.api.UploadcareClient
+
+
+          val uploadcare = UploadcareClient(publicKey = "YOUR_PUBLIC_KEY", secretKey = "YOUR_SECRET_KEY")
+
+
+          val addOn = ClamAVAddOn(uploadcare)
+
+          val status = addOn.check(requestId = "d1fb31c6-ed34-4e21-bdc3-4f1485f58e21")
+
+          Log.d("TAG", status.toString())
+
+          '
+  /addons/remove_bg/execute/:
+    post:
+      summary: Execute Remove.bg
+      description: Execute [remove.bg](https://remove.bg/) background image removal Add-On for a given target.
+      tags:
+      - Add-Ons
+      operationId: removeBgExecute
+      parameters:
+      - $ref: '#/components/parameters/acceptHeader'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                target:
+                  description: Unique ID of the file to process
+                  type: string
+                  format: uuid
+                  example: 21975c81-7f57-4c7a-aef9-acfe28779f78
+                params:
+                  description: Optional object with Add-On specific parameters
+                  type: object
+                  properties:
+                    crop:
+                      type: boolean
+                      default: false
+                      description: Whether to crop off all empty regions
+                    crop_margin:
+                      type: string
+                      default: '0'
+                      description: Adds a margin around the cropped subject, e.g 30px or 30%
+                    scale:
+                      type: string
+                      description: Scales the subject relative to the total image size, e.g 80%
+                      example: 30%
+                    add_shadow:
+                      type: boolean
+                      description: Whether to add an artificial shadow to the result
+                      default: false
+                    type_level:
+                      type: string
+                      enum:
+                      - none
+                      - '1'
+                      - '2'
+                      - latest
+                      description: "\"none\" = No classification (foreground_type won't bet set in the application data)\n\n\"1\" = Use coarse classification classes: [person, product, animal, car, other]\n\n\"2\" = Use more specific classification classes: [person, product, animal, car,\n      car_interior, car_part, transportation, graphics, other]\n\n\"latest\" = Always use the latest classification classes available\n"
+                      default: none
+                    type:
+                      type: string
+                      enum:
+                      - auto
+                      - person
+                      - product
+                      - car
+                      description: Foreground type.
+                    semitransparency:
+                      type: boolean
+                      description: Whether to have semi-transparent regions in the result
+                      default: true
+                    channels:
+                      type: string
+                      enum:
+                      - rgba
+                      - alpha
+                      description: Request either the finalized image ('rgba', default) or an alpha mask ('alpha').
+                      default: rgba
+                    roi:
+                      type: string
+                      description: 'Region of interest: Only contents of this rectangular region can be detected
+
+                        as foreground. Everything outside is considered background and will be removed.
+
+                        The rectangle is defined as two x/y coordinates in the format "x1 y1 x2 y2".
+
+                        The coordinates can be in absolute pixels (suffix ''px'') or relative to the
+
+                        width/height of the image (suffix ''%''). By default, the whole image is the
+
+                        region of interest ("0% 0% 100% 100%").
+
+                        '
+                      example: 0% 0% 90% 90%
+                    position:
+                      type: string
+                      description: 'Positions the subject within the image canvas. Can be "original"
+
+                        (default unless "scale" is given), "center" (default when "scale" is given) or a value from "0%" to "100%"
+
+                        (both horizontal and vertical) or two values (horizontal, vertical).
+
+                        '
+                  default: {}
+                  example:
+                    crop: true
+                    type_level: '2'
+              required:
+              - target
+      responses:
+        '200':
+          $ref: '#/components/responses/executeAddonResponse'
+        '400':
+          $ref: '#/components/responses/simpleAuthHTTPForbiddenResponse'
+        '401':
+          $ref: '#/components/responses/authorizationProblemsResponse'
+        '406':
+          $ref: '#/components/responses/invalidAcceptHeader'
+        '409':
+          $ref: '#/components/responses/executeAddonConcurrentCallResponse'
+        '429':
+          $ref: '#/components/responses/requestWasThrottledError'
+      x-codeSamples:
+      - lang: PHP
+        label: PHP
+        source: '<?php
+
+          $configuration = Uploadcare\Configuration::create((string) $_ENV[''UPLOADCARE_PUBLIC_KEY''], (string) $_ENV[''UPLOADCARE_SECRET_KEY'']);
+
+
+          $api = (new Uploadcare\Api($configuration))->addons();
+
+          $resultKey = $api->requestRemoveBackground(''21975c81-7f57-4c7a-aef9-acfe28779f78'');
+
+          echo \sprintf(''Remove background requested. Key is \''%s\'''', $resultKey);
+
+          '
+      - lang: Python
+        label: Python
+        source: "from pyuploadcare import Uploadcare\nuploadcare = Uploadcare(public_key='YOUR_PUBLIC_KEY', secret_key='YOUR_SECRET_KEY')\n\nremove_bg_params = AddonRemoveBGExecutionParams(\n    crop=True,\n    crop_margin=\"20px\",\n    scale=\"15%\",\n    position ='',\n    roi = ''\n)\n\ntarget_file = uploadcare.file(\"1bac376c-aa7e-4356-861b-dd2657b5bfd2\")\nremove_bg_result = uploadcare.addons_api.execute(\n    target_file,\n    AddonLabels.REMOVE_BG,\n    remove_bg_params\n)\n"
+      - lang: Ruby
+        label: Ruby
+        source: 'require ''uploadcare''
+
+          Uploadcare.config.public_key = ''YOUR_PUBLIC_KEY''
+
+          Uploadcare.config.secret_key = ''YOUR_SECRET_KEY''
+
+
+          uuid = ''1bac376c-aa7e-4356-861b-dd2657b5bfd2''
+
+          Uploadcare::Addons.remove_bg(uuid, crop: true)
+
+          '
+      - lang: Swift
+        label: Swift
+        source: 'import Uploadcare
+
+
+          let uploadcare = Uploadcare(withPublicKey: "YOUR_PUBLIC_KEY", secretKey: "YOUR_SECRET_KEY")
+
+
+          let parameters = RemoveBGAddonExecutionParams(crop: true, typeLevel: .two)
+
+          let response = try await uploadcare.executeRemoveBG(fileUUID: "1bac376c-aa7e-4356-861b-dd2657b5bfd2", parameters: parameters)
+
+          print(response) // contains requestID
+
+
+          // Execute and wait for completion:
+
+          let status = try await uploadcare.performRemoveBG(fileUUID: "1bac376c-aa7e-4356-861b-dd2657b5bfd2")
+
+          print(status)
+
+          '
+      - lang: Kotlin
+        label: Kotlin
+        source: 'import com.uploadcare.android.library.api.UploadcareClient
+
+
+          val uploadcare = UploadcareClient(publicKey = "YOUR_PUBLIC_KEY", secretKey = "YOUR_SECRET_KEY")
+
+
+          val addOn = RemoveBgAddOn(uploadcare)
+
+          val response = addOn.execute(fileId = "1bac376c-aa7e-4356-861b-dd2657b5bfd2")
+
+          Log.d("TAG", response.toString())
+
+          '
+  /addons/remove_bg/execute/status/:
+    get:
+      summary: Check Remove.bg execution status
+      description: 'Check the status of an Add-On execution request that had been started
+
+        using the [Execute Add-On](#operation/removeBgExecute) operation.
+
+        '
+      tags:
+      - Add-Ons
+      operationId: removeBgExecutionStatus
+      parameters:
+      - $ref: '#/components/parameters/acceptHeader'
+      - in: query
+        name: request_id
+        description: 'Request ID returned by the Add-On execution request described above.
+
+          '
+        schema:
+          type: string
+          format: uuid
+        required: true
+      responses:
+        '200':
+          description: Add-On execution response. See `file_id` in response in order to get image without background.
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/addonExecutionStatus'
+                - type: object
+                  properties:
+                    result:
+                      type: object
+                      properties:
+                        file_id:
+                          type: string
+                          description: UUID of the file with removed background.
+                          example: 21975c81-7f57-4c7a-aef9-acfe28779f78
+              example:
+                result:
+                  file_id: 21975c81-7f57-4c7a-aef9-acfe28779f78
+                status: done
+        '400':
+          $ref: '#/components/responses/simpleAuthHTTPForbiddenResponse'
+        '401':
+          $ref: '#/components/responses/authorizationProblemsResponse'
+        '406':
+          $ref: '#/components/responses/invalidAcceptHeader'
+      x-codeSamples:
+      - lang: PHP
+        label: PHP
+        source: '<?php
+
+          $configuration = Uploadcare\Configuration::create((string) $_ENV[''UPLOADCARE_PUBLIC_KEY''], (string) $_ENV[''UPLOADCARE_SECRET_KEY'']);
+
+
+          $api = (new Uploadcare\Api($configuration))->addons();
+
+          $status = $api->checkRemoveBackground(''request-id'');
+
+          echo \sprintf(''Remove background status: %s'', $status);
+
+          '
+      - lang: Python
+        label: Python
+        source: 'from pyuploadcare import Uploadcare
+
+          uploadcare = Uploadcare(public_key=''YOUR_PUBLIC_KEY'', secret_key=''YOUR_SECRET_KEY'')
+
+
+          addon_task_status = uploadcare.addons_api.status(request_id, AddonLabels.REMOVE_BG)
+
+          print(addon_task_status)
+
+          '
+      - lang: Ruby
+        label: Ruby
+        source: 'require ''uploadcare''
+
+          Uploadcare.config.public_key = ''YOUR_PUBLIC_KEY''
+
+          Uploadcare.config.secret_key = ''YOUR_SECRET_KEY''
+
+
+          request_id = ''1bac376c-aa7e-4356-861b-dd2657b5bfd2''
+
+          result = Uploadcare::Addons.remove_bg_status(request_id)
+
+          puts result.status
+
+          '
+      - lang: Swift
+        label: Swift
+        source: 'import Uploadcare
+
+
+          let uploadcare = Uploadcare(withPublicKey: "YOUR_PUBLIC_KEY", secretKey: "YOUR_SECRET_KEY")
+
+
+          let status = try await uploadcare.checkRemoveBGStatus(requestID: "requestID")
+
+          print(status)
+
+          '
+      - lang: Kotlin
+        label: Kotlin
+        source: 'import com.uploadcare.android.library.api.UploadcareClient
+
+
+          val uploadcare = UploadcareClient(publicKey = "YOUR_PUBLIC_KEY", secretKey = "YOUR_SECRET_KEY")
+
+
+          val addOn = RemoveBgAddOn(uploadcare)
+
+          val status = addOn.check(requestId = "d1fb31c6-ed34-4e21-bdc3-4f1485f58e21")
+
+          Log.d("TAG", status.toString())
+
+          '
+components:
+  schemas:
+    addonExecutionStatus:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - in_progress
+          - error
+          - done
+          - unknown
+          description: 'Defines the status of an Add-On execution.
+
+            In most cases, once the status changes to `done`, [Application Data](#operation/fileInfo) of the file that had been specified as a `appdata`, will contain the result of the execution.'
+    simpleAuthHTTPForbidden:
+      type: object
+      properties:
+        detail:
+          type: string
+          default: Simple authentication over HTTP is forbidden. Please, use HTTPS or signed requests instead.
+      example:
+        detail: Simple authentication over HTTP is forbidden. Please, use HTTPS or signed requests instead.
+  responses:
+    simpleAuthHTTPForbiddenResponse:
+      description: Simple authentication over HTTP is forbidden. Please, use HTTPS or signed requests instead.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/simpleAuthHTTPForbidden'
+    executeAddonResponse:
+      description: Add-On execution response.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              request_id:
+                type: string
+                format: uuid
+                description: Request ID.
+                example: 8db3c8b4-2dea-4146-bcdb-63387e2b33c1
+    addonExecutionStatusResponse:
+      description: Add-On execution status response.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+                enum:
+                - in_progress
+                - error
+                - done
+                - unknown
+                description: 'Defines the status of an Add-On execution.
+
+                  In most cases, once the status changes to `done`, [Application Data](#operation/fileInfo) of the file that had been specified as a `appdata`, will contain the result of the execution.'
+    executeAddonConcurrentCallResponse:
+      description: Add-On concurrent call attempt.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              detail:
+                type: string
+                example: Concurrent call attempted
+                default: Concurrent call attempted
+    invalidAcceptHeader:
+      description: Invalid version header `Accept` for this endpoint.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              detail:
+                type: string
+                example: Incorrect Accept header provided. Make sure to specify API version. Refer to REST API docs for details.
+                default: Incorrect Accept header provided. Make sure to specify API version. Refer to REST API docs for details.
+    authorizationProblemsResponse:
+      description: Authorization errors.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              detail:
+                type: string
+                enum:
+                - Incorrect authentication credentials.
+                - Public key {public_key} not found.
+                - Secret key not found.
+                - Invalid signature. Please check your Secret key.
+                example: Incorrect authentication credentials.
+    requestWasThrottledError:
+      description: Request was throttled.
+      headers:
+        Retry-After:
+          description: Number of seconds to wait before the next request.
+          schema:
+            type: integer
+            example: 10
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              detail:
+                type: string
+                example: Request was throttled. Expected available in 10 seconds.
+  parameters:
+    acceptHeader:
+      in: header
+      name: Accept
+      description: Version header.
+      schema:
+        type: string
+        nullable: true
+        example: application/vnd.uploadcare-v0.7+json
+      required: true

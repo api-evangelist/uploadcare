@@ -1,0 +1,1052 @@
+openapi: 3.0.0
+info:
+  title: URL API Reference Add-Ons Groups API
+  version: '2022-11-28'
+  description: 'Every uploaded file is immediately available on the Uploadcare CDN.
+
+    The CDN includes on-the-fly processing features and can work as a proxy.
+
+
+    ## API endpoints
+
+    Access files in Uploadcare CDN at `ucarecdn.com` over HTTP/HTTPS like this:
+
+    ```https://ucarecdn.com/:uuid/```
+
+
+    You can add CDN operations by including directives in the CDN URL:
+
+    ```https://ucarecdn.com/:uuid/-/:operation/:params/:filename```
+
+
+    * `:uuid` stands for the unique file identifier, UUID, assigned on upload.
+
+    * `/-/` is a mandatory parsing delimiter to divide operations and other path components.
+
+    * `:operation/:params/` is a CDN operation directive with parameters.
+
+    * `:filename` is an optional filename you can add after a trailing slash /.
+
+
+    You can stack two and more operations like this:
+
+    ```-/:operation/:params/-/:operation/:params/```
+
+    '
+  contact:
+    name: API support
+    email: help@uploadcare.com
+  x-logo:
+    url: https://ucarecdn.com/12e3af14-392d-416f-8542-f210c2eb6ec4/logourlapi.svg
+    backgroundColor: '#fafafa'
+    altText: Uploadcare URL API Reference
+  x-meta:
+    title: URL API Reference — Uploadcare
+    description: A reference documentation for the Uploadcare's URL API.
+servers:
+- url: https://ucarecdn.com
+  description: Production server
+tags:
+- name: Groups
+paths:
+  /group/:
+    post:
+      tags:
+      - Groups
+      operationId: createFilesGroup
+      summary: Create a file group
+      description: 'Create a file group from a set of already uploaded files.
+
+
+        The most common use case for creating a file group is when a user uploads
+
+        multiple files at once and then wants to display them together.
+
+
+        **Note:** A group itself and files within it MUST belong to the same project.
+
+
+        **Note:** Groups are immutable and the only way to add/remove a file to a group
+
+        is to create a new one.
+
+        '
+      requestBody:
+        $ref: '#/components/requestBodies/createFilesGroupRequestBody'
+      responses:
+        '200':
+          $ref: '#/components/responses/createFilesGroupSuccessful'
+        '400':
+          $ref: '#/components/responses/createFilesGroupInputValidationErrors'
+        '403':
+          $ref: '#/components/responses/createFilesGroupAccessForbiddenErrors'
+      x-codeSamples:
+      - lang: JavaScript
+        label: JS
+        source: "import { group } from '@uploadcare/upload-client'\n\nconst result = await group(\n  [\n    'd6d34fa9-addd-472c-868d-2e5c105f9fcd',\n    'b1026315-8116-4632-8364-607e64fca723/-/resize/x800/'\n  ],\n  {\n    publicKey: 'YOUR_PUBLIC_KEY'\n  }\n)\n"
+      - lang: PHP
+        label: PHP
+        source: '<?php
+
+          $configuration = Uploadcare\Configuration::create((string) $_ENV[''UPLOADCARE_PUBLIC_KEY''], (string) $_ENV[''UPLOADCARE_SECRET_KEY'']);
+
+
+          $uploader = new Uploadcare\Uploader\Uploader($configuration);
+
+          $result = $uploader->groupFiles([''d6d34fa9-addd-472c-868d-2e5c105f9fcd'', ''b1026315-8116-4632-8364-607e64fca723/-/resize/x800/'']);
+
+          echo \sprintf(''Response status is %s'', $result->getStatusCode());
+
+          '
+      - lang: Python
+        label: Python
+        source: 'from pyuploadcare import Uploadcare, File, FileGroup
+
+
+          uploadcare = Uploadcare(public_key=''YOUR_PUBLIC_KEY'', secret_key=''YOUR_SECRET_KEY'')
+
+          file_1 = uploadcare.file(''d6d34fa9-addd-472c-868d-2e5c105f9fcd'')
+
+          file_2 = uploadcare.file(''b1026315-8116-4632-8364-607e64fca723/-/resize/x800/'')
+
+          file_group = uploadcare.create_file_group([file_1, file_2])
+
+          '
+      - lang: Ruby
+        label: Ruby
+        source: "require 'uploadcare'\nUploadcare.config.public_key = 'YOUR_PUBLIC_KEY'\nUploadcare.config.secret_key = 'YOUR_SECRET_KEY'\n\nuuids = [\n  'd6d34fa9-addd-472c-868d-2e5c105f9fcd',\n  'b1026315-8116-4632-8364-607e64fca723/-/resize/x800/'\n]\nUploadcare::Group.create(uuids)\n"
+      - lang: Swift
+        label: Swift
+        source: 'import Uploadcare
+
+
+          let uploadcare = Uploadcare(withPublicKey: "YOUR_PUBLIC_KEY", secretKey: "YOUR_SECRET_KEY")
+
+
+          let filesIds = ["d6d34fa9-addd-472c-868d-2e5c105f9fcd", "b1026315-8116-4632-8364-607e64fca723/-/resize/x800/"]
+
+          let group = try await uploadAPI.createFilesGroup(fileIds: filesIds)
+
+          print(group)
+
+          '
+      - lang: Kotlin
+        label: Kotlin
+        source: "import com.uploadcare.android.library.api.UploadcareClient\n\nval uploadcare = UploadcareClient(publicKey = \"YOUR_PUBLIC_KEY\", secretKey = \"YOUR_SECRET_KEY\")\n\nval uuids = listOf(\n    \"d6d34fa9-addd-472c-868d-2e5c105f9fcd\",\n    \"b1026315-8116-4632-8364-607e64fca723/-/resize/x800/\"\n)\nval group = uploadcare.createGroup(fileIds = uuids)\nLog.d(\"TAG\", group.toString())\n"
+  /group/info/:
+    get:
+      tags:
+      - Groups
+      operationId: filesGroupInfo
+      summary: Get information about a file group
+      description: 'Returns a JSON object with information about a file group (when the group was created,
+
+        number of the files in the group, etc).
+
+        '
+      parameters:
+      - in: query
+        name: pub_key
+        required: true
+        schema:
+          $ref: '#/components/schemas/projectPublicKeyType'
+        example: YOUR_PUBLIC_KEY
+      - in: query
+        name: group_id
+        description: 'Group''s unique ID. Group IDs look like `UUID~N`, where the `~N` part reflects the number of the files in the group.
+
+          '
+        required: true
+        schema:
+          type: string
+        example: d52d7136-a2e5-4338-9f45-affbf83b857d~2
+      responses:
+        '200':
+          $ref: '#/components/responses/filesGroupInfoSuccessful'
+        '400':
+          $ref: '#/components/responses/filesGroupInfoInputValidationErrors'
+        '403':
+          $ref: '#/components/responses/filesGroupInfoAccessForbiddenErrors'
+        '404':
+          $ref: '#/components/responses/filesGroupInfoNotFoundErrors'
+      x-codeSamples:
+      - lang: JavaScript
+        label: JS
+        source: "import { groupInfo } from '@uploadcare/upload-client'\n\nconst result = await groupInfo(\n  '0d712319-b970-4602-850c-bae1ced521a6~1',\n  {\n    publicKey: 'YOUR_PUBLIC_KEY'\n  }\n)\n"
+      - lang: PHP
+        label: PHP
+        source: '<?php
+
+          $configuration = Uploadcare\Configuration::create((string) $_ENV[''UPLOADCARE_PUBLIC_KEY''], (string) $_ENV[''UPLOADCARE_SECRET_KEY'']);
+
+
+          $uploader = new Uploadcare\Uploader\Uploader($configuration);
+
+          $groupInfo = $uploader->groupInfo(''0d712319-b970-4602-850c-bae1ced521a6~1'');
+
+          echo $groupInfo->getBody()->getContents();
+
+          '
+      - lang: Python
+        label: Python
+        source: 'from pyuploadcare import Uploadcare, FileGroup
+
+
+          uploadcare = Uploadcare(public_key=''YOUR_PUBLIC_KEY'', secret_key=''YOUR_SECRET_KEY'')
+
+          file_group = uploadcare.file_group(''0d712319-b970-4602-850c-bae1ced521a6~1'')
+
+          print(file_group.info)
+
+          '
+      - lang: Ruby
+        label: Ruby
+        source: 'require ''uploadcare''
+
+          Uploadcare.config.public_key = ''YOUR_PUBLIC_KEY''
+
+          Uploadcare.config.secret_key = ''YOUR_SECRET_KEY''
+
+
+          uuid = ''0d712319-b970-4602-850c-bae1ced521a6~1''
+
+          info = Uploadcare::Group.info(uuid)
+
+          puts info.inspect
+
+          '
+      - lang: Swift
+        label: Swift
+        source: 'import Uploadcare
+
+
+          let uploadcare = Uploadcare(withPublicKey: "YOUR_PUBLIC_KEY", secretKey: "YOUR_SECRET_KEY")
+
+
+          let group = try await uploadcare.uploadAPI.filesGroupInfo(groupId: "0d712319-b970-4602-850c-bae1ced521a6~1")
+
+          print(group)
+
+          '
+      - lang: Kotlin
+        label: Kotlin
+        source: 'import com.uploadcare.android.library.api.UploadcareClient
+
+
+          val uploadcare = UploadcareClient(publicKey = "YOUR_PUBLIC_KEY", secretKey = "YOUR_SECRET_KEY")
+
+
+          val group = uploadcare.getUploadedGroup(groupId = "0d712319-b970-4602-850c-bae1ced521a6~1")
+
+          Log.d("TAG", group.toString())
+
+          '
+components:
+  schemas:
+    groupFileURLParsingFailedError:
+      type: string
+      default: No files[N] parameters found.
+      example: '#/components/examples/groupFileURLParsingFailedError/value'
+    signatureExpirationInvalidError:
+      type: string
+      default: '`expire` must be a UNIX timestamp.'
+      example: '#/components/examples/signatureExpirationInvalidError/value'
+    fileUploadInfo:
+      type: object
+      description: Information about an uploaded file.
+      required:
+      - uuid
+      - file_id
+      - size
+      - total
+      - done
+      - original_filename
+      - filename
+      - mime_type
+      - image_info
+      - video_info
+      - content_info
+      - metadata
+      - is_image
+      - is_stored
+      - is_ready
+      properties:
+        uuid:
+          type: string
+          format: uuid
+          description: File's unique ID.
+          example: 575ed4e8-f4e8-4c14-a58b-1527b6d9ee46
+        file_id:
+          type: string
+          format: uuid
+          description: Same as `uuid`
+          example: 575ed4e8-f4e8-4c14-a58b-1527b6d9ee46
+        size:
+          type: integer
+          description: File's size in bytes.
+          example: 145212
+        total:
+          type: integer
+          description: Same as `size`.
+          example: 145212
+        done:
+          type: integer
+          description: Same as `size`.
+          example: 145212
+        original_filename:
+          type: string
+          description: Original file of the uploaded file.
+          example: test-image_1.jpg
+        filename:
+          type: string
+          description: Sanitized `original_filename`.
+          example: testimage_1.jpg
+        mime_type:
+          type: string
+          description: File's MIME-type.
+          example: image/jpeg
+        image_info:
+          $ref: '#/components/schemas/imageInfo'
+        video_info:
+          $ref: '#/components/schemas/legacyVideoInfo'
+        content_info:
+          $ref: '#/components/schemas/contentInfo'
+        metadata:
+          $ref: '#/components/schemas/metadata'
+        is_image:
+          type: boolean
+          description: True if the uploaded file is an image of a supported file format.
+          example: true
+        is_stored:
+          type: boolean
+          description: True if the file has been marked as stored.
+          example: true
+        is_ready:
+          type: boolean
+          description: True if the file is ready to be fetched from Uploadcare's CDN.
+          example: true
+        s3_bucket:
+          type: string
+          nullable: true
+          description: Name of an AWS S3 bucket where the file is stored. Only available if you associate a Foreign Storage Bucket with your project.
+          example: custom-s3-bucket-name
+      example:
+        uuid: be3b4d5e-179d-460e-8a5d-69112ac86cbb
+        file_id: be3b4d5e-179d-460e-8a5d-69112ac86cbb
+        size: 2667636
+        total: 2667636
+        done: 2667636
+        original_filename: IMG-0412_123.JPG
+        filename: IMG0412_123.JPG
+        mime_type: image/jpeg
+        image_info:
+          color_mode: RGB
+          orientation: 6
+          format: JPEG
+          height: 4032
+          width: 3024
+          sequence: false
+          geo_location:
+            latitude: 55.62013611111111
+            longitude: 37.66299166666666
+          datetime_original: '2018-08-20T08:59:50'
+          dpi:
+          - 72
+          - 72
+        video_info: null
+        content_info:
+          mime:
+            mime: image/jpeg
+            type: image
+            subtype: jpeg
+          image:
+            color_mode: RGB
+            orientation: 6
+            format: JPEG
+            height: 4032
+            width: 3024
+            sequence: false
+            geo_location:
+              latitude: 55.62013611111111
+              longitude: 37.66299166666666
+            datetime_original: '2018-08-20T08:59:50'
+            dpi:
+            - 72
+            - 72
+        metadata:
+          subsystem: uploader
+          pet: cat
+        is_image: true
+        is_stored: true
+        is_ready: true
+    publicKeyRequiredError:
+      type: string
+      default: pub_key is required.
+      example: '#/components/examples/publicKeyRequiredError/value'
+    contentInfo:
+      type: object
+      nullable: true
+      description: Information about file content.
+      properties:
+        mime:
+          type: object
+          description: MIME type.
+          required:
+          - mime
+          - type
+          - subtype
+          properties:
+            mime:
+              type: string
+              description: Full MIME type.
+              example: image/jpeg
+            type:
+              type: string
+              description: Type of MIME type.
+              example: image
+            subtype:
+              type: string
+              description: Subtype of MIME type.
+              example: jpeg
+        image:
+          $ref: '#/components/schemas/imageInfo'
+        video:
+          $ref: '#/components/schemas/videoInfo'
+    projectPublicKeyRemovedError:
+      type: string
+      default: Project <PUB-KEY> is marked as removed.
+      example: '#/components/examples/projectPublicKeyRemovedError/value'
+    signatureType:
+      type: string
+      description: '`signature` must be sent along with your upload request if you would like to use signed uploads.
+
+        The signature should be generated on your backend.
+
+        **Note**: the process requires knowledge of your Uploadcare Project''s Secret key.
+
+        See [signed uploads](https://uploadcare.com/docs/security/secure-uploads/) for details.
+
+        '
+      example: 04b29480233f4def5c875875b6bdc3b1
+    accountBlockedError:
+      type: string
+      default: Account has been blocked.
+      example: '#/components/examples/accountBlockedError/value'
+    postRequestParserFailedError:
+      type: string
+      default: HTTP POST request parsing failed.
+      example: '#/components/examples/postRequestParserFailedError/value'
+    legacyVideoInfo:
+      type: object
+      nullable: true
+      description: Video metadata.
+      properties:
+        duration:
+          type: integer
+          description: Video file's duration in milliseconds.
+          example: 261827
+        format:
+          type: string
+          description: Video file's format.
+          example: mp4
+        bitrate:
+          type: integer
+          description: Video file's bitrate.
+          example: 393
+        audio:
+          type: object
+          description: Audio stream's metadata.
+          nullable: true
+          properties:
+            bitrate:
+              nullable: true
+              type: number
+              description: Audio stream's bitrate.
+              example: 78
+            codec:
+              nullable: true
+              type: string
+              description: Audio stream's codec.
+              example: aac
+            sample_rate:
+              nullable: true
+              type: integer
+              description: Audio stream's sample rate.
+              example: 44100
+            channels:
+              nullable: true
+              type: integer
+              description: Audio stream's number of channels.
+              example: 2
+        video:
+          type: object
+          description: Video stream's metadata.
+          properties:
+            height:
+              type: integer
+              description: Video stream's image height.
+              example: 360
+            width:
+              type: integer
+              description: Video stream's image width.
+              example: 640
+            frame_rate:
+              type: number
+              description: Video stream's frame rate.
+              example: 30
+            bitrate:
+              type: integer
+              description: Video stream's bitrate.
+              example: 315
+            codec:
+              type: string
+              description: Video stream codec.
+              example: h264
+    expireType:
+      type: integer
+      description: '`expire` must be sent along with your upload request if you would like to use signed uploads.
+
+        The parameter defines the time during which your signature is valid. It''s a UNIX timestamp.
+
+        See [signed uploads](https://uploadcare.com/docs/security/secure-uploads/) for details.
+
+        '
+      example: 1454902434
+    signatureExpirationError:
+      type: string
+      default: Expired signature.
+      example: '#/components/examples/signatureExpirationError/value'
+    signatureRequiredError:
+      type: string
+      default: '`signature` is required.'
+      example: '#/components/examples/signatureRequiredError/value'
+    videoInfo:
+      type: object
+      description: Video metadata.
+      required:
+      - duration
+      - format
+      - bitrate
+      - audio
+      - video
+      properties:
+        duration:
+          type: integer
+          description: Video file's duration in milliseconds.
+          nullable: true
+          example: 261827
+        format:
+          type: string
+          description: Video file's format.
+          example: mp4
+        bitrate:
+          type: integer
+          description: Video file's bitrate.
+          nullable: true
+          example: 393
+        audio:
+          type: array
+          items:
+            type: object
+            description: Audio stream's metadata.
+            required:
+            - bitrate
+            - codec
+            - sample_rate
+            - channels
+            properties:
+              bitrate:
+                type: integer
+                description: Audio stream's bitrate.
+                nullable: true
+                example: 78
+              codec:
+                type: string
+                description: Audio stream's codec.
+                nullable: true
+                example: aac
+              sample_rate:
+                type: integer
+                description: Audio stream's sample rate.
+                nullable: true
+                example: 44100
+              channels:
+                type: integer
+                description: Audio stream's number of channels.
+                nullable: true
+                example: 2
+        video:
+          type: array
+          items:
+            type: object
+            description: Video stream's metadata.
+            required:
+            - height
+            - width
+            - frame_rate
+            - bitrate
+            - codec
+            properties:
+              height:
+                type: integer
+                description: Video stream's image height.
+                example: 360
+              width:
+                type: integer
+                description: Video stream's image width.
+                example: 640
+              frame_rate:
+                type: number
+                description: Video stream's frame rate.
+                example: 30
+              bitrate:
+                type: integer
+                description: Video stream's bitrate.
+                nullable: true
+                example: 315
+              codec:
+                type: string
+                description: Video stream's codec.
+                nullable: true
+                example: h264
+    groupIdRequiredError:
+      type: string
+      default: group_id is required.
+      example: '#/components/examples/groupIdRequiredError/value'
+    groupInfo:
+      type: object
+      description: File group information object.
+      properties:
+        id:
+          type: string
+          description: Group's unique ID.
+          example: d52d7136-a2e5-4338-9f45-affbf83b857d~2
+        datetime_created:
+          type: string
+          description: ISO-8601 date and time when the group was created.
+          format: date-time
+          example: '2015-09-21T12:39:13.743754Z'
+        datetime_stored:
+          nullable: true
+          description: Deprecated. This field will be removed in a future version of the Upload API.
+          type: string
+          format: date-time
+          example: '2015-09-21T12:39:13.953757Z'
+          deprecated: true
+        files_count:
+          type: integer
+          description: Number of the files in the group.
+          example: 2
+        cdn_url:
+          type: string
+          format: uri
+          description: Group's CDN URL.
+          example: http://www.ucarecdn.com/d52d7136-a2e5-4338-9f45-affbf83b857d~2/
+        url:
+          type: string
+          description: Group's API resource URL. See the [REST API](/docs/api/rest/) documentation for details.
+          format: uri
+          example: https://api.uploadcare.com/groups/d52d7136-a2e5-4338-9f45-affbf83b857d~2/
+        files:
+          type: array
+          description: 'The list of files in the group. An array may contain null values if a file has been removed.
+
+            '
+          nullable: true
+          allOf:
+          - type: object
+            properties:
+              default_effects:
+                type: string
+                format: uri
+                description: The field contains a set of processing operations applied to the file when the group was created. This set is applied by default when the file is reffered via a group CDN URL and `/nth/N/` operator.
+                example: resize/x800/
+          - $ref: '#/components/schemas/fileUploadInfo'
+      example:
+        id: 0d712319-b970-4602-850c-bae1ced521a6~1
+        datetime_created: '2018-09-12T10:03:38.686710Z'
+        datetime_stored: null
+        files_count: 1
+        cdn_url: https://ucarecdn.com/0d712319-b970-4602-850c-bae1ced521a6~1/
+        url: https://api.uploadcare.com/groups/0d712319-b970-4602-850c-bae1ced521a6~1/
+        files:
+        - default_effects: resize/x800/
+          uuid: be3b4d5e-179d-460e-8a5d-69112ac86cbb
+          file_id: be3b4d5e-179d-460e-8a5d-69112ac86cbb
+          size: 2667636
+          total: 2667636
+          done: 2667636
+          original_filename: IMG-0412_123.JPG
+          filename: IMG0412_123.JPG
+          mime_type: image/jpeg
+          image_info:
+            color_mode: RGB
+            orientation: 6
+            format: JPEG
+            height: 4032
+            width: 3024
+            sequence: false
+            geo_location:
+              latitude: 55.62013611111111
+              longitude: 37.66299166666666
+            datetime_original: '2018-08-20T08:59:50'
+            dpi:
+            - 72
+            - 72
+          video_info: null
+          content_info:
+            mime:
+              mime: image/jpeg
+              type: image
+              subtype: jpeg
+            image:
+              color_mode: RGB
+              orientation: 6
+              format: JPEG
+              height: 4032
+              width: 3024
+              sequence: false
+              geo_location:
+                latitude: 55.62013611111111
+                longitude: 37.66299166666666
+              datetime_original: '2018-08-20T08:59:50'
+              dpi:
+              - 72
+              - 72
+          metadata:
+            subsystem: uploader
+            pet: cat
+          is_image: true
+          is_stored: true
+          is_ready: true
+    uploadFailedError:
+      type: string
+      default: Upload failed.
+      example: '#/components/examples/uploadFailedError/value'
+    projectPublicKeyType:
+      type: string
+      description: Public key identifying an Uploadcare project your uploads will go to.
+      example: caa9d29da887ee88ffe6
+    metadata:
+      type: object
+      nullable: true
+      description: Arbitrary metadata associated with a file.
+    groupNotFoundError:
+      type: string
+      default: group_id is invalid.
+      example: '#/components/examples/groupNotFoundError/value'
+    nullCharactersForbiddenError:
+      type: string
+      default: Null characters are not allowed.
+      example: '#/components/examples/nullCharactersForbiddenError/value'
+    accountUnpaidError:
+      type: string
+      default: Account has been blocked for non payment.
+      example: '#/components/examples/accountUnpaidError/value'
+    signatureExpirationRequiredError:
+      type: string
+      default: '`expire` is required.'
+      example: '#/components/examples/signatureExpirationRequiredError/value'
+    signatureInvalidError:
+      type: string
+      default: Invalid signature.
+      example: '#/components/examples/signatureInvalidError/value'
+    requestFiledsNumberLimitExceededError:
+      type: string
+      default: The request contains too many HTTP POST fields.
+      example: '#/components/examples/requestFiledsNumberLimitExceededError/value'
+    imageInfo:
+      type: object
+      description: Image metadata.
+      required:
+      - color_mode
+      - orientation
+      - format
+      - height
+      - width
+      - geo_location
+      - datetime_original
+      - dpi
+      - sequence
+      properties:
+        color_mode:
+          type: string
+          description: Image color mode.
+          enum:
+          - RGB
+          - RGBA
+          - RGBa
+          - RGBX
+          - L
+          - LA
+          - La
+          - P
+          - PA
+          - CMYK
+          - YCbCr
+          - HSV
+          - LAB
+          example: RGBA
+        orientation:
+          type: integer
+          description: Image orientation from EXIF.
+          nullable: true
+          minimum: 0
+          maximum: 8
+          example: 6
+        format:
+          type: string
+          description: Image format.
+          example: JPEG
+        sequence:
+          type: boolean
+          description: Set to true if a file contains a sequence of images (GIF for example).
+          example: false
+        height:
+          type: integer
+          description: Image height in pixels.
+          example: 2352
+        width:
+          type: integer
+          description: Image width in pixels.
+          example: 2935
+        geo_location:
+          description: Geo-location of image from EXIF.
+          type: object
+          nullable: true
+          required:
+          - latitude
+          - longitude
+          properties:
+            latitude:
+              type: number
+              description: Location latitude.
+              example: -1.1884555555555556
+            longitude:
+              type: number
+              description: Location longitude.
+              example: 52.66996666666667
+        datetime_original:
+          type: string
+          description: Image date and time from EXIF. Please be aware that this data is not always formatted and displayed exactly as it appears in the EXIF.
+          nullable: true
+          format: date-time
+          example: '2018-09-13T16:23:40'
+        dpi:
+          type: array
+          description: Image DPI for two dimensions.
+          nullable: true
+          items:
+            type: number
+            example: 72
+          minItems: 2
+          maxItems: 2
+          example:
+          - 72
+          - 72
+    publicKeyInvalidError:
+      type: string
+      default: pub_key is invalid.
+      example: '#/components/examples/publicKeyInvalidError/value'
+    groupFilesInvalidError:
+      type: string
+      default: 'This is not valid file url: %s.'
+      example: '#/components/examples/groupFilesInvalidError/value'
+    accountLimitsExceededError:
+      type: string
+      default: Account has reached its limits.
+      example: '#/components/examples/accountLimitsExceededError/value'
+    groupFilesNotFoundError:
+      type: string
+      default: Some files not found.
+      example: '#/components/examples/groupFilesNotFoundError/value'
+  examples:
+    groupNotFoundError:
+      value: group_id is invalid.
+    publicKeyInvalidError:
+      value: pub_key is invalid.
+    signatureInvalidError:
+      value: Invalid signature.
+    signatureExpirationInvalidError:
+      value: '`expire` must be a UNIX timestamp.'
+    publicKeyRequiredError:
+      value: pub_key is required.
+    nullCharactersForbiddenError:
+      value: Null characters are not allowed.
+    groupFilesInvalidError:
+      value: 'This is not valid file url: wrong-uuid.'
+    projectPublicKeyRemovedError:
+      value: Project 39e3eb895fdada95e7a9 is marked as removed.
+    groupFileURLParsingFailedError:
+      value: No files[N] parameters found.
+    uploadFailedError:
+      value: Upload failed.
+    accountUnpaidError:
+      value: Account has been blocked for non payment.
+    accountBlockedError:
+      value: Account has been blocked.
+    signatureExpirationError:
+      value: Expired signature.
+    signatureRequiredError:
+      value: '`signature` is required.'
+    accountLimitsExceededError:
+      value: Account has reached its limits.
+    requestFiledsNumberLimitExceededError:
+      value: The request contains too many HTTP POST fields.
+    groupIdRequiredError:
+      value: group_id is required.
+    postRequestParserFailedError:
+      value: HTTP POST request parsing failed.
+    groupFilesNotFoundError:
+      value: Some files not found.
+    signatureExpirationRequiredError:
+      value: '`expire` is required.'
+  responses:
+    createFilesGroupAccessForbiddenErrors:
+      description: Request was not allowed.
+      content:
+        text/plain:
+          schema:
+            anyOf:
+            - $ref: '#/components/schemas/publicKeyRequiredError'
+            - $ref: '#/components/schemas/publicKeyInvalidError'
+            - $ref: '#/components/schemas/projectPublicKeyRemovedError'
+            - $ref: '#/components/schemas/accountBlockedError'
+            - $ref: '#/components/schemas/accountUnpaidError'
+            - $ref: '#/components/schemas/uploadFailedError'
+            - $ref: '#/components/schemas/accountLimitsExceededError'
+            - $ref: '#/components/schemas/signatureExpirationError'
+            - $ref: '#/components/schemas/signatureInvalidError'
+          examples:
+            public-key-is-required:
+              $ref: '#/components/examples/publicKeyRequiredError'
+            public-key-is-invalid:
+              $ref: '#/components/examples/publicKeyInvalidError'
+            project-public-key-removed:
+              $ref: '#/components/examples/projectPublicKeyRemovedError'
+            account-blocked:
+              $ref: '#/components/examples/accountBlockedError'
+            account-unpaid:
+              $ref: '#/components/examples/accountUnpaidError'
+            upload-failed:
+              $ref: '#/components/examples/uploadFailedError'
+            account-limits-exceeded:
+              $ref: '#/components/examples/accountLimitsExceededError'
+            signature-expiration:
+              $ref: '#/components/examples/signatureExpirationError'
+            signature-invalid:
+              $ref: '#/components/examples/signatureInvalidError'
+    filesGroupInfoInputValidationErrors:
+      description: Request failed input parameters validation.
+      content:
+        text/plain:
+          schema:
+            anyOf:
+            - $ref: '#/components/schemas/nullCharactersForbiddenError'
+            - $ref: '#/components/schemas/groupIdRequiredError'
+          examples:
+            null-characters-forbidden:
+              $ref: '#/components/examples/nullCharactersForbiddenError'
+            group-id-required:
+              $ref: '#/components/examples/groupIdRequiredError'
+    filesGroupInfoAccessForbiddenErrors:
+      description: Request was not allowed.
+      content:
+        text/plain:
+          schema:
+            anyOf:
+            - $ref: '#/components/schemas/publicKeyRequiredError'
+            - $ref: '#/components/schemas/publicKeyInvalidError'
+          examples:
+            public-key-is-required:
+              $ref: '#/components/examples/publicKeyRequiredError'
+            public-key-is-invalid:
+              $ref: '#/components/examples/publicKeyInvalidError'
+    createFilesGroupInputValidationErrors:
+      description: Request failed input parameters validation.
+      content:
+        text/plain:
+          schema:
+            anyOf:
+            - $ref: '#/components/schemas/requestFiledsNumberLimitExceededError'
+            - $ref: '#/components/schemas/postRequestParserFailedError'
+            - $ref: '#/components/schemas/nullCharactersForbiddenError'
+            - $ref: '#/components/schemas/signatureRequiredError'
+            - $ref: '#/components/schemas/signatureExpirationRequiredError'
+            - $ref: '#/components/schemas/signatureExpirationInvalidError'
+            - $ref: '#/components/schemas/groupFilesInvalidError'
+            - $ref: '#/components/schemas/groupFileURLParsingFailedError'
+            - $ref: '#/components/schemas/groupFilesNotFoundError'
+          examples:
+            request-fields-number-limit-exceeded:
+              $ref: '#/components/examples/requestFiledsNumberLimitExceededError'
+            post-request-parser-failed:
+              $ref: '#/components/examples/postRequestParserFailedError'
+            null-characters-forbidden:
+              $ref: '#/components/examples/nullCharactersForbiddenError'
+            signature-required:
+              $ref: '#/components/examples/signatureRequiredError'
+            signature-expiration-required:
+              $ref: '#/components/examples/signatureExpirationRequiredError'
+            signature-expiration-invalid:
+              $ref: '#/components/examples/signatureExpirationInvalidError'
+            group-files-invalid:
+              $ref: '#/components/examples/groupFilesInvalidError'
+            group-file-url-parsing-failed:
+              $ref: '#/components/examples/groupFileURLParsingFailedError'
+            group-files-not-found:
+              $ref: '#/components/examples/groupFilesNotFoundError'
+    filesGroupInfoSuccessful:
+      description: File group information was retrieved successfully.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/groupInfo'
+    createFilesGroupSuccessful:
+      description: The group was created successfully.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/groupInfo'
+    filesGroupInfoNotFoundErrors:
+      description: Group with specified UUID was not found.
+      content:
+        text/plain:
+          schema:
+            $ref: '#/components/schemas/groupNotFoundError'
+          examples:
+            group-not-found:
+              $ref: '#/components/examples/groupNotFoundError'
+  requestBodies:
+    createFilesGroupRequestBody:
+      required: true
+      content:
+        multipart/form-data:
+          schema:
+            type: object
+            properties:
+              pub_key:
+                $ref: '#/components/schemas/projectPublicKeyType'
+              files[]:
+                type: array
+                description: 'Set of files you want to add to the group.
+
+                  Each element can be a file UUID with or without the applied image
+
+                  processing operations.
+
+                  '
+                items:
+                  type: string
+              signature:
+                $ref: '#/components/schemas/signatureType'
+              expire:
+                $ref: '#/components/schemas/expireType'
+            required:
+            - files[]
+            - pub_key
+          example:
+            pub_key: YOUR_PUBLIC_KEY
+            files[]:
+            - d6d34fa9-addd-472c-868d-2e5c105f9fcd
+            - b1026315-8116-4632-8364-607e64fca723/-/resize/x800/

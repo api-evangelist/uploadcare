@@ -1,0 +1,2109 @@
+openapi: 3.0.0
+info:
+  title: URL API Reference Add-Ons File API
+  version: '2022-11-28'
+  description: 'Every uploaded file is immediately available on the Uploadcare CDN.
+
+    The CDN includes on-the-fly processing features and can work as a proxy.
+
+
+    ## API endpoints
+
+    Access files in Uploadcare CDN at `ucarecdn.com` over HTTP/HTTPS like this:
+
+    ```https://ucarecdn.com/:uuid/```
+
+
+    You can add CDN operations by including directives in the CDN URL:
+
+    ```https://ucarecdn.com/:uuid/-/:operation/:params/:filename```
+
+
+    * `:uuid` stands for the unique file identifier, UUID, assigned on upload.
+
+    * `/-/` is a mandatory parsing delimiter to divide operations and other path components.
+
+    * `:operation/:params/` is a CDN operation directive with parameters.
+
+    * `:filename` is an optional filename you can add after a trailing slash /.
+
+
+    You can stack two and more operations like this:
+
+    ```-/:operation/:params/-/:operation/:params/```
+
+    '
+  contact:
+    name: API support
+    email: help@uploadcare.com
+  x-logo:
+    url: https://ucarecdn.com/12e3af14-392d-416f-8542-f210c2eb6ec4/logourlapi.svg
+    backgroundColor: '#fafafa'
+    altText: Uploadcare URL API Reference
+  x-meta:
+    title: URL API Reference — Uploadcare
+    description: A reference documentation for the Uploadcare's URL API.
+servers:
+- url: https://ucarecdn.com
+  description: Production server
+tags:
+- name: File
+paths:
+  /files/:
+    get:
+      tags:
+      - File
+      summary: List of files
+      description: Getting a paginated list of files. If you need multiple results pages, use `previous`/`next` from the response to navigate back/forth.
+      operationId: filesList
+      parameters:
+      - $ref: '#/components/parameters/acceptHeader'
+      - in: query
+        name: removed
+        description: '`true` to only include removed files in the response, `false` to include existing files. Defaults to `false`.'
+        schema:
+          type: boolean
+          default: false
+          example: true
+      - in: query
+        name: stored
+        description: '`true` to only include files that were stored, `false` to include temporary ones. The default is unset: both stored and not stored files are returned.'
+        schema:
+          type: boolean
+          example: true
+      - in: query
+        name: limit
+        description: A preferred amount of files in a list for a single response. Defaults to 100, while the maximum is 1000.
+        schema:
+          type: integer
+          maximum: 1000
+          minimum: 1
+          example: 100
+          default: 100
+      - in: query
+        name: ordering
+        description: Specifies the way files are sorted in a returned list. `datetime_uploaded` for ascending order, `-datetime_uploaded` for descending order.
+        schema:
+          type: string
+          enum:
+          - datetime_uploaded
+          - -datetime_uploaded
+          default: datetime_uploaded
+          example: -datetime_uploaded
+      - in: query
+        name: from
+        description: A starting point for filtering the files. If provided, the value MUST adhere to the ISO 8601 Extended Date/Time Format (`YYYY-MM-DDTHH:MM:SSZ`).
+        schema:
+          type: string
+          example: '2015-09-10T10:00:00Z'
+      - in: query
+        name: include
+        description: 'Include additional fields to the file object, such as: appdata.'
+        schema:
+          type: string
+        example: appdata
+      responses:
+        '200':
+          $ref: '#/components/responses/paginatedFilesResponse'
+        '400':
+          $ref: '#/components/responses/simpleAuthHTTPForbiddenResponse'
+        '401':
+          $ref: '#/components/responses/authorizationProblemsResponse'
+        '406':
+          $ref: '#/components/responses/invalidAcceptHeader'
+        '429':
+          $ref: '#/components/responses/requestWasThrottledError'
+      x-codeSamples:
+      - lang: JavaScript
+        label: JS
+        source: "import {\n  listOfFiles,\n  UploadcareSimpleAuthSchema,\n} from '@uploadcare/rest-client';\n\nconst uploadcareSimpleAuthSchema = new UploadcareSimpleAuthSchema({\n  publicKey: 'YOUR_PUBLIC_KEY',\n  secretKey: 'YOUR_SECRET_KEY',\n});\n\nconst result = await listOfFiles(\n  {},\n  { authSchema: uploadcareSimpleAuthSchema }\n)\n"
+      - lang: PHP
+        label: PHP
+        source: "<?php\n$configuration = Uploadcare\\Configuration::create((string) $_ENV['UPLOADCARE_PUBLIC_KEY'], (string) $_ENV['UPLOADCARE_SECRET_KEY']);\n\n$api = (new Uploadcare\\Api($configuration))->file();\n$list = $api->listFiles();\nforeach ($list->getResults() as $result) {\n    echo \\sprintf('URL: %s', $result->getUrl());\n}\nwhile (($next = $api->nextPage($list)) !== null) {\n    foreach ($next->getResults() as $result) {\n        echo \\sprintf('URL: %s', $result->getUrl());\n    }\n}\n"
+      - lang: Python
+        label: Python
+        source: "from pyuploadcare import Uploadcare\nuploadcare = Uploadcare(public_key='YOUR_PUBLIC_KEY', secret_key='YOUR_SECRET_KEY')\n\nfiles = uploadcare.list_files(stored=True, limit=10)\nfor file in files:\n    print(file.info)\n"
+      - lang: Ruby
+        label: Ruby
+        source: 'require ''uploadcare''
+
+          Uploadcare.config.public_key = ''YOUR_PUBLIC_KEY''
+
+          Uploadcare.config.secret_key = ''YOUR_SECRET_KEY''
+
+
+          list = Uploadcare::FileList.file_list(stored: true, removed: false, limit: 100)
+
+          list.each { |file| puts file.inspect }
+
+          '
+      - lang: Swift
+        label: Swift
+        source: "import Uploadcare\n\nlet uploadcare = Uploadcare(withPublicKey: \"YOUR_PUBLIC_KEY\", secretKey: \"YOUR_SECRET_KEY\")\n\nlet query = PaginationQuery()\n  .stored(true)\n  .ordering(.dateTimeUploadedDESC)\n  .limit(10)\nvar list = uploadcare.listOfFiles()\n\ntry await list.get(withQuery: query)\nprint(list)\n\n// Next page\nif list.next != nil {\n  try await list.nextPage()\n  print(list)\n}\n\n// Previous page\nif list.previous != nil {\n  try await filesList.previousPage()\n  print(list)\n}\n"
+      - lang: Kotlin
+        label: Kotlin
+        source: "import com.uploadcare.android.library.api.UploadcareClient\n\nval uploadcare = UploadcareClient(publicKey = \"YOUR_PUBLIC_KEY\", secretKey = \"YOUR_SECRET_KEY\")\n\nval filesQueryBuilder = uploadcare.getFiles()\nval files = filesQueryBuilder\n    .stored(true)\n    .ordering(Order.UPLOAD_TIME_DESC)\n    .asList()\nLog.d(\"TAG\", files.toString())\n"
+  /files/{uuid}/storage/:
+    put:
+      summary: Store file
+      description: Store a single file by UUID. When file is stored, it is available permanently. If not stored — it will only be available for 24 hours. If the parameter is omitted, it checks the `Auto file storing` setting of your Uploadcare project identified by the `public_key` provided in the `auth-param`.
+      tags:
+      - File
+      operationId: storeFile
+      parameters:
+      - $ref: '#/components/parameters/acceptHeader'
+      - in: path
+        name: uuid
+        description: File UUID.
+        required: true
+        schema:
+          type: string
+          format: uuid
+          example: 21975c81-7f57-4c7a-aef9-acfe28779f78
+      responses:
+        '200':
+          description: File stored. File info in JSON.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/file'
+        '400':
+          $ref: '#/components/responses/simpleAuthHTTPForbiddenResponse'
+        '401':
+          $ref: '#/components/responses/authorizationProblemsResponse'
+        '404':
+          $ref: '#/components/responses/fileNotFoundError'
+        '406':
+          $ref: '#/components/responses/invalidAcceptHeader'
+        '429':
+          $ref: '#/components/responses/requestWasThrottledError'
+      x-codeSamples:
+      - lang: JavaScript
+        label: JS
+        source: "import {\n  storeFile,\n  UploadcareSimpleAuthSchema,\n} from '@uploadcare/rest-client';\n\nconst uploadcareSimpleAuthSchema = new UploadcareSimpleAuthSchema({\n  publicKey: 'YOUR_PUBLIC_KEY',\n  secretKey: 'YOUR_SECRET_KEY',\n});\n\nconst result = await storeFile(\n  {\n    uuid: '1bac376c-aa7e-4356-861b-dd2657b5bfd2',\n  },\n  { authSchema: uploadcareSimpleAuthSchema }\n)\n"
+      - lang: PHP
+        label: PHP
+        source: '<?php
+
+          $configuration = Uploadcare\Configuration::create((string) $_ENV[''UPLOADCARE_PUBLIC_KEY''], (string) $_ENV[''UPLOADCARE_SECRET_KEY'']);
+
+
+          $api = (new Uploadcare\Api($configuration))->file();
+
+          $result = $api->storeFile(''1bac376c-aa7e-4356-861b-dd2657b5bfd2'');
+
+          echo \sprintf(''File %s is stored at %s'', $result->getUuid(), $result->getDatetimeStored()->format(\DateTimeInterface::ATOM));
+
+          '
+      - lang: Python
+        label: Python
+        source: 'from pyuploadcare import Uploadcare
+
+          uploadcare = Uploadcare(public_key=''YOUR_PUBLIC_KEY'', secret_key=''YOUR_SECRET_KEY'')
+
+
+          file = uploadcare.file("1bac376c-aa7e-4356-861b-dd2657b5bfd2")
+
+          file.store()
+
+          '
+      - lang: Ruby
+        label: Ruby
+        source: 'require ''uploadcare''
+
+          Uploadcare.config.public_key = ''YOUR_PUBLIC_KEY''
+
+          Uploadcare.config.secret_key = ''YOUR_SECRET_KEY''
+
+
+          uuid = ''1bac376c-aa7e-4356-861b-dd2657b5bfd2''
+
+          Uploadcare::File.store(uuid)
+
+          '
+      - lang: Swift
+        label: Swift
+        source: 'import Uploadcare
+
+
+          let uploadcare = Uploadcare(withPublicKey: "YOUR_PUBLIC_KEY", secretKey: "YOUR_SECRET_KEY")
+
+
+          let file = try await uploadcare.storeFile(withUUID: "1bac376c-aa7e-4356-861b-dd2657b5bfd2")
+
+          print(file)
+
+          '
+      - lang: Kotlin
+        label: Kotlin
+        source: 'import com.uploadcare.android.library.api.UploadcareClient
+
+
+          val uploadcare = UploadcareClient(publicKey = "YOUR_PUBLIC_KEY", secretKey = "YOUR_SECRET_KEY")
+
+
+          uploadcare.saveFile("1bac376c-aa7e-4356-861b-dd2657b5bfd2")
+
+          '
+    delete:
+      summary: Delete file
+      tags:
+      - File
+      description: 'Removes individual files. Returns file info.
+
+
+        Note: this operation removes the file from storage but doesn''t invalidate CDN cache.
+
+        '
+      operationId: deleteFileStorage
+      parameters:
+      - $ref: '#/components/parameters/acceptHeader'
+      - in: path
+        name: uuid
+        description: File UUID.
+        required: true
+        schema:
+          type: string
+          format: uuid
+          example: 21975c81-7f57-4c7a-aef9-acfe28779f78
+      responses:
+        '200':
+          description: File deleted. File info in JSON.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/file'
+              examples:
+                Removed File:
+                  $ref: '#/components/examples/file_removed'
+        '400':
+          $ref: '#/components/responses/simpleAuthHTTPForbiddenResponse'
+        '401':
+          $ref: '#/components/responses/authorizationProblemsResponse'
+        '404':
+          $ref: '#/components/responses/fileNotFoundError'
+        '406':
+          $ref: '#/components/responses/invalidAcceptHeader'
+        '429':
+          $ref: '#/components/responses/requestWasThrottledError'
+      x-codeSamples:
+      - lang: JavaScript
+        label: JS
+        source: "import {\n  deleteFile,\n  UploadcareSimpleAuthSchema,\n} from '@uploadcare/rest-client';\n\nconst uploadcareSimpleAuthSchema = new UploadcareSimpleAuthSchema({\n  publicKey: 'YOUR_PUBLIC_KEY',\n  secretKey: 'YOUR_SECRET_KEY',\n});\n\nconst result = await deleteFile(\n  {\n    uuid: '1bac376c-aa7e-4356-861b-dd2657b5bfd2',\n  },\n  { authSchema: uploadcareSimpleAuthSchema }\n)\n"
+      - lang: PHP
+        label: PHP
+        source: '<?php
+
+          $configuration = Uploadcare\Configuration::create((string) $_ENV[''UPLOADCARE_PUBLIC_KEY''], (string) $_ENV[''UPLOADCARE_SECRET_KEY'']);
+
+
+          $fileInfo = (new Uploadcare\Api($configuration))->file()->deleteFile(''1bac376c-aa7e-4356-861b-dd2657b5bfd2'');
+
+          echo \sprintf(''File \''%s\'' deleted at \''%s\'''', $fileInfo->getUuid(), $fileInfo->getDatetimeRemoved()->format(\DateTimeInterface::ATOM));
+
+          '
+      - lang: Python
+        label: Python
+        source: 'from pyuploadcare import Uploadcare
+
+          uploadcare = Uploadcare(public_key=''YOUR_PUBLIC_KEY'', secret_key=''YOUR_SECRET_KEY'')
+
+
+          file = uploadcare.file("1bac376c-aa7e-4356-861b-dd2657b5bfd2")
+
+          file.delete()
+
+          '
+      - lang: Ruby
+        label: Ruby
+        source: 'require ''uploadcare''
+
+          Uploadcare.config.public_key = ''YOUR_PUBLIC_KEY''
+
+          Uploadcare.config.secret_key = ''YOUR_SECRET_KEY''
+
+
+          puts Uploadcare::File.delete(''1bac376c-aa7e-4356-861b-dd2657b5bfd2'')
+
+          '
+      - lang: Swift
+        label: Swift
+        source: 'import Uploadcare
+
+
+          let uploadcare = Uploadcare(withPublicKey: "YOUR_PUBLIC_KEY", secretKey: "YOUR_SECRET_KEY")
+
+
+          let file = try await uploadcare.deleteFile(withUUID: "1bac376c-aa7e-4356-861b-dd2657b5bfd2")
+
+          print(file)
+
+          '
+      - lang: Kotlin
+        label: Kotlin
+        source: 'import com.uploadcare.android.library.api.UploadcareClient
+
+
+          val uploadcare = UploadcareClient(publicKey = "YOUR_PUBLIC_KEY", secretKey = "YOUR_SECRET_KEY")
+
+
+          uploadcare.deleteFile(fileId = "1bac376c-aa7e-4356-861b-dd2657b5bfd2")
+
+          '
+  /files/{uuid}/:
+    get:
+      summary: File info
+      tags:
+      - File
+      description: Get file information by its UUID (immutable).
+      operationId: fileInfo
+      parameters:
+      - $ref: '#/components/parameters/acceptHeader'
+      - in: path
+        name: uuid
+        description: File UUID.
+        required: true
+        schema:
+          type: string
+          format: uuid
+          example: 03ccf9ab-f266-43fb-973d-a6529c55c2ae
+      - in: query
+        name: include
+        description: 'Include additional fields to the file object, such as: appdata.'
+        schema:
+          type: string
+        example: appdata
+      responses:
+        '200':
+          description: File info in JSON.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/file'
+              examples:
+                Image:
+                  $ref: '#/components/examples/file'
+                Video:
+                  $ref: '#/components/examples/file_video'
+        '400':
+          $ref: '#/components/responses/simpleAuthHTTPForbiddenResponse'
+        '401':
+          $ref: '#/components/responses/authorizationProblemsResponse'
+        '404':
+          $ref: '#/components/responses/fileNotFoundError'
+        '406':
+          $ref: '#/components/responses/invalidAcceptHeader'
+        '429':
+          $ref: '#/components/responses/requestWasThrottledError'
+      x-codeSamples:
+      - lang: JavaScript
+        label: JS
+        source: "import {\n  fileInfo,\n  UploadcareSimpleAuthSchema,\n} from '@uploadcare/rest-client';\n\nconst uploadcareSimpleAuthSchema = new UploadcareSimpleAuthSchema({\n  publicKey: 'YOUR_PUBLIC_KEY',\n  secretKey: 'YOUR_SECRET_KEY',\n});\n\nconst result = await fileInfo(\n  {\n    uuid: '1bac376c-aa7e-4356-861b-dd2657b5bfd2',\n  },\n  { authSchema: uploadcareSimpleAuthSchema }\n)\n"
+      - lang: PHP
+        label: PHP
+        source: '<?php
+
+          $configuration = Uploadcare\Configuration::create((string) $_ENV[''UPLOADCARE_PUBLIC_KEY''], (string) $_ENV[''UPLOADCARE_SECRET_KEY'']);
+
+
+          $api = (new Uploadcare\Api($configuration))->file();
+
+          $fileInfo = $api->fileInfo(''1bac376c-aa7e-4356-861b-dd2657b5bfd2'');
+
+          echo \sprintf(''URL: %s, ID: %s, Mime type: %s'', $fileInfo->getUrl(), $fileInfo->getUuid(), $fileInfo->getMimeType());
+
+          '
+      - lang: Python
+        label: Python
+        source: 'from pyuploadcare import Uploadcare
+
+          uploadcare = Uploadcare(public_key=''YOUR_PUBLIC_KEY'', secret_key=''YOUR_SECRET_KEY'')
+
+
+          file = uploadcare.file("1bac376c-aa7e-4356-861b-dd2657b5bfd2")
+
+          print(file.info)
+
+          '
+      - lang: Ruby
+        label: Ruby
+        source: 'require ''uploadcare''
+
+          Uploadcare.config.public_key = ''YOUR_PUBLIC_KEY''
+
+          Uploadcare.config.secret_key = ''YOUR_SECRET_KEY''
+
+
+          uuid = ''1bac376c-aa7e-4356-861b-dd2657b5bfd2''
+
+          puts Uploadcare::File.info(uuid).inspect
+
+          '
+      - lang: Swift
+        label: Swift
+        source: 'import Uploadcare
+
+
+          let uploadcare = Uploadcare(withPublicKey: "YOUR_PUBLIC_KEY", secretKey: "YOUR_SECRET_KEY")
+
+
+          let fileInfoQuery = FileInfoQuery().include(.appdata)
+
+          let file = try await uploadcare.fileInfo(withUUID: "1bac376c-aa7e-4356-861b-dd2657b5bfd2", withQuery: fileInfoQuery)
+
+          print(file)
+
+          '
+      - lang: Kotlin
+        label: Kotlin
+        source: 'import com.uploadcare.android.library.api.UploadcareClient
+
+
+          val uploadcare = UploadcareClient(publicKey = "YOUR_PUBLIC_KEY", secretKey = "YOUR_SECRET_KEY")
+
+
+          val file = uploadcare.getFile(fileId = "1bac376c-aa7e-4356-861b-dd2657b5bfd2")
+
+          Log.d("TAG", file.toString())
+
+          '
+  /files/storage/:
+    put:
+      summary: Batch file storing
+      description: Used to store multiple files in one go. Up to 100 files are supported per request. A JSON object holding your File list SHOULD be put into a request body.
+      operationId: filesStoring
+      tags:
+      - File
+      parameters:
+      - $ref: '#/components/parameters/acceptHeader'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: string
+                format: uuid
+                description: List of file UUIDs to store.
+              example:
+              - 21975c81-7f57-4c7a-aef9-acfe28779f78
+              - cbaf2d73-5169-4b2b-a543-496cf2813dff
+      responses:
+        '200':
+          $ref: '#/components/responses/filesStorageResponse'
+        '400':
+          $ref: '#/components/responses/filesStoreUUIDSError'
+        '401':
+          $ref: '#/components/responses/authorizationProblemsResponse'
+        '406':
+          $ref: '#/components/responses/invalidAcceptHeader'
+        '429':
+          $ref: '#/components/responses/requestWasThrottledError'
+      x-codeSamples:
+      - lang: JavaScript
+        label: JS
+        source: "import {\n  storeFiles,\n  UploadcareSimpleAuthSchema,\n} from '@uploadcare/rest-client';\n\nconst uploadcareSimpleAuthSchema = new UploadcareSimpleAuthSchema({\n  publicKey: 'YOUR_PUBLIC_KEY',\n  secretKey: 'YOUR_SECRET_KEY',\n});\n\nconst result = await storeFiles(\n  {\n      uuids: [\n          'b7a301d1-1bd0-473d-8d32-708dd55addc0',\n          '1bac376c-aa7e-4356-861b-dd2657b5bfd2',\n        ]\n  },\n  { authSchema: uploadcareSimpleAuthSchema }\n)\n"
+      - lang: PHP
+        label: PHP
+        source: "<?php\n$configuration = Uploadcare\\Configuration::create((string) $_ENV['UPLOADCARE_PUBLIC_KEY'], (string) $_ENV['UPLOADCARE_SECRET_KEY']);\n\nuse Uploadcare\\Interfaces\\File\\FileInfoInterface;\n$api = (new Uploadcare\\Api($configuration))->file();\n$result = $api->batchStoreFile(['b7a301d1-1bd0-473d-8d32-708dd55addc0', '1bac376c-aa7e-4356-861b-dd2657b5bfd2']);\nforeach ($result->getResult() as $result) {\n    if (!$result instanceof FileInfoInterface) {\n        continue;\n    }\n    \\sprintf('Result %s is stored at %s', $result->getUuid(), $result->getDatetimeStored()->format(\\DateTimeInterface::ATOM));\n}\n"
+      - lang: Python
+        label: Python
+        source: "from pyuploadcare import Uploadcare\nuploadcare = Uploadcare(public_key='YOUR_PUBLIC_KEY', secret_key='YOUR_SECRET_KEY')\n\nfiles = [\n    'b7a301d1-1bd0-473d-8d32-708dd55addc0',\n    '1bac376c-aa7e-4356-861b-dd2657b5bfd2'\n]\nuploadcare.store_files(files)\n"
+      - lang: Ruby
+        label: Ruby
+        source: "require 'uploadcare'\nUploadcare.config.public_key = 'YOUR_PUBLIC_KEY'\nUploadcare.config.secret_key = 'YOUR_SECRET_KEY'\n\nuuids = %w[\n  b7a301d1-1bd0-473d-8d32-708dd55addc0\n  1bac376c-aa7e-4356-861b-dd2657b5bfd2\n]\nUploadcare::FileList.batch_store(uuids)\n"
+      - lang: Swift
+        label: Swift
+        source: "import Uploadcare\n\nlet uploadcare = Uploadcare(withPublicKey: \"YOUR_PUBLIC_KEY\", secretKey: \"YOUR_SECRET_KEY\")\n\nlet uuids = [\n  \"b7a301d1-1bd0-473d-8d32-708dd55addc0\",\n  \"1bac376c-aa7e-4356-861b-dd2657b5bfd2\"\n]\nlet response = try await uploadcare.storeFiles(withUUIDs: uuids)\nprint(response)\n"
+      - lang: Kotlin
+        label: Kotlin
+        source: "import com.uploadcare.android.library.api.UploadcareClient\n\nval uploadcare = UploadcareClient(publicKey = \"YOUR_PUBLIC_KEY\", secretKey = \"YOUR_SECRET_KEY\")\n\nval uuids = listOf(\n    \"b7a301d1-1bd0-473d-8d32-708dd55addc0\",\n    \"1bac376c-aa7e-4356-861b-dd2657b5bfd2\"\n)\nuploadcare.saveFiles(uuids)\n"
+    delete:
+      summary: Batch file delete
+      description: 'Used to delete multiple files in one go. Up to 100 files are supported per request. A JSON object holding your File list SHOULD be put into a request body.
+
+
+        Note: this operation removes files from storage but doesn''t invalidate CDN cache.
+
+        '
+      operationId: filesDelete
+      tags:
+      - File
+      parameters:
+      - $ref: '#/components/parameters/acceptHeader'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: string
+                format: uuid
+                description: List of file UUIDs to delete.
+              example:
+              - 21975c81-7f57-4c7a-aef9-acfe28779f78
+              - cbaf2d73-5169-4b2b-a543-496cf2813dff
+      responses:
+        '200':
+          $ref: '#/components/responses/filesStorageResponse'
+        '400':
+          $ref: '#/components/responses/filesStoreUUIDSError'
+        '401':
+          $ref: '#/components/responses/authorizationProblemsResponse'
+        '406':
+          $ref: '#/components/responses/invalidAcceptHeader'
+        '429':
+          $ref: '#/components/responses/requestWasThrottledError'
+      x-codeSamples:
+      - lang: JavaScript
+        label: JS
+        source: "import {\n  deleteFiles,\n  UploadcareSimpleAuthSchema,\n} from '@uploadcare/rest-client';\n\nconst uploadcareSimpleAuthSchema = new UploadcareSimpleAuthSchema({\n  publicKey: 'YOUR_PUBLIC_KEY',\n  secretKey: 'YOUR_SECRET_KEY',\n});\n\nconst result = await deleteFiles(\n  {\n      uuids: [\n          '21975c81-7f57-4c7a-aef9-acfe28779f78',\n          'cbaf2d73-5169-4b2b-a543-496cf2813dff',\n        ]\n  },\n  { authSchema: uploadcareSimpleAuthSchema }\n)\n"
+      - lang: PHP
+        label: PHP
+        source: '<?php
+
+          $configuration = Uploadcare\Configuration::create((string) $_ENV[''UPLOADCARE_PUBLIC_KEY''], (string) $_ENV[''UPLOADCARE_SECRET_KEY'']);
+
+
+          $api = (new Uploadcare\Api($configuration))->file();
+
+          $fileInfo = $api->fileInfo(''21975c81-7f57-4c7a-aef9-acfe28779f78'');
+
+          $api->deleteFile($fileInfo);
+
+          echo \sprintf(''File \''%s\'' deleted at \''%s\'''', $fileInfo->getUuid(), $fileInfo->getDatetimeRemoved()->format(\DateTimeInterface::ATOM));
+
+          '
+      - lang: Python
+        label: Python
+        source: "from pyuploadcare import Uploadcare\nuploadcare = Uploadcare(public_key='YOUR_PUBLIC_KEY', secret_key='YOUR_SECRET_KEY')\n\nfiles = [\n    '21975c81-7f57-4c7a-aef9-acfe28779f78',\n    'cbaf2d73-5169-4b2b-a543-496cf2813dff'\n    ]\nuploadcare.delete_files(files)\n"
+      - lang: Ruby
+        label: Ruby
+        source: 'require ''uploadcare''
+
+          Uploadcare.config.public_key = ''YOUR_PUBLIC_KEY''
+
+          Uploadcare.config.secret_key = ''YOUR_SECRET_KEY''
+
+
+          uuids = %w[21975c81-7f57-4c7a-aef9-acfe28779f78 cbaf2d73-5169-4b2b-a543-496cf2813dff]
+
+          puts Uploadcare::FileList.batch_delete(uuids)
+
+          '
+      - lang: Swift
+        label: Swift
+        source: 'import Uploadcare
+
+
+          let uploadcare = Uploadcare(withPublicKey: "YOUR_PUBLIC_KEY", secretKey: "YOUR_SECRET_KEY")
+
+
+          let uuids = ["21975c81-7f57-4c7a-aef9-acfe28779f78", "cbaf2d73-5169-4b2b-a543-496cf2813dff"]
+
+          try await uploadcare.deleteFiles(withUUIDs: uuids)
+
+          '
+      - lang: Kotlin
+        label: Kotlin
+        source: 'import com.uploadcare.android.library.api.UploadcareClient
+
+
+          val uploadcare = UploadcareClient(publicKey = "YOUR_PUBLIC_KEY", secretKey = "YOUR_SECRET_KEY")
+
+
+          val uuids = listOf("21975c81-7f57-4c7a-aef9-acfe28779f78", "cbaf2d73-5169-4b2b-a543-496cf2813dff")
+
+          uploadcare.deleteFiles(fileIds = uuids)
+
+          '
+  /files/local_copy/:
+    post:
+      summary: Copy file to local storage
+      description: 'POST requests are used to copy original files or their modified versions to a default storage.
+
+
+        Source files MAY either be stored or just uploaded and MUST NOT be deleted.
+
+
+        Copying of large files is not supported at the moment. If the file CDN URL includes transformation operators, its size MUST NOT exceed 100 MB. If not, the size MUST NOT exceed 5 GB.
+
+
+        Note: In the immediate 201 response, the `result.size` can be `0` and the `result.mime_type` can be `application/octet-stream`. This indicates the copy has been initiated but is not yet completed.
+
+        Once the copy finishes, fetching the file info (e.g., `GET /files/{uuid}/`) will return the actual size and MIME type.
+
+        '
+      tags:
+      - File
+      operationId: createLocalCopy
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              required:
+              - source
+              type: object
+              properties:
+                source:
+                  description: A CDN URL or just UUID of a file subjected to copy.
+                  type: string
+                  format: uri
+                  example:
+                    uuid:
+                      value: 85b5644f-e692-4855-9db0-8c5a83096e25
+                    cdn:
+                      value: http://www.ucarecdn.com/85b5644f-e692-4855-9db0-8c5a83096e25/-/resize/200x/roof.jpg
+                store:
+                  description: The parameter only applies to the Uploadcare storage and MUST be either true or false.
+                  type: string
+                  enum:
+                  - 'true'
+                  - 'false'
+                  default: 'false'
+                  example: 'true'
+                metadata:
+                  description: Arbitrary additional metadata.
+                  type: object
+                  example:
+                    subsystem: uploader
+            example:
+              source: 03ccf9ab-f266-43fb-973d-a6529c55c2ae
+              store: 'true'
+              metadata:
+                subsystem: uploader
+                pet: cat
+      parameters:
+      - $ref: '#/components/parameters/acceptHeader'
+      responses:
+        '201':
+          description: The file was copied successfully. HTTP response contains `result` field with information about the copy.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/localCopyResponse'
+        '400':
+          $ref: '#/components/responses/fileCopyErrors'
+        '401':
+          $ref: '#/components/responses/authorizationProblemsResponse'
+        '406':
+          $ref: '#/components/responses/invalidAcceptHeader'
+        '429':
+          $ref: '#/components/responses/requestWasThrottledError'
+      x-codeSamples:
+      - lang: JavaScript
+        label: JS
+        source: "import {\n  copyFileToLocalStorage,\n  UploadcareSimpleAuthSchema,\n} from '@uploadcare/rest-client';\n\nconst uploadcareSimpleAuthSchema = new UploadcareSimpleAuthSchema({\n  publicKey: 'YOUR_PUBLIC_KEY',\n  secretKey: 'YOUR_SECRET_KEY',\n});\n\nconst result = await copyFileToLocalStorage(\n  {\n    source: '1bac376c-aa7e-4356-861b-dd2657b5bfd2',\n    store: true,\n  },\n  { authSchema: uploadcareSimpleAuthSchema }\n)\n"
+      - lang: PHP
+        label: PHP
+        source: '<?php
+
+          $configuration = Uploadcare\Configuration::create((string) $_ENV[''UPLOADCARE_PUBLIC_KEY''], (string) $_ENV[''UPLOADCARE_SECRET_KEY'']);
+
+
+          $api = (new Uploadcare\Api($configuration))->file();
+
+          $fileInfo = $api->copyToLocalStorage(''03ccf9ab-f266-43fb-973d-a6529c55c2ae'', true);
+
+          echo \sprintf(''File \''%s\'' copied to local storage'', $fileInfo->getUuid());
+
+          '
+      - lang: Python
+        label: Python
+        source: 'from pyuploadcare import Uploadcare
+
+          uploadcare = Uploadcare(public_key=''YOUR_PUBLIC_KEY'', secret_key=''YOUR_SECRET_KEY'')
+
+
+          file = uploadcare.file("1bac376c-aa7e-4356-861b-dd2657b5bfd2")
+
+          copied_file = file.create_local_copy(store=True)
+
+          '
+      - lang: Ruby
+        label: Ruby
+        source: 'require ''uploadcare''
+
+          Uploadcare.config.public_key = ''YOUR_PUBLIC_KEY''
+
+          Uploadcare.config.secret_key = ''YOUR_SECRET_KEY''
+
+
+          source = ''1bac376c-aa7e-4356-861b-dd2657b5bfd2''
+
+          copied_file = Uploadcare::File.local_copy(source, store: true)
+
+          puts copied_file.uuid
+
+          '
+      - lang: Swift
+        label: Swift
+        source: 'import Uploadcare
+
+
+          let uploadcare = Uploadcare(withPublicKey: "YOUR_PUBLIC_KEY", secretKey: "YOUR_SECRET_KEY")
+
+
+          let response = try await uploadcare.copyFileToLocalStorage(source: "1bac376c-aa7e-4356-861b-dd2657b5bfd2")
+
+          print(response)
+
+          '
+      - lang: Kotlin
+        label: Kotlin
+        source: 'import com.uploadcare.android.library.api.UploadcareClient
+
+
+          val uploadcare = UploadcareClient(publicKey = "YOUR_PUBLIC_KEY", secretKey = "YOUR_SECRET_KEY")
+
+
+          val copyFile = uploadcare.copyFileLocalStorage(source = "1bac376c-aa7e-4356-861b-dd2657b5bfd2")
+
+          Log.d("TAG", copyFile.toString())
+
+          '
+  /files/remote_copy/:
+    post:
+      summary: Copy file to remote storage
+      description: 'POST requests are used to copy original files or their modified versions to the S3 bucket.
+
+
+        Source files MAY either be stored or just uploaded and MUST NOT be deleted.
+
+
+        Copying of large files is not supported at the moment. File size MUST NOT exceed 5 GB.
+
+        '
+      tags:
+      - File
+      operationId: createRemoteCopy
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              required:
+              - source
+              - target
+              type: object
+              properties:
+                source:
+                  description: A CDN URL or just UUID of a file subjected to copy.
+                  type: string
+                  format: uri
+                  example:
+                    uuid:
+                      value: 85b5644f-e692-4855-9db0-8c5a83096e25
+                    cdn:
+                      value: http://www.ucarecdn.com/85b5644f-e692-4855-9db0-8c5a83096e25/-/resize/200x/roof.jpg
+                target:
+                  description: Identifies a custom storage name related to your project. It implies that you are copying a file to a specified custom storage. Keep in mind that you can have multiple storages associated with a single S3 bucket.
+                  type: string
+                  example: mytarget
+                make_public:
+                  description: MUST be either `true` or `false`. The `true` value makes copied files available via public links, `false` does the opposite.
+                  type: boolean
+                  default: true
+                  example: true
+                pattern:
+                  description: 'The parameter is used to specify file names Uploadcare passes to the S3 bucket. If the parameter is omitted, your S3 bucket pattern is used. Use any combination of allowed values.
+
+
+                    Parameter values:
+
+                    - `${default}` = `${uuid}/${auto_filename}`
+
+                    - `${auto_filename}` = `${filename}${effects}${ext}`
+
+                    - `${effects}` = processing operations put into a CDN URL
+
+                    - `${filename}` = original filename without extension
+
+                    - `${uuid}` = file UUID
+
+                    - `${ext}` = file extension, including period, e.g. .jpg
+
+                    '
+                  type: string
+                  default: ${default}
+                  enum:
+                  - ${default}
+                  - ${auto_filename}
+                  - ${effects}
+                  - ${filename}
+                  - ${uuid}
+                  - ${ext}
+                  example: ${uuid}.${ext}
+            example:
+              source: 03ccf9ab-f266-43fb-973d-a6529c55c2ae
+              target: mytarget
+      parameters:
+      - $ref: '#/components/parameters/acceptHeader'
+      responses:
+        '200':
+          $ref: '#/components/responses/remoteCopyResponse'
+        '201':
+          $ref: '#/components/responses/remoteCopyResponse201'
+        '400':
+          description: Simple HTTP auth. on HTTP or file copy errors.
+          content:
+            application/json:
+              schema:
+                oneOf:
+                - $ref: '#/components/schemas/simpleAuthHTTPForbidden'
+                - $ref: '#/components/responses/fileCopyErrors/content/application~1json/schema'
+              examples:
+                Authentication Error:
+                  $ref: '#/components/examples/simpleAuthHTTPForbidden'
+                Copy Error:
+                  value:
+                    detail: Bad `source` parameter. Use UUID or CDN URL.
+        '401':
+          $ref: '#/components/responses/authorizationProblemsResponse'
+        '406':
+          $ref: '#/components/responses/invalidAcceptHeader'
+        '429':
+          $ref: '#/components/responses/requestWasThrottledError'
+      x-codeSamples:
+      - lang: JavaScript
+        label: JS
+        source: "import {\n  copyFileToRemoteStorage,\n  UploadcareSimpleAuthSchema,\n} from '@uploadcare/rest-client';\n\nconst uploadcareSimpleAuthSchema = new UploadcareSimpleAuthSchema({\n  publicKey: 'YOUR_PUBLIC_KEY',\n  secretKey: 'YOUR_SECRET_KEY',\n});\n\nconst result = await copyFileToRemoteStorage(\n  {\n    source: '1bac376c-aa7e-4356-861b-dd2657b5bfd2',\n    target: 'custom_storage_connected_to_the_project',\n  },\n  { authSchema: uploadcareSimpleAuthSchema }\n)\n"
+      - lang: PHP
+        label: PHP
+        source: '<?php
+
+          $configuration = Uploadcare\Configuration::create((string) $_ENV[''UPLOADCARE_PUBLIC_KEY''], (string) $_ENV[''UPLOADCARE_SECRET_KEY'']);
+
+
+          $api = (new Uploadcare\Api($configuration))->file();
+
+          $result = $api->copyToRemoteStorage(''03ccf9ab-f266-43fb-973d-a6529c55c2ae'', true);
+
+          echo \sprintf(''File \''%s\'' copied to local storage'', $result);
+
+          '
+      - lang: Python
+        label: Python
+        source: "from pyuploadcare import Uploadcare\nuploadcare = Uploadcare(public_key='YOUR_PUBLIC_KEY', secret_key='YOUR_SECRET_KEY')\n\nfile = uploadcare.file(\"1bac376c-aa7e-4356-861b-dd2657b5bfd2\")\nr_copied_file = file.create_remote_copy(\n    target='custom_storage_connected_to_the_project',\n    make_public=True,\n    pattern='${uuid}/${filename}${ext}',\n)\n"
+      - lang: Ruby
+        label: Ruby
+        source: 'require ''uploadcare''
+
+          Uploadcare.config.public_key = ''YOUR_PUBLIC_KEY''
+
+          Uploadcare.config.secret_key = ''YOUR_SECRET_KEY''
+
+
+          source_object = ''1bac376c-aa7e-4356-861b-dd2657b5bfd2''
+
+          target = ''custom_storage_connected_to_the_project''
+
+          copied_file_url = Uploadcare::File.remote_copy(source_object, target, make_public: true)
+
+          puts copied_file_url
+
+          '
+      - lang: Swift
+        label: Swift
+        source: 'import Uploadcare
+
+
+          let uploadcare = Uploadcare(withPublicKey: "YOUR_PUBLIC_KEY", secretKey: "YOUR_SECRET_KEY")
+
+
+          let response = try await uploadcare.copyFileToRemoteStorage(source: "03ccf9ab-f266-43fb-973d-a6529c55c2ae", target: "mytarget", pattern: .uuid)
+
+          print(response)
+
+          '
+      - lang: Kotlin
+        label: Kotlin
+        source: "import com.uploadcare.android.library.api.UploadcareClient\n\nval uploadcare = UploadcareClient(publicKey = \"YOUR_PUBLIC_KEY\", secretKey = \"YOUR_SECRET_KEY\")\n\nval copyFile = uploadcare.copyFileRemoteStorage(\n    source = \"1bac376c-aa7e-4356-861b-dd2657b5bfd2\",\n    target = \"custom_storage_connected_to_the_project\"\n)\nLog.d(\"TAG\", copyFile.toString())\n"
+components:
+  schemas:
+    contentInfo:
+      type: object
+      nullable: true
+      description: Information about file content.
+      properties:
+        mime:
+          type: object
+          description: MIME type.
+          required:
+          - mime
+          - type
+          - subtype
+          properties:
+            mime:
+              type: string
+              description: Full MIME type.
+              example: image/jpeg
+            type:
+              type: string
+              description: Type of MIME type.
+              example: image
+            subtype:
+              type: string
+              description: Subtype of MIME type.
+              example: jpeg
+        image:
+          $ref: '#/components/schemas/imageInfo'
+        video:
+          $ref: '#/components/schemas/videoInfo'
+    localCopyResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          default: file
+          example: file
+        result:
+          $ref: '#/components/schemas/fileCopy'
+    awsRekognitionDetectModerationLabels_v2016_06_27:
+      allOf:
+      - $ref: '#/components/schemas/applicationData'
+      - type: object
+        properties:
+          version:
+            type: string
+            enum:
+            - '2016-06-27'
+          data:
+            type: object
+            description: Dictionary with a result of an aws rekognition detect moderation labels execution result.
+            properties:
+              ModerationModelVersion:
+                type: string
+              ModerationLabels:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    Confidence:
+                      type: number
+                    Name:
+                      type: string
+                    ParentName:
+                      type: string
+                  required:
+                  - Name
+                  - ParentName
+                  - Confidence
+            required:
+            - ModerationLabels
+            - ModerationModelVersion
+            example:
+              value:
+                aws_rekognition_detect_moderation_labels:
+                  data:
+                    ModerationModelVersion: '6.0'
+                    ModerationLabels:
+                    - Confidence: 93.41645812988281
+                      Name: Weapons
+                      ParentName: Violence
+                  version: '2016-06-27'
+                  datetime_created: '2023-02-21T11:25:31.259763Z'
+                  datetime_updated: '2023-02-21T11:27:33.359763Z'
+    videoInfo:
+      type: object
+      description: Video metadata.
+      required:
+      - duration
+      - format
+      - bitrate
+      - audio
+      - video
+      properties:
+        duration:
+          type: integer
+          description: Video file's duration in milliseconds.
+          nullable: true
+          example: 261827
+        format:
+          type: string
+          description: Video file's format.
+          example: mp4
+        bitrate:
+          type: integer
+          description: Video file's bitrate.
+          nullable: true
+          example: 393
+        audio:
+          type: array
+          items:
+            type: object
+            description: Audio stream's metadata.
+            required:
+            - bitrate
+            - codec
+            - sample_rate
+            - channels
+            properties:
+              bitrate:
+                type: integer
+                description: Audio stream's bitrate.
+                nullable: true
+                example: 78
+              codec:
+                type: string
+                description: Audio stream's codec.
+                nullable: true
+                example: aac
+              sample_rate:
+                type: integer
+                description: Audio stream's sample rate.
+                nullable: true
+                example: 44100
+              channels:
+                type: integer
+                description: Audio stream's number of channels.
+                nullable: true
+                example: 2
+        video:
+          type: array
+          items:
+            type: object
+            description: Video stream's metadata.
+            required:
+            - height
+            - width
+            - frame_rate
+            - bitrate
+            - codec
+            properties:
+              height:
+                type: integer
+                description: Video stream's image height.
+                example: 360
+              width:
+                type: integer
+                description: Video stream's image width.
+                example: 640
+              frame_rate:
+                type: number
+                description: Video stream's frame rate.
+                example: 30
+              bitrate:
+                type: integer
+                description: Video stream's bitrate.
+                nullable: true
+                example: 315
+              codec:
+                type: string
+                description: Video stream's codec.
+                nullable: true
+                example: h264
+    ucClamavVirusScan:
+      allOf:
+      - $ref: '#/components/schemas/applicationData'
+      - type: object
+        properties:
+          version:
+            type: string
+            enum:
+            - 0.104.2
+            - 0.104.3
+            - 0.105.0
+            - 0.105.1
+          data:
+            type: object
+            description: Dictionary with a result of ClamAV execution result.
+            properties:
+              infected:
+                type: boolean
+              infected_with:
+                type: string
+            required:
+            - infected
+        example:
+          value:
+            uc_clamav_virus_scan:
+              data:
+                infected: true
+                infected_with: Win.Test.EICAR_HDB-1
+              version: 0.104.2
+              datetime_created: '2021-09-21T11:24:33.159663Z'
+              datetime_updated: '2021-09-21T11:24:33.159663Z'
+    fileCopy:
+      type: object
+      required:
+      - datetime_removed
+      - datetime_stored
+      - datetime_uploaded
+      - is_image
+      - is_ready
+      - mime_type
+      - original_file_url
+      - original_filename
+      - size
+      - url
+      - uuid
+      - variations
+      - content_info
+      - metadata
+      properties:
+        datetime_removed:
+          type: string
+          format: date-time
+          nullable: true
+          description: Date and time when a file was removed, if any.
+        datetime_stored:
+          type: string
+          format: date-time
+          nullable: true
+          description: Date and time of the last store request, if any.
+        datetime_uploaded:
+          type: string
+          format: date-time
+          description: Date and time when a file was uploaded.
+        is_image:
+          type: boolean
+          description: Is file is image.
+          example: true
+        is_ready:
+          type: boolean
+          description: Is file is ready to be used after upload.
+          example: true
+        mime_type:
+          type: string
+          description: File MIME-type. In the immediate response after starting a local copy, it can be `application/octet-stream` until the copy completes.
+          example: image/jpeg
+        original_file_url:
+          type: string
+          format: uri
+          description: Publicly available file CDN URL. Available if a file is not deleted.
+          nullable: true
+        original_filename:
+          type: string
+          description: Original file name taken from uploaded file.
+          example: EU_4.jpg
+        size:
+          type: integer
+          enum:
+          - 0
+          description: File size in bytes. In the immediate response after starting a local copy, it can be `0` until the copy completes.
+          example: 0
+        url:
+          type: string
+          format: uri
+          description: API resource URL for a particular file.
+        uuid:
+          type: string
+          format: uuid
+          description: File UUID.
+          example: 575ed4e8-f4e8-4c14-a58b-1527b6d9ee46
+        variations:
+          enum:
+          - null
+        content_info:
+          enum:
+          - null
+        metadata:
+          $ref: '#/components/schemas/metadata'
+    applicationDataObject:
+      type: object
+      nullable: true
+      description: Dictionary of application names and data associated with these applications.
+      properties:
+        aws_rekognition_detect_labels:
+          $ref: '#/components/schemas/awsRekognitionDetectLabels_v2016_06_27'
+        aws_rekognition_detect_moderation_labels:
+          $ref: '#/components/schemas/awsRekognitionDetectModerationLabels_v2016_06_27'
+        remove_bg:
+          $ref: '#/components/schemas/removeBg_v1_0'
+        uc_clamav_virus_scan:
+          $ref: '#/components/schemas/ucClamavVirusScan'
+    removeBg_v1_0:
+      allOf:
+      - $ref: '#/components/schemas/applicationData'
+      - type: object
+        properties:
+          version:
+            type: string
+            enum:
+            - '1.0'
+          data:
+            type: object
+            description: Dictionary with a result of an remove.bg information about an image.
+            properties:
+              foreground_type:
+                type: string
+                description: foreground classification type (present if type_level was set)
+        example:
+          value:
+            remove_bg:
+              data:
+                foreground_type: person
+              version: '1.0'
+              datetime_created: '2021-07-25T12:24:33.159663Z'
+              datetime_updated: '2021-07-25T12:24:33.159663Z'
+    awsRekognitionDetectLabels_v2016_06_27:
+      allOf:
+      - $ref: '#/components/schemas/applicationData'
+      - type: object
+        properties:
+          version:
+            type: string
+            enum:
+            - '2016-06-27'
+          data:
+            type: object
+            description: Dictionary with a result of an aws rekognition detect labels execution result.
+            properties:
+              LabelModelVersion:
+                type: string
+              Labels:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    Confidence:
+                      type: number
+                    Instances:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          BoundingBox:
+                            type: object
+                            properties:
+                              Height:
+                                type: number
+                              Left:
+                                type: number
+                              Top:
+                                type: number
+                              Width:
+                                type: number
+                          Confidence:
+                            type: number
+                    Name:
+                      type: string
+                    Parents:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          Name:
+                            type: string
+                  required:
+                  - Name
+                  - Parents
+                  - Instances
+                  - Confidence
+            required:
+            - Labels
+            - LabelModelVersion
+            example:
+              value:
+                aws_rekognition_detect_labels:
+                  data:
+                    LabelModelVersion: '2.0'
+                    Labels:
+                    - Confidence: 93.41645812988281
+                      Instances: []
+                      Name: Home Decor
+                      Parents: []
+                    - Confidence: 70.75951385498047
+                      Instances: []
+                      Name: Linen
+                      Parents:
+                      - Name: Home Decor
+                    - Confidence: 64.7123794555664
+                      Instances: []
+                      Name: Sunlight
+                      Parents: []
+                    - Confidence: 56.264793395996094
+                      Instances: []
+                      Name: Flare
+                      Parents:
+                      - Name: Light
+                    - Confidence: 50.47153854370117
+                      Instances: []
+                      Name: Tree
+                      Parents:
+                      - Name: Plant
+                  version: '2016-06-27'
+                  datetime_created: '2021-09-21T11:25:31.259763Z'
+                  datetime_updated: '2021-09-21T11:27:33.359763Z'
+    metadata:
+      type: object
+      nullable: true
+      description: Arbitrary metadata associated with a file.
+    file:
+      type: object
+      required:
+      - datetime_removed
+      - datetime_stored
+      - datetime_uploaded
+      - is_image
+      - is_ready
+      - mime_type
+      - original_file_url
+      - original_filename
+      - size
+      - url
+      - uuid
+      - variations
+      - content_info
+      - metadata
+      properties:
+        datetime_removed:
+          type: string
+          format: date-time
+          nullable: true
+          description: Date and time when a file was removed, if any.
+        datetime_stored:
+          type: string
+          format: date-time
+          nullable: true
+          description: Date and time of the last store request, if any.
+        datetime_uploaded:
+          type: string
+          format: date-time
+          description: Date and time when a file was uploaded.
+        is_image:
+          type: boolean
+          description: Is file is image.
+          example: true
+        is_ready:
+          type: boolean
+          description: Is file is ready to be used after upload.
+          example: true
+        mime_type:
+          type: string
+          description: File MIME-type.
+          example: image/jpeg
+        original_file_url:
+          type: string
+          format: uri
+          description: Publicly available file CDN URL. Available if a file is not deleted.
+          nullable: true
+          example: https://ucarecdn.com/e575ed4e8-f4e8-4c14-a58b-1527b6d9ee46/EU_4.jpg
+        original_filename:
+          type: string
+          description: Original file name taken from uploaded file.
+          example: EU_4.jpg
+        size:
+          type: integer
+          description: File size in bytes.
+          example: 145212
+        url:
+          type: string
+          format: uri
+          description: API resource URL for a particular file.
+          example: https://api.uploadcare.com/files/e10ce759-42c3-4185-bae5-e22a9143d68f/
+        uuid:
+          type: string
+          format: uuid
+          description: File UUID.
+          example: 575ed4e8-f4e8-4c14-a58b-1527b6d9ee46
+        appdata:
+          $ref: '#/components/schemas/applicationDataObject'
+        variations:
+          type: object
+          nullable: true
+          description: 'Dictionary of other files that were created using this file as a source. It''s used for video processing and document conversion jobs. E.g., `<conversion_path>: <uuid>`.'
+        content_info:
+          $ref: '#/components/schemas/contentInfo'
+        metadata:
+          $ref: '#/components/schemas/metadata'
+      example:
+        datetime_removed: null
+        datetime_stored: '2018-11-26T12:49:10.477888Z'
+        datetime_uploaded: '2018-11-26T12:49:09.945335Z'
+        variations: null
+        is_image: true
+        is_ready: true
+        mime_type: image/jpeg
+        original_file_url: https://ucarecdn.com/22240276-2f06-41f8-9411-755c8ce926ed/pineapple.jpg
+        original_filename: pineapple.jpg
+        size: 642
+        url: https://api.uploadcare.com/files/22240276-2f06-41f8-9411-755c8ce926ed/
+        uuid: 22240276-2f06-41f8-9411-755c8ce926ed
+        content_info:
+          mime:
+            mime: image/jpeg
+            type: image
+            subtype: jpeg
+          image:
+            format: JPEG
+            width: 500
+            height: 500
+            sequence: false
+            color_mode: RGB
+            orientation: 6
+            geo_location:
+              latitude: 55.62013611111111
+              longitude: 37.66299166666666
+            datetime_original: '2018-08-20T08:59:50'
+            dpi:
+            - 72
+            - 72
+        metadata:
+          subsystem: uploader
+          pet: cat
+        appdata:
+          aws_rekognition_detect_labels:
+            data:
+              LabelModelVersion: '2.0'
+              Labels:
+              - Confidence: 93.41645812988281
+                Instances: []
+                Name: Home Decor
+                Parents: []
+              - Confidence: 70.75951385498047
+                Instances: []
+                Name: Linen
+                Parents:
+                - Name: Home Decor
+              - Confidence: 64.7123794555664
+                Instances: []
+                Name: Sunlight
+                Parents: []
+              - Confidence: 56.264793395996094
+                Instances: []
+                Name: Flare
+                Parents:
+                - Name: Light
+              - Confidence: 50.47153854370117
+                Instances: []
+                Name: Tree
+                Parents:
+                - Name: Plant
+            version: '2016-06-27'
+            datetime_created: '2021-09-21T11:25:31.259763Z'
+            datetime_updated: '2021-09-21T11:27:33.359763Z'
+          aws_rekognition_detect_moderation_labels:
+            data:
+              ModerationModelVersion: '6.0'
+              ModerationLabels:
+              - Confidence: 93.41645812988281
+                Name: Weapons
+                ParentName: Violence
+            version: '2016-06-27'
+            datetime_created: '2023-02-21T11:25:31.259763Z'
+            datetime_updated: '2023-02-21T11:27:33.359763Z'
+          remove_bg:
+            data:
+              foreground_type: person
+            version: '1.0'
+            datetime_created: '2021-07-25T12:24:33.159663Z'
+            datetime_updated: '2021-07-25T12:24:33.159663Z'
+          uc_clamav_virus_scan:
+            data:
+              infected: true
+              infected_with: Win.Test.EICAR_HDB-1
+            version: 0.104.2
+            datetime_created: '2021-09-21T11:24:33.159663Z'
+            datetime_updated: '2021-09-21T11:24:33.159663Z'
+    copiedFileURL:
+      type: object
+      properties:
+        type:
+          type: string
+          default: url
+          example: url
+        result:
+          type: string
+          format: url
+          description: URL with an s3 scheme. Your bucket name is put as a host, and an s3 object path follows.
+          example: s3://mybucket/03ccf9ab-f266-43fb-973d-a6529c55c2ae/image.png
+    imageInfo:
+      type: object
+      description: Image metadata.
+      required:
+      - color_mode
+      - orientation
+      - format
+      - height
+      - width
+      - geo_location
+      - datetime_original
+      - dpi
+      - sequence
+      properties:
+        color_mode:
+          type: string
+          description: Image color mode.
+          enum:
+          - RGB
+          - RGBA
+          - RGBa
+          - RGBX
+          - L
+          - LA
+          - La
+          - P
+          - PA
+          - CMYK
+          - YCbCr
+          - HSV
+          - LAB
+          example: RGBA
+        orientation:
+          type: integer
+          description: Image orientation from EXIF.
+          nullable: true
+          minimum: 0
+          maximum: 8
+          example: 6
+        format:
+          type: string
+          description: Image format.
+          example: JPEG
+        sequence:
+          type: boolean
+          description: Set to true if a file contains a sequence of images (GIF for example).
+          example: false
+        height:
+          type: integer
+          description: Image height in pixels.
+          example: 2352
+        width:
+          type: integer
+          description: Image width in pixels.
+          example: 2935
+        geo_location:
+          description: Geo-location of image from EXIF.
+          type: object
+          nullable: true
+          required:
+          - latitude
+          - longitude
+          properties:
+            latitude:
+              type: number
+              description: Location latitude.
+              example: -1.1884555555555556
+            longitude:
+              type: number
+              description: Location longitude.
+              example: 52.66996666666667
+        datetime_original:
+          type: string
+          description: Image date and time from EXIF. Please be aware that this data is not always formatted and displayed exactly as it appears in the EXIF.
+          nullable: true
+          format: date-time
+          example: '2018-09-13T16:23:40'
+        dpi:
+          type: array
+          description: Image DPI for two dimensions.
+          nullable: true
+          items:
+            type: number
+            example: 72
+          minItems: 2
+          maxItems: 2
+          example:
+          - 72
+          - 72
+    applicationData:
+      type: object
+      properties:
+        version:
+          type: string
+          description: An application version.
+        datetime_created:
+          type: string
+          format: date-time
+          description: Date and time when an application data was created.
+        datetime_updated:
+          type: string
+          format: date-time
+          description: Date and time when an application data was updated.
+        data:
+          type: object
+          description: Dictionary with a result of an application execution result.
+      required:
+      - version
+      - datetime_created
+      - datetime_updated
+      - data
+    simpleAuthHTTPForbidden:
+      type: object
+      properties:
+        detail:
+          type: string
+          default: Simple authentication over HTTP is forbidden. Please, use HTTPS or signed requests instead.
+      example:
+        detail: Simple authentication over HTTP is forbidden. Please, use HTTPS or signed requests instead.
+  responses:
+    invalidAcceptHeader:
+      description: Invalid version header `Accept` for this endpoint.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              detail:
+                type: string
+                example: Incorrect Accept header provided. Make sure to specify API version. Refer to REST API docs for details.
+                default: Incorrect Accept header provided. Make sure to specify API version. Refer to REST API docs for details.
+    fileCopyErrors:
+      description: Possible errors for file copy endpoint.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              detail:
+                type: string
+                enum:
+                - Bad `source` parameter. Use UUID or CDN URL.
+                - '`source` parameter is required.'
+                - Project has no storage with provided name.
+                - '`store` parameter should be `true` or `false`.'
+                - 'Invalid pattern provided: `pattern_value`'
+                - 'Invalid pattern provided: Invalid character in a pattern.'
+                - File is not ready yet.
+                - Copying of large files is not supported at the moment.
+                - Not allowed on your current plan.
+                example: File is not ready yet.
+    simpleAuthHTTPForbiddenResponse:
+      description: Simple authentication over HTTP is forbidden. Please, use HTTPS or signed requests instead.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/simpleAuthHTTPForbidden'
+    requestWasThrottledError:
+      description: Request was throttled.
+      headers:
+        Retry-After:
+          description: Number of seconds to wait before the next request.
+          schema:
+            type: integer
+            example: 10
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              detail:
+                type: string
+                example: Request was throttled. Expected available in 10 seconds.
+    filesStoreUUIDSError:
+      description: File UUIDs list validation errors.
+      content:
+        application/json:
+          schema:
+            oneOf:
+            - $ref: '#/components/schemas/simpleAuthHTTPForbidden'
+            - type: object
+              description: File UUIDs list validation errors.
+              properties:
+                detail:
+                  type: string
+                  enum:
+                  - Expected list of UUIDs
+                  - List of UUIDs can not be empty
+                  - Maximum UUIDs per request is exceeded. The limit is 100
+                  example: Expected list of UUIDs
+    paginatedFilesResponse:
+      description: A list of files, paginated.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              next:
+                type: string
+                format: uri
+                description: Next page URL.
+                nullable: true
+                example: https://api.uploadcare.com/files/?from=2018-11-27T01%3A00%3A24.296613%2B00%3A00&limit=3&offset=0
+              previous:
+                type: string
+                format: uri
+                description: Previous page URL.
+                nullable: true
+                example: https://api.uploadcare.com/files/?limit=3&to=2018-11-27T01%3A00%3A36.436838%2B00%3A00&offset=0
+              total:
+                type: integer
+                minimum: 0
+                description: Total number of the files of the queried type. The queried type depends on the stored and removed query parameters.
+                example: 26
+              totals:
+                type: object
+                properties:
+                  removed:
+                    type: integer
+                    minimum: 0
+                    description: Total number of the files that are marked as removed.
+                    default: 0
+                    example: 0
+                  stored:
+                    type: integer
+                    minimum: 0
+                    description: Total number of the files that are marked as stored.
+                    default: 0
+                    example: 25
+                  unstored:
+                    type: integer
+                    minimum: 0
+                    description: Total number of the files that are not marked as stored.
+                    default: 0
+                    example: 1
+                required:
+                - removed
+                - stored
+                - unstored
+              per_page:
+                type: integer
+                description: Number of the files per page.
+                example: 100
+              results:
+                type: array
+                items:
+                  $ref: '#/components/schemas/file'
+          examples:
+            With App Data:
+              $ref: '#/components/examples/file_list_w_appdata'
+            Without App Data:
+              $ref: '#/components/examples/file_list'
+    fileNotFoundError:
+      description: File not found.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              detail:
+                type: string
+                description: Not found.
+                example: Not found.
+    remoteCopyResponse:
+      description: Destination file with that name already exists. Check the `pattern` parameter.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/copiedFileURL'
+    remoteCopyResponse201:
+      description: The file was copied successfully. HTTP response contains `result` field with the URL of the file on the remote storage.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/copiedFileURL'
+    authorizationProblemsResponse:
+      description: Authorization errors.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              detail:
+                type: string
+                enum:
+                - Incorrect authentication credentials.
+                - Public key {public_key} not found.
+                - Secret key not found.
+                - Invalid signature. Please check your Secret key.
+                example: Incorrect authentication credentials.
+    filesStorageResponse:
+      description: OK. See `problems` and `result` fields in the response. In case a file list provided in a request holds invalid UUIDs, they'll be included in the `problems` structure. Invalid UUIDs can be incomplete, associated with files that no longer exist, etc.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+                example: ok
+              problems:
+                type: object
+                description: Dictionary of passed files UUIDs and problems associated with these UUIDs.
+                example:
+                  21975c81-7f57-4c7a-aef9-acfe28779f78: Missing in the project
+                  4j334o01-8bs3: Invalid
+              result:
+                description: List of file objects that have been stored/deleted.
+                type: array
+                items:
+                  $ref: '#/components/schemas/file'
+  examples:
+    file_list:
+      value:
+        next: https://api.uploadcare.com/files/?limit=1&from=2018-11-27T01%3A00%3A43.001705%2B00%3A00&offset=0
+        previous: https://api.uploadcare.com/files/?limit=1&to=2018-11-27T01%3A00%3A36.436838%2B00%3A00&offset=0
+        total: 2484
+        totals:
+          removed: 0
+          stored: 2480
+          unstored: 4
+        per_page: 1
+        results:
+        - datetime_removed: null
+          datetime_stored: '2021-09-21T11:24:33.159663Z'
+          datetime_uploaded: '2021-09-21T11:24:33.159663Z'
+          is_image: false
+          is_ready: true
+          mime_type: video/mp4
+          original_file_url: https://ucarecdn.com/7ed2aed0-0482-4c13-921b-0557b193edc2/16317390663260.mp4
+          original_filename: 16317390663260.mp4
+          size: 14479722
+          url: https://api.uploadcare.com/files/7ed2aed0-0482-4c13-921b-0557b193edc2/
+          uuid: 7ed2aed0-0482-4c13-921b-0557b193edc2
+          variations: null
+          content_info:
+            mime:
+              mime: video/mp4
+              type: video
+              subtype: mp4
+            video:
+              audio:
+              - codec: aac
+                bitrate: 129
+                channels: 2
+                sample_rate: 44100
+              video:
+              - codec: h264
+                width: 640
+                height: 480
+                bitrate: 433
+                frame_rate: 30
+              format: mp4
+              bitrate: 579
+              duration: 200044
+          metadata:
+            subsystem: tester
+            pet: dog
+    simpleAuthHTTPForbidden:
+      value:
+        detail: Simple authentication over HTTP is forbidden. Please, use HTTPS or signed requests instead.
+    file_list_w_appdata:
+      value:
+        next: https://api.uploadcare.com/files/?limit=1&from=2018-11-27T01%3A00%3A43.001705%2B00%3A00&offset=0
+        previous: https://api.uploadcare.com/files/?limit=1&to=2018-11-27T01%3A00%3A36.436838%2B00%3A00&offset=0
+        total: 2484
+        totals:
+          removed: 0
+          stored: 2480
+          unstored: 4
+        per_page: 1
+        results:
+        - datetime_removed: null
+          datetime_stored: '2018-11-26T12:49:10.477888Z'
+          datetime_uploaded: '2018-11-26T12:49:09.945335Z'
+          variations: null
+          is_image: true
+          is_ready: true
+          mime_type: image/jpeg
+          original_file_url: https://ucarecdn.com/22240276-2f06-41f8-9411-755c8ce926ed/pineapple.jpg
+          original_filename: pineapple.jpg
+          size: 642
+          url: https://api.uploadcare.com/files/22240276-2f06-41f8-9411-755c8ce926ed/
+          uuid: 22240276-2f06-41f8-9411-755c8ce926ed
+          content_info:
+            mime:
+              mime: image/jpeg
+              type: image
+              subtype: jpeg
+            image:
+              format: JPEG
+              width: 500
+              height: 500
+              sequence: false
+              color_mode: RGB
+              orientation: 6
+              geo_location:
+                latitude: 55.62013611111111
+                longitude: 37.66299166666666
+              datetime_original: '2018-08-20T08:59:50'
+              dpi:
+              - 72
+              - 72
+          metadata:
+            subsystem: uploader
+            pet: cat
+          appdata:
+            uc_clamav_virus_scan:
+              data:
+                infected: true
+                infected_with: Win.Test.EICAR_HDB-1
+              version: 0.104.2
+              datetime_created: '2021-09-21T11:24:33.159663Z'
+              datetime_updated: '2021-09-21T11:24:33.159663Z'
+    file:
+      value:
+        datetime_removed: null
+        datetime_stored: '2018-11-26T12:49:10.477888Z'
+        datetime_uploaded: '2018-11-26T12:49:09.945335Z'
+        variations: null
+        is_image: true
+        is_ready: true
+        mime_type: image/jpeg
+        original_file_url: https://ucarecdn.com/22240276-2f06-41f8-9411-755c8ce926ed/pineapple.jpg
+        original_filename: pineapple.jpg
+        size: 642
+        url: https://api.uploadcare.com/files/22240276-2f06-41f8-9411-755c8ce926ed/
+        uuid: 22240276-2f06-41f8-9411-755c8ce926ed
+        content_info:
+          mime:
+            mime: image/jpeg
+            type: image
+            subtype: jpeg
+          image:
+            format: JPEG
+            width: 500
+            height: 500
+            sequence: false
+            color_mode: RGB
+            orientation: 6
+            geo_location:
+              latitude: 55.62013611111111
+              longitude: 37.66299166666666
+            datetime_original: '2018-08-20T08:59:50'
+            dpi:
+            - 72
+            - 72
+        metadata:
+          subsystem: uploader
+          pet: cat
+        appdata:
+          aws_rekognition_detect_labels:
+            data:
+              LabelModelVersion: '2.0'
+              Labels:
+              - Confidence: 93.41645812988281
+                Instances: []
+                Name: Home Decor
+                Parents: []
+              - Confidence: 70.75951385498047
+                Instances: []
+                Name: Linen
+                Parents:
+                - Name: Home Decor
+              - Confidence: 64.7123794555664
+                Instances: []
+                Name: Sunlight
+                Parents: []
+              - Confidence: 56.264793395996094
+                Instances: []
+                Name: Flare
+                Parents:
+                - Name: Light
+              - Confidence: 50.47153854370117
+                Instances: []
+                Name: Tree
+                Parents:
+                - Name: Plant
+            version: '2016-06-27'
+            datetime_created: '2021-09-21T11:25:31.259763Z'
+            datetime_updated: '2021-09-21T11:27:33.359763Z'
+          aws_rekognition_detect_moderation_labels:
+            data:
+              ModerationModelVersion: '6.0'
+              ModerationLabels:
+              - Confidence: 93.41645812988281
+                Name: Weapons
+                ParentName: Violence
+            version: '2016-06-27'
+            datetime_created: '2023-02-21T11:25:31.259763Z'
+            datetime_updated: '2023-02-21T11:27:33.359763Z'
+          remove_bg:
+            data:
+              foreground_type: person
+            version: '1.0'
+            datetime_created: '2021-07-25T12:24:33.159663Z'
+            datetime_updated: '2021-07-25T12:24:33.159663Z'
+          uc_clamav_virus_scan:
+            data:
+              infected: true
+              infected_with: Win.Test.EICAR_HDB-1
+            version: 0.104.2
+            datetime_created: '2021-09-21T11:24:33.159663Z'
+            datetime_updated: '2021-09-21T11:24:33.159663Z'
+    file_removed:
+      value:
+        datetime_removed: '2018-11-26T12:49:11.477888Z'
+        datetime_stored: null
+        datetime_uploaded: '2018-11-26T12:49:09.945335Z'
+        variations: null
+        is_image: true
+        is_ready: true
+        mime_type: image/jpeg
+        original_file_url: https://ucarecdn.com/22240276-2f06-41f8-9411-755c8ce926ed/pineapple.jpg
+        original_filename: pineapple.jpg
+        size: 642
+        url: https://api.uploadcare.com/files/22240276-2f06-41f8-9411-755c8ce926ed/
+        uuid: 22240276-2f06-41f8-9411-755c8ce926ed
+        content_info:
+          mime:
+            mime: image/jpeg
+            type: image
+            subtype: jpeg
+          image:
+            format: JPEG
+            width: 500
+            height: 500
+            sequence: false
+            color_mode: RGB
+            orientation: 6
+            geo_location:
+              latitude: 55.62013611111111
+              longitude: 37.66299166666666
+            datetime_original: '2018-08-20T08:59:50'
+            dpi:
+            - 72
+            - 72
+        metadata:
+          subsystem: uploader
+          pet: cat
+        appdata:
+          uc_clamav_virus_scan:
+            data:
+              infected: true
+              infected_with: Win.Test.EICAR_HDB-1
+            version: 0.104.2
+            datetime_created: '2021-09-21T11:24:33.159663Z'
+            datetime_updated: '2021-09-21T11:24:33.159663Z'
+    file_video:
+      value:
+        datetime_removed: null
+        datetime_stored: '2021-09-21T11:24:33.159663Z'
+        datetime_uploaded: '2021-09-21T11:24:33.159663Z'
+        is_image: false
+        is_ready: true
+        mime_type: video/mp4
+        original_file_url: https://ucarecdn.com/7ed2aed0-0482-4c13-921b-0557b193edc2/16317390663260.mp4
+        original_filename: 16317390663260.mp4
+        size: 14479722
+        url: https://api.uploadcare.com/files/7ed2aed0-0482-4c13-921b-0557b193edc2/
+        uuid: 7ed2aed0-0482-4c13-921b-0557b193edc2
+        variations: null
+        content_info:
+          mime:
+            mime: video/mp4
+            type: video
+            subtype: mp4
+          video:
+            audio:
+            - codec: aac
+              bitrate: 129
+              channels: 2
+              sample_rate: 44100
+            video:
+            - codec: h264
+              width: 640
+              height: 480
+              bitrate: 433
+              frame_rate: 30
+            format: mp4
+            bitrate: 579
+            duration: 200044
+        metadata:
+          subsystem: tester
+          pet: dog
+  parameters:
+    acceptHeader:
+      in: header
+      name: Accept
+      description: Version header.
+      schema:
+        type: string
+        nullable: true
+        example: application/vnd.uploadcare-v0.7+json
+      required: true

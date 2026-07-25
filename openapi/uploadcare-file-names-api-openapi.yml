@@ -1,0 +1,175 @@
+openapi: 3.0.0
+info:
+  title: URL API Reference Add-Ons File names API
+  version: '2022-11-28'
+  description: 'Every uploaded file is immediately available on the Uploadcare CDN.
+
+    The CDN includes on-the-fly processing features and can work as a proxy.
+
+
+    ## API endpoints
+
+    Access files in Uploadcare CDN at `ucarecdn.com` over HTTP/HTTPS like this:
+
+    ```https://ucarecdn.com/:uuid/```
+
+
+    You can add CDN operations by including directives in the CDN URL:
+
+    ```https://ucarecdn.com/:uuid/-/:operation/:params/:filename```
+
+
+    * `:uuid` stands for the unique file identifier, UUID, assigned on upload.
+
+    * `/-/` is a mandatory parsing delimiter to divide operations and other path components.
+
+    * `:operation/:params/` is a CDN operation directive with parameters.
+
+    * `:filename` is an optional filename you can add after a trailing slash /.
+
+
+    You can stack two and more operations like this:
+
+    ```-/:operation/:params/-/:operation/:params/```
+
+    '
+  contact:
+    name: API support
+    email: help@uploadcare.com
+  x-logo:
+    url: https://ucarecdn.com/12e3af14-392d-416f-8542-f210c2eb6ec4/logourlapi.svg
+    backgroundColor: '#fafafa'
+    altText: Uploadcare URL API Reference
+  x-meta:
+    title: URL API Reference — Uploadcare
+    description: A reference documentation for the Uploadcare's URL API.
+servers:
+- url: https://ucarecdn.com
+  description: Production server
+tags:
+- name: File names
+  description: 'Your original filenames can be accessed via [REST API](/docs/api/rest/).
+
+    Make a request to receive a JSON response with file parameters including
+
+    `original_filename`.
+
+
+    You can set an optional filename that users will see instead of the original name:
+
+
+    ```https://ucarecdn.com/:uuid/:filename```
+
+
+    `:filename` should comply with [file name conventions](https://tools.ietf.org/html/rfc3986#section-3.3)
+
+    and it should be a valid part of a URL. For example, `filename.ext`.
+
+
+    Here are some examples with full CDN URLs:
+
+
+    ```
+
+    Safe:
+
+
+    // adding a simple filename
+
+    https://ucarecdn.com/85b5644f-e692-4855-9db0-8c5a83096e25/image.jpg
+
+
+    // using a char allowed in the pchar definition
+
+    https://ucarecdn.com/85b5644f-e692-4855-9db0-8c5a83096e25/image@2x.jpg
+
+
+    // allowed in pchar together with Image Transformations
+
+    https://ucarecdn.com/85b5644f-e692-4855-9db0-8c5a83096e25/-/preview/-/resize/550x/image@1x.jpg
+
+
+    // using a sub-delim allowed in pchar together with Image Transformations
+
+    https://ucarecdn.com/85b5644f-e692-4855-9db0-8c5a83096e25/-/preview/-/grayscale/image_black&white@2x.jpg
+
+
+    // using percent-encoded gen-delims that are not allowed in pchar
+
+    https://ucarecdn.com/85b5644f-e692-4855-9db0-8c5a83096e25/-/preview/-/grayscale/image%5Bdesaturated%5D@2x.jpg
+
+
+    Unsafe:
+
+
+    // using gen-delims that are not allowed in pchar without encoding
+
+    https://ucarecdn.com/85b5644f-e692-4855-9db0-8c5a83096e25/-/preview/-/grayscale/image[desaturated]@2x.jpg
+
+    ```
+
+    '
+paths:
+  /{uuid}/{filename}:
+    parameters:
+    - $ref: '#/components/parameters/uuid'
+    - $ref: '#/components/parameters/filename'
+    get:
+      tags:
+      - File names
+      summary: File with a custom name
+      description: 'You can set an optional filename that users will see instead of
+
+        the original name.
+
+        '
+      operationId: fileWithName
+      responses:
+        '200':
+          description: File with a custom name
+          content:
+            image/jpeg:
+              schema:
+                type: string
+                format: binary
+              examples:
+                image:
+                  $ref: '#/components/examples/image'
+        '404':
+          $ref: '#/components/responses/fileNotFoundError'
+components:
+  examples:
+    image:
+      externalValue: https://ucarecdn.com/d7fe74ac-65b8-4ade-875f-ccd92759a70f/cat.jpg
+    imageNotFound:
+      externalValue: https://ucarecdn.com/d7fe74ac-65b8-4ade-875f-ccd92759a700/imageNotFound.jpg
+  responses:
+    fileNotFoundError:
+      description: Image with "File not found" text.
+      content:
+        image/jpeg:
+          schema:
+            type: string
+            format: binary
+          examples:
+            imageNotFound:
+              $ref: '#/components/examples/imageNotFound'
+  parameters:
+    filename:
+      in: path
+      description: 'An optional filename that users will see instead of the original name.
+
+        '
+      name: filename
+      required: true
+      schema:
+        type: string
+        example: cat.jpg
+    uuid:
+      in: path
+      description: Unique file identifier
+      name: uuid
+      required: true
+      schema:
+        type: string
+        example: d7fe74ac-65b8-4ade-875f-ccd92759a70f

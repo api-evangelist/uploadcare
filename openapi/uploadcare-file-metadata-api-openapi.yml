@@ -1,0 +1,487 @@
+openapi: 3.0.0
+info:
+  title: URL API Reference Add-Ons File metadata API
+  version: '2022-11-28'
+  description: 'Every uploaded file is immediately available on the Uploadcare CDN.
+
+    The CDN includes on-the-fly processing features and can work as a proxy.
+
+
+    ## API endpoints
+
+    Access files in Uploadcare CDN at `ucarecdn.com` over HTTP/HTTPS like this:
+
+    ```https://ucarecdn.com/:uuid/```
+
+
+    You can add CDN operations by including directives in the CDN URL:
+
+    ```https://ucarecdn.com/:uuid/-/:operation/:params/:filename```
+
+
+    * `:uuid` stands for the unique file identifier, UUID, assigned on upload.
+
+    * `/-/` is a mandatory parsing delimiter to divide operations and other path components.
+
+    * `:operation/:params/` is a CDN operation directive with parameters.
+
+    * `:filename` is an optional filename you can add after a trailing slash /.
+
+
+    You can stack two and more operations like this:
+
+    ```-/:operation/:params/-/:operation/:params/```
+
+    '
+  contact:
+    name: API support
+    email: help@uploadcare.com
+  x-logo:
+    url: https://ucarecdn.com/12e3af14-392d-416f-8542-f210c2eb6ec4/logourlapi.svg
+    backgroundColor: '#fafafa'
+    altText: Uploadcare URL API Reference
+  x-meta:
+    title: URL API Reference — Uploadcare
+    description: A reference documentation for the Uploadcare's URL API.
+servers:
+- url: https://ucarecdn.com
+  description: Production server
+tags:
+- name: File metadata
+  description: 'File metadata is additional, arbitrary data, associated with uploaded file. As an example, you could store unique file identifier from your system.
+
+
+    Metadata is key-value data. You can specify up to 50 keys, with key names up to 64 characters long and values up to 512 characters long.
+
+    Read more in the [docs](https://uploadcare.com/docs/file-metadata/).
+
+
+    **Notice:** Do not store any sensitive information (bank account numbers, card details, etc.) as metadata.
+
+
+    **Notice:** File metadata is provided by the end-users uploading the files and can contain symbols unsafe in, for example, HTML context. Please escape the metadata before use according to the rules of the target runtime context (HTML browser, SQL query parameter, etc).
+
+    '
+paths:
+  /files/{uuid}/metadata/:
+    get:
+      summary: Get file's metadata
+      description: Get file's metadata keys and values.
+      tags:
+      - File metadata
+      operationId: _fileMetadata
+      parameters:
+      - $ref: '#/components/parameters/acceptHeader'
+      - in: path
+        name: uuid
+        description: File UUID.
+        required: true
+        schema:
+          type: string
+          format: uuid
+          example: 21975c81-7f57-4c7a-aef9-acfe28779f78
+      responses:
+        '200':
+          $ref: '#/components/responses/fileMetadataResponse'
+        '400':
+          $ref: '#/components/responses/simpleAuthHTTPForbiddenResponse'
+        '401':
+          $ref: '#/components/responses/authorizationProblemsResponse'
+        '406':
+          $ref: '#/components/responses/invalidAcceptHeader'
+      x-codeSamples:
+      - lang: JavaScript
+        label: JS
+        source: "import {\n  getMetadata,\n  UploadcareSimpleAuthSchema,\n} from '@uploadcare/rest-client';\n\nconst uploadcareSimpleAuthSchema = new UploadcareSimpleAuthSchema({\n  publicKey: 'YOUR_PUBLIC_KEY',\n  secretKey: 'YOUR_SECRET_KEY',\n});\n\nconst result = await getMetadata(\n  {\n    uuid: '1bac376c-aa7e-4356-861b-dd2657b5bfd2',\n  },\n  { authSchema: uploadcareSimpleAuthSchema }\n)\n"
+      - lang: PHP
+        label: PHP
+        source: "<?php\n$configuration = Uploadcare\\Configuration::create((string) $_ENV['UPLOADCARE_PUBLIC_KEY'], (string) $_ENV['UPLOADCARE_SECRET_KEY']);\n\n$api = (new Uploadcare\\Api($configuration))->file();\n$fileInfo = $api->fileInfo('1bac376c-aa7e-4356-861b-dd2657b5bfd2');\necho \\sprintf(\"File %s metadata:\\n\", $fileInfo->getUuid());\nforeach ($fileInfo->getMetadata() as $metaKey => $metaItem) {\n    echo \\sprintf(\"%s: %s\\n\", $metaKey, $metaItem);\n}\n"
+      - lang: Python
+        label: Python
+        source: 'from pyuploadcare import Uploadcare
+
+          uploadcare = Uploadcare(public_key=''YOUR_PUBLIC_KEY'', secret_key=''YOUR_SECRET_KEY'')
+
+
+          value = uploadcare.metadata_api.get_all_metadata("1bac376c-aa7e-4356-861b-dd2657b5bfd2")
+
+          print(value)
+
+          '
+      - lang: Ruby
+        label: Ruby
+        source: 'require ''uploadcare''
+
+          Uploadcare.config.public_key = ''YOUR_PUBLIC_KEY''
+
+          Uploadcare.config.secret_key = ''YOUR_SECRET_KEY''
+
+
+          uuid = ''1bac376c-aa7e-4356-861b-dd2657b5bfd2''
+
+          puts Uploadcare::FileMetadata.show(uuid, ''pet'')
+
+          '
+      - lang: Swift
+        label: Swift
+        source: 'import Uploadcare
+
+
+          let uploadcare = Uploadcare(withPublicKey: "YOUR_PUBLIC_KEY", secretKey: "YOUR_SECRET_KEY")
+
+
+          let metadata = try await uploadcare.fileMetadata(withUUID: "1bac376c-aa7e-4356-861b-dd2657b5bfd2")
+
+          print(metadata)
+
+          '
+      - lang: Kotlin
+        label: Kotlin
+        source: 'import com.uploadcare.android.library.api.UploadcareClient
+
+
+          val uploadcare = UploadcareClient(publicKey = "YOUR_PUBLIC_KEY", secretKey = "YOUR_SECRET_KEY")
+
+
+          val metadata = uploadcare.getFileMetadata(fileId = "1bac376c-aa7e-4356-861b-dd2657b5bfd2")
+
+          Log.d("TAG", metadata.toString())
+
+          '
+  /files/{uuid}/metadata/{key}/:
+    get:
+      summary: Get metadata key's value
+      description: Get the value of a single metadata key.
+      tags:
+      - File metadata
+      operationId: fileMetadataKey
+      parameters:
+      - $ref: '#/components/parameters/acceptHeader'
+      - $ref: '#/components/parameters/fileUUID'
+      - $ref: '#/components/parameters/fileMetadataKey'
+      responses:
+        '200':
+          description: Value of a file's metadata key.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/metadataItemValue'
+        '400':
+          $ref: '#/components/responses/simpleAuthHTTPForbiddenResponse'
+        '401':
+          $ref: '#/components/responses/authorizationProblemsResponse'
+        '406':
+          $ref: '#/components/responses/invalidAcceptHeader'
+      x-codeSamples:
+      - lang: JavaScript
+        label: JS
+        source: "import {\n  getMetadataValue,\n  UploadcareSimpleAuthSchema,\n} from '@uploadcare/rest-client';\n\nconst uploadcareSimpleAuthSchema = new UploadcareSimpleAuthSchema({\n  publicKey: 'YOUR_PUBLIC_KEY',\n  secretKey: 'YOUR_SECRET_KEY',\n});\n\nconst result = await getMetadataValue(\n  {\n    uuid: '1bac376c-aa7e-4356-861b-dd2657b5bfd2',\n    key: 'pet'\n  },\n  { authSchema: uploadcareSimpleAuthSchema }\n)\n"
+      - lang: PHP
+        label: PHP
+        source: '<?php
+
+          $configuration = Uploadcare\Configuration::create((string) $_ENV[''UPLOADCARE_PUBLIC_KEY''], (string) $_ENV[''UPLOADCARE_SECRET_KEY'']);
+
+
+          $api = (new Uploadcare\Api($configuration))->metadata();
+
+          $metadata = $api->getMetadata(''1bac376c-aa7e-4356-861b-dd2657b5bfd2'');
+
+          echo \sprintf(''Value for key \''pet\'' %s'', $metadata[''pet''] ?? ''does not exists'');
+
+          '
+      - lang: Python
+        label: Python
+        source: 'from pyuploadcare import Uploadcare
+
+          uploadcare = Uploadcare(public_key=''YOUR_PUBLIC_KEY'', secret_key=''YOUR_SECRET_KEY'')
+
+
+          value = uploadcare.metadata_api.get_key("1bac376c-aa7e-4356-861b-dd2657b5bfd2", "pet")
+
+          print(value)
+
+          '
+      - lang: Ruby
+        label: Ruby
+        source: 'require ''uploadcare''
+
+          Uploadcare.config.public_key = ''YOUR_PUBLIC_KEY''
+
+          Uploadcare.config.secret_key = ''YOUR_SECRET_KEY''
+
+
+          uuid = ''1bac376c-aa7e-4356-861b-dd2657b5bfd2''
+
+          puts Uploadcare::FileMetadata.index(uuid).inspect
+
+          '
+      - lang: Swift
+        label: Swift
+        source: 'import Uploadcare
+
+
+          let uploadcare = Uploadcare(withPublicKey: "YOUR_PUBLIC_KEY", secretKey: "YOUR_SECRET_KEY")
+
+
+          let value = try await uploadcare.fileMetadataValue(forKey: "pet", withUUID: "1bac376c-aa7e-4356-861b-dd2657b5bfd2")
+
+          print(value)
+
+          '
+      - lang: Kotlin
+        label: Kotlin
+        source: "import com.uploadcare.android.library.api.UploadcareClient\n\nval uploadcare = UploadcareClient(publicKey = \"YOUR_PUBLIC_KEY\", secretKey = \"YOUR_SECRET_KEY\")\n\nval value = uploadcare.getFileMetadataKeyValue(\n    fileId = \"1bac376c-aa7e-4356-861b-dd2657b5bfd2\",\n    key = \"pet\"\n)\nLog.d(\"TAG\", value)\n"
+    put:
+      summary: Update metadata key's value
+      description: Update the value of a single metadata key. If the key does not exist, it will be created.
+      tags:
+      - File metadata
+      operationId: updateFileMetadataKey
+      parameters:
+      - $ref: '#/components/parameters/acceptHeader'
+      - $ref: '#/components/parameters/fileUUID'
+      - $ref: '#/components/parameters/fileMetadataKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: string
+              minLength: 1
+              maxLength: 512
+      responses:
+        '200':
+          description: Value of a file's metadata key successfully updated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/metadataItemValue'
+        '201':
+          description: Key of a file metadata successfully added.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/metadataItemValue'
+        '400':
+          $ref: '#/components/responses/simpleAuthHTTPForbiddenResponse'
+        '401':
+          $ref: '#/components/responses/authorizationProblemsResponse'
+        '406':
+          $ref: '#/components/responses/invalidAcceptHeader'
+      x-codeSamples:
+      - lang: JavaScript
+        label: JS
+        source: "import {\n  updateMetadata,\n  UploadcareSimpleAuthSchema,\n} from '@uploadcare/rest-client';\n\nconst uploadcareSimpleAuthSchema = new UploadcareSimpleAuthSchema({\n  publicKey: 'YOUR_PUBLIC_KEY',\n  secretKey: 'YOUR_SECRET_KEY',\n});\n\nconst result = await updateMetadata(\n  {\n    uuid: '1bac376c-aa7e-4356-861b-dd2657b5bfd2',\n    key: 'pet',\n    value: 'dog',\n  },\n  { authSchema: uploadcareSimpleAuthSchema }\n)\n"
+      - lang: PHP
+        label: PHP
+        source: '<?php
+
+          $configuration = Uploadcare\Configuration::create((string) $_ENV[''UPLOADCARE_PUBLIC_KEY''], (string) $_ENV[''UPLOADCARE_SECRET_KEY'']);
+
+
+          $api = (new Uploadcare\Api($configuration))->metadata();
+
+          $result = $api->setKey(''1bac376c-aa7e-4356-861b-dd2657b5bfd2'', ''pet'', ''dog'');
+
+          echo \sprintf(''Metadata key \''pet\'' is set to %s'', $result[''pet'']);
+
+          '
+      - lang: Python
+        label: Python
+        source: 'from pyuploadcare import Uploadcare
+
+          uploadcare = Uploadcare(public_key=''YOUR_PUBLIC_KEY'', secret_key=''YOUR_SECRET_KEY'')
+
+
+          file_uuid = ''1bac376c-aa7e-4356-861b-dd2657b5bfd2''
+
+          key, value = "pet", "dog"
+
+          uploadcare.metadata_api.update_or_create_key(file_uuid, key, value)
+
+          '
+      - lang: Ruby
+        label: Ruby
+        source: 'require ''uploadcare''
+
+          Uploadcare.config.public_key = ''YOUR_PUBLIC_KEY''
+
+          Uploadcare.config.secret_key = ''YOUR_SECRET_KEY''
+
+
+          uuid = ''1bac376c-aa7e-4356-861b-dd2657b5bfd2''
+
+          key = ''pet''
+
+          value = ''dog''
+
+          Uploadcare::FileMetadata.update(uuid, key, value)
+
+          '
+      - lang: Swift
+        label: Swift
+        source: "import Uploadcare\n\nlet uploadcare = Uploadcare(withPublicKey: \"YOUR_PUBLIC_KEY\", secretKey: \"YOUR_SECRET_KEY\")\n\nlet response = try await uploadcare.updateFileMetadata(\n  withUUID: \"1bac376c-aa7e-4356-861b-dd2657b5bfd2\", \n  key: \"pet\", \n  value: dog\n)\n print(response)\n"
+      - lang: Kotlin
+        label: Kotlin
+        source: "import com.uploadcare.android.library.api.UploadcareClient\n\nval uploadcare = UploadcareClient(publicKey = \"YOUR_PUBLIC_KEY\", secretKey = \"YOUR_SECRET_KEY\")\n\nval value = uploadcare.updateFileMetadataKeyValue(\n    fileId = \"1bac376c-aa7e-4356-861b-dd2657b5bfd2\",\n    key = \"pet\",\n    value = \"dog\"\n)\nLog.d(\"TAG\", value)\n"
+    delete:
+      summary: Delete metadata key
+      description: Delete a file's metadata key.
+      tags:
+      - File metadata
+      operationId: deleteFileMetadataKey
+      parameters:
+      - $ref: '#/components/parameters/acceptHeader'
+      - $ref: '#/components/parameters/fileUUID'
+      - $ref: '#/components/parameters/fileMetadataKey'
+      responses:
+        '204':
+          description: Key of a file metadata successfully deleted.
+        '400':
+          $ref: '#/components/responses/simpleAuthHTTPForbiddenResponse'
+        '401':
+          $ref: '#/components/responses/authorizationProblemsResponse'
+        '406':
+          $ref: '#/components/responses/invalidAcceptHeader'
+      x-codeSamples:
+      - lang: JavaScript
+        label: JS
+        source: "import {\n  deleteMetadata,\n  UploadcareSimpleAuthSchema,\n} from '@uploadcare/rest-client';\n\nconst uploadcareSimpleAuthSchema = new UploadcareSimpleAuthSchema({\n  publicKey: 'YOUR_PUBLIC_KEY',\n  secretKey: 'YOUR_SECRET_KEY',\n});\n\nconst result = await deleteMetadata(\n  {\n    uuid: '1bac376c-aa7e-4356-861b-dd2657b5bfd2',\n    key: 'delete_key',\n  },\n  { authSchema: uploadcareSimpleAuthSchema }\n)\n"
+      - lang: PHP
+        label: PHP
+        source: "<?php\n$configuration = Uploadcare\\Configuration::create((string) $_ENV['UPLOADCARE_PUBLIC_KEY'], (string) $_ENV['UPLOADCARE_SECRET_KEY']);\n\n$metadataApi = (new Uploadcare\\Api($configuration))->metadata();\ntry {\n    $metadataApi->removeKey('1bac376c-aa7e-4356-861b-dd2657b5bfd2', 'pet');\n} catch (\\Throwable $e) {\n    echo \\sprintf('Error while key removing: %s', $e->getMessage());\n}\necho 'Key was successfully removed';\n"
+      - lang: Python
+        label: Python
+        source: 'from pyuploadcare import Uploadcare
+
+          uploadcare = Uploadcare(public_key=''YOUR_PUBLIC_KEY'', secret_key=''YOUR_SECRET_KEY'')
+
+
+          file_uuid = ''1bac376c-aa7e-4356-861b-dd2657b5bfd2''
+
+          uploadcare.metadata_api.delete_key(file_uuid, mkey=''pet'')
+
+          '
+      - lang: Ruby
+        label: Ruby
+        source: 'require ''uploadcare''
+
+          Uploadcare.config.public_key = ''YOUR_PUBLIC_KEY''
+
+          Uploadcare.config.secret_key = ''YOUR_SECRET_KEY''
+
+
+          puts Uploadcare::FileMetadata.delete(''1bac376c-aa7e-4356-861b-dd2657b5bfd2'', ''pet'')
+
+          '
+      - lang: Swift
+        label: Swift
+        source: 'import Uploadcare
+
+
+          let uploadcare = Uploadcare(withPublicKey: "YOUR_PUBLIC_KEY", secretKey: "YOUR_SECRET_KEY")
+
+
+          try await uploadcare.deleteFileMetadata(forKey: "pet",  withUUID: "1bac376c-aa7e-4356-861b-dd2657b5bfd2")
+
+          '
+      - lang: Kotlin
+        label: Kotlin
+        source: 'import com.uploadcare.android.library.api.UploadcareClient
+
+
+          val uploadcare = UploadcareClient(publicKey = "YOUR_PUBLIC_KEY", secretKey = "YOUR_SECRET_KEY")
+
+
+          uploadcare.deleteFileMetadataKey(fileId = "1bac376c-aa7e-4356-861b-dd2657b5bfd2", key = "pet")
+
+          '
+components:
+  parameters:
+    fileUUID:
+      in: path
+      name: uuid
+      description: File UUID.
+      required: true
+      schema:
+        type: string
+        format: uuid
+        example: 21975c81-7f57-4c7a-aef9-acfe28779f78
+    acceptHeader:
+      in: header
+      name: Accept
+      description: Version header.
+      schema:
+        type: string
+        nullable: true
+        example: application/vnd.uploadcare-v0.7+json
+      required: true
+    fileMetadataKey:
+      in: path
+      name: key
+      description: "Key of file metadata.\nList of allowed characters for the key:\n  - Latin letters in lower or upper case (a-z,A-Z)\n  - digits (0-9)\n  - underscore `_`\n  - a hyphen `-`\n  - dot `.`\n  - colon `:`\n"
+      required: true
+      schema:
+        type: string
+        minLength: 1
+        maxLength: 64
+        pattern: '[\w\-\.\:]+'
+        example: subsystem
+  responses:
+    simpleAuthHTTPForbiddenResponse:
+      description: Simple authentication over HTTP is forbidden. Please, use HTTPS or signed requests instead.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/simpleAuthHTTPForbidden'
+    fileMetadataResponse:
+      description: File metadata in JSON.
+      content:
+        application/json:
+          schema:
+            type: object
+            example:
+              subsystem: uploader
+              pet: cat
+    invalidAcceptHeader:
+      description: Invalid version header `Accept` for this endpoint.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              detail:
+                type: string
+                example: Incorrect Accept header provided. Make sure to specify API version. Refer to REST API docs for details.
+                default: Incorrect Accept header provided. Make sure to specify API version. Refer to REST API docs for details.
+    authorizationProblemsResponse:
+      description: Authorization errors.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              detail:
+                type: string
+                enum:
+                - Incorrect authentication credentials.
+                - Public key {public_key} not found.
+                - Secret key not found.
+                - Invalid signature. Please check your Secret key.
+                example: Incorrect authentication credentials.
+  schemas:
+    metadataItemValue:
+      type: string
+      minLength: 1
+      maxLength: 512
+      description: Value of metadata key.
+      example: uploader
+    simpleAuthHTTPForbidden:
+      type: object
+      properties:
+        detail:
+          type: string
+          default: Simple authentication over HTTP is forbidden. Please, use HTTPS or signed requests instead.
+      example:
+        detail: Simple authentication over HTTP is forbidden. Please, use HTTPS or signed requests instead.

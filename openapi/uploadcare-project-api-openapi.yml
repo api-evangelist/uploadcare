@@ -1,0 +1,230 @@
+openapi: 3.0.0
+info:
+  title: URL API Reference Add-Ons Project API
+  version: '2022-11-28'
+  description: 'Every uploaded file is immediately available on the Uploadcare CDN.
+
+    The CDN includes on-the-fly processing features and can work as a proxy.
+
+
+    ## API endpoints
+
+    Access files in Uploadcare CDN at `ucarecdn.com` over HTTP/HTTPS like this:
+
+    ```https://ucarecdn.com/:uuid/```
+
+
+    You can add CDN operations by including directives in the CDN URL:
+
+    ```https://ucarecdn.com/:uuid/-/:operation/:params/:filename```
+
+
+    * `:uuid` stands for the unique file identifier, UUID, assigned on upload.
+
+    * `/-/` is a mandatory parsing delimiter to divide operations and other path components.
+
+    * `:operation/:params/` is a CDN operation directive with parameters.
+
+    * `:filename` is an optional filename you can add after a trailing slash /.
+
+
+    You can stack two and more operations like this:
+
+    ```-/:operation/:params/-/:operation/:params/```
+
+    '
+  contact:
+    name: API support
+    email: help@uploadcare.com
+  x-logo:
+    url: https://ucarecdn.com/12e3af14-392d-416f-8542-f210c2eb6ec4/logourlapi.svg
+    backgroundColor: '#fafafa'
+    altText: Uploadcare URL API Reference
+  x-meta:
+    title: URL API Reference — Uploadcare
+    description: A reference documentation for the Uploadcare's URL API.
+servers:
+- url: https://ucarecdn.com
+  description: Production server
+tags:
+- name: Project
+paths:
+  /project/:
+    get:
+      tags:
+      - Project
+      summary: Project info
+      description: Getting info about account project.
+      operationId: projectInfo
+      parameters:
+      - $ref: '#/components/parameters/acceptHeader'
+      responses:
+        '200':
+          description: Your project details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/project'
+        '400':
+          $ref: '#/components/responses/simpleAuthHTTPForbiddenResponse'
+        '401':
+          $ref: '#/components/responses/authorizationProblemsResponse'
+        '406':
+          $ref: '#/components/responses/invalidAcceptHeader'
+        '429':
+          $ref: '#/components/responses/requestWasThrottledError'
+      x-codeSamples:
+      - lang: PHP
+        label: PHP
+        source: "<?php\n$configuration = Uploadcare\\Configuration::create((string) $_ENV['UPLOADCARE_PUBLIC_KEY'], (string) $_ENV['UPLOADCARE_SECRET_KEY']);\n\n$api = (new Uploadcare\\Api($configuration))->project();\n$projectInfo = $api->getProjectInfo();\necho \\sprintf(\"Project %s info:\\n\", $projectInfo->getName());\necho \\sprintf(\"Public key: %s\\n\", $projectInfo->getPubKey());\necho \\sprintf(\"Auto-store enabled: %s\\n\", $projectInfo->isAutostoreEnabled() ? 'yes' : 'no');\nforeach ($projectInfo->getCollaborators() as $email => $name) {\n    echo \\sprintf(\"%s: %s\\n\", $name, $email);\n}\n"
+      - lang: Python
+        label: Python
+        source: 'from pyuploadcare import Uploadcare, ProjectInfo
+
+          uploadcare = Uploadcare(public_key=''YOUR_PUBLIC_KEY'', secret_key=''YOUR_SECRET_KEY'')
+
+
+          project_info = uploadcare.get_project_info()
+
+          print(project_info)
+
+          '
+      - lang: Ruby
+        label: Ruby
+        source: 'require ''uploadcare''
+
+          Uploadcare.config.public_key = ''YOUR_PUBLIC_KEY''
+
+          Uploadcare.config.secret_key = ''YOUR_SECRET_KEY''
+
+
+          project_info = Uploadcare::Project.show
+
+          puts project_info.inspect
+
+          '
+      - lang: Swift
+        label: Swift
+        source: 'import Uploadcare
+
+
+          let uploadcare = Uploadcare(withPublicKey: "YOUR_PUBLIC_KEY", secretKey: "YOUR_SECRET_KEY")
+
+
+          let project = try await uploadcare.getProjectInfo()
+
+          print(project)
+
+          '
+      - lang: Kotlin
+        label: Kotlin
+        source: 'import com.uploadcare.android.library.api.UploadcareClient
+
+
+          val uploadcare = UploadcareClient(publicKey = "YOUR_PUBLIC_KEY", secretKey = "YOUR_SECRET_KEY")
+
+
+          val project = uploadcare.getProject()
+
+          Log.d("TAG", project.toString())
+
+          '
+components:
+  responses:
+    simpleAuthHTTPForbiddenResponse:
+      description: Simple authentication over HTTP is forbidden. Please, use HTTPS or signed requests instead.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/simpleAuthHTTPForbidden'
+    invalidAcceptHeader:
+      description: Invalid version header `Accept` for this endpoint.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              detail:
+                type: string
+                example: Incorrect Accept header provided. Make sure to specify API version. Refer to REST API docs for details.
+                default: Incorrect Accept header provided. Make sure to specify API version. Refer to REST API docs for details.
+    authorizationProblemsResponse:
+      description: Authorization errors.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              detail:
+                type: string
+                enum:
+                - Incorrect authentication credentials.
+                - Public key {public_key} not found.
+                - Secret key not found.
+                - Invalid signature. Please check your Secret key.
+                example: Incorrect authentication credentials.
+    requestWasThrottledError:
+      description: Request was throttled.
+      headers:
+        Retry-After:
+          description: Number of seconds to wait before the next request.
+          schema:
+            type: integer
+            example: 10
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              detail:
+                type: string
+                example: Request was throttled. Expected available in 10 seconds.
+  schemas:
+    project:
+      type: object
+      properties:
+        collaborators:
+          type: array
+          nullable: true
+          items:
+            type: object
+            properties:
+              email:
+                type: string
+                format: email
+                description: Collaborator email.
+              name:
+                type: string
+                description: Collaborator name.
+        name:
+          type: string
+          description: Project login name.
+        pub_key:
+          type: string
+          description: Project public key.
+        autostore_enabled:
+          type: boolean
+          example: true
+      example:
+        collaborators: []
+        name: demo
+        pub_key: YOUR_PUBLIC_KEY
+        autostore_enabled: true
+    simpleAuthHTTPForbidden:
+      type: object
+      properties:
+        detail:
+          type: string
+          default: Simple authentication over HTTP is forbidden. Please, use HTTPS or signed requests instead.
+      example:
+        detail: Simple authentication over HTTP is forbidden. Please, use HTTPS or signed requests instead.
+  parameters:
+    acceptHeader:
+      in: header
+      name: Accept
+      description: Version header.
+      schema:
+        type: string
+        nullable: true
+        example: application/vnd.uploadcare-v0.7+json
+      required: true

@@ -1,0 +1,1174 @@
+openapi: 3.0.0
+info:
+  title: URL API Reference Add-Ons Group API
+  version: '2022-11-28'
+  description: 'Every uploaded file is immediately available on the Uploadcare CDN.
+
+    The CDN includes on-the-fly processing features and can work as a proxy.
+
+
+    ## API endpoints
+
+    Access files in Uploadcare CDN at `ucarecdn.com` over HTTP/HTTPS like this:
+
+    ```https://ucarecdn.com/:uuid/```
+
+
+    You can add CDN operations by including directives in the CDN URL:
+
+    ```https://ucarecdn.com/:uuid/-/:operation/:params/:filename```
+
+
+    * `:uuid` stands for the unique file identifier, UUID, assigned on upload.
+
+    * `/-/` is a mandatory parsing delimiter to divide operations and other path components.
+
+    * `:operation/:params/` is a CDN operation directive with parameters.
+
+    * `:filename` is an optional filename you can add after a trailing slash /.
+
+
+    You can stack two and more operations like this:
+
+    ```-/:operation/:params/-/:operation/:params/```
+
+    '
+  contact:
+    name: API support
+    email: help@uploadcare.com
+  x-logo:
+    url: https://ucarecdn.com/12e3af14-392d-416f-8542-f210c2eb6ec4/logourlapi.svg
+    backgroundColor: '#fafafa'
+    altText: Uploadcare URL API Reference
+  x-meta:
+    title: URL API Reference — Uploadcare
+    description: A reference documentation for the Uploadcare's URL API.
+servers:
+- url: https://ucarecdn.com
+  description: Production server
+tags:
+- name: Group
+paths:
+  /groups/:
+    get:
+      tags:
+      - Group
+      summary: List of groups
+      description: Get a paginated list of groups.
+      operationId: groupsList
+      parameters:
+      - in: header
+        name: Accept
+        description: Version header.
+        schema:
+          type: string
+          nullable: true
+          enum:
+          - application/vnd.uploadcare-v0.7+json
+          example: application/vnd.uploadcare-v0.7+json
+        required: true
+      - in: query
+        name: limit
+        description: 'A preferred amount of groups in a list for a single response.
+
+          Defaults to 100, while the maximum is 1000.
+
+          '
+        schema:
+          type: integer
+          example: 150
+      - in: query
+        name: from
+        description: 'A starting point for filtering the list of groups.
+
+          If passed, MUST be a date and time value in ISO-8601 format.
+
+          '
+        schema:
+          type: string
+          format: date-time
+          example: '2015-01-02T10:00:00.463352Z'
+      - in: query
+        name: ordering
+        description: 'Specifies the way groups should be sorted in the returned list.
+
+          `datetime_created` for the ascending order (default),
+
+          `-datetime_created` for the descending one.
+
+          '
+        schema:
+          type: string
+          enum:
+          - datetime_created
+          - -datetime_created
+          default: datetime_created
+          example: -datetime_created
+      responses:
+        '200':
+          $ref: '#/components/responses/paginatedGroupsResponse'
+        '400':
+          $ref: '#/components/responses/simpleAuthHTTPForbiddenResponse'
+        '401':
+          $ref: '#/components/responses/authorizationProblemsResponse'
+        '406':
+          $ref: '#/components/responses/invalidAcceptHeader'
+        '429':
+          $ref: '#/components/responses/requestWasThrottledError'
+      x-codeSamples:
+      - lang: JavaScript
+        label: JS
+        source: "import {\n  listOfGroups,\n  UploadcareSimpleAuthSchema,\n} from '@uploadcare/rest-client';\n\nconst uploadcareSimpleAuthSchema = new UploadcareSimpleAuthSchema({\n  publicKey: 'YOUR_PUBLIC_KEY',\n  secretKey: 'YOUR_SECRET_KEY',\n});\n\nconst result = await listOfGroups({}, { authSchema: uploadcareSimpleAuthSchema })\n"
+      - lang: PHP
+        label: PHP
+        source: "<?php\n$configuration = Uploadcare\\Configuration::create((string) $_ENV['UPLOADCARE_PUBLIC_KEY'], (string) $_ENV['UPLOADCARE_SECRET_KEY']);\n\n$api = (new Uploadcare\\Api($configuration))->group();\n$list = $api->listGroups();\nforeach ($list->getResults() as $group) {\n    \\sprintf('Group URL: %s, ID: %s', $group->getUrl(), $group->getUuid());\n}\nwhile (($next = $api->nextPage($list)) !== null) {\n    foreach ($next->getResults() as $group) {\n        \\sprintf('Group URL: %s, ID: %s', $group->getUrl(), $group->getUuid());\n    }\n}\n"
+      - lang: Python
+        label: Python
+        source: 'from pyuploadcare import Uploadcare
+
+          uploadcare = Uploadcare(public_key=''YOUR_PUBLIC_KEY'', secret_key=''YOUR_SECRET_KEY'')
+
+
+          groups_list = uploadcare.list_file_groups()
+
+          print(''Number of groups is'', groups_list.count())
+
+          '
+      - lang: Ruby
+        label: Ruby
+        source: 'require ''uploadcare''
+
+          Uploadcare.config.public_key = ''YOUR_PUBLIC_KEY''
+
+          Uploadcare.config.secret_key = ''YOUR_SECRET_KEY''
+
+
+          groups = Uploadcare::GroupList.list(limit: 10)
+
+          groups.each { |group| puts group.inspect }
+
+          '
+      - lang: Swift
+        label: Swift
+        source: "import Uploadcare\n\nlet uploadcare = Uploadcare(withPublicKey: \"YOUR_PUBLIC_KEY\", secretKey: \"YOUR_SECRET_KEY\")\n\nlet query = GroupsListQuery()\n  .limit(10)\n  .ordering(.datetimeCreatedDESC)\n  \nlet groupsList = uploadcare.listOfGroups()\n\nlet list = try await groupsList.get(withQuery: query)\nprint(list)\n\n// Next page\nlet next = try await groupsList.nextPage()\nprint(list)\n\n// Previous page\nlet previous = try await groupsList.previousPage()\nprint(list)\n"
+      - lang: Kotlin
+        label: Kotlin
+        source: "import com.uploadcare.android.library.api.UploadcareClient\n\nval uploadcare = UploadcareClient(publicKey = \"YOUR_PUBLIC_KEY\", secretKey = \"YOUR_SECRET_KEY\")\n\nval groupsQueryBuilder = uploadcare.getGroups()\nval groups = groupsQueryBuilder\n    .ordering(Order.UPLOAD_TIME_DESC)\n    .asList()\nLog.d(\"TAG\", groups.toString())\n"
+  /groups/{uuid}/:
+    get:
+      summary: Group info
+      description: 'Get a file group by its ID.
+
+
+        Groups are identified in a way similar to individual files. A group ID consists of a UUID
+
+        followed by a “~” (tilde) character and a group size: integer number of the files in the group.
+
+        '
+      operationId: groupInfo
+      tags:
+      - Group
+      parameters:
+      - in: header
+        name: Accept
+        description: Version header.
+        schema:
+          type: string
+          nullable: true
+          enum:
+          - application/vnd.uploadcare-v0.7+json
+          example: application/vnd.uploadcare-v0.7+json
+        required: true
+      - in: path
+        name: uuid
+        description: Group UUID.
+        required: true
+        schema:
+          type: string
+          example: badfc9f7-f88f-4921-9cc0-22e2c08aa2da~12
+      responses:
+        '200':
+          description: Group's info
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/groupWithFiles'
+        '400':
+          $ref: '#/components/responses/simpleAuthHTTPForbiddenResponse'
+        '401':
+          $ref: '#/components/responses/authorizationProblemsResponse'
+        '404':
+          $ref: '#/components/responses/groupNotFound'
+        '406':
+          $ref: '#/components/responses/invalidAcceptHeader'
+        '429':
+          $ref: '#/components/responses/requestWasThrottledError'
+      x-codeSamples:
+      - lang: JavaScript
+        label: JS
+        source: "import {\n  groupInfo,\n  UploadcareSimpleAuthSchema,\n} from '@uploadcare/rest-client';\n\nconst uploadcareSimpleAuthSchema = new UploadcareSimpleAuthSchema({\n  publicKey: 'YOUR_PUBLIC_KEY',\n  secretKey: 'YOUR_SECRET_KEY',\n});\n\nconst result = await groupInfo(\n  {\n    uuid: 'c5bec8c7-d4b6-4921-9e55-6edb027546bc~1',\n  },\n  { authSchema: uploadcareSimpleAuthSchema }\n)\n"
+      - lang: PHP
+        label: PHP
+        source: "<?php\n$configuration = Uploadcare\\Configuration::create((string) $_ENV['UPLOADCARE_PUBLIC_KEY'], (string) $_ENV['UPLOADCARE_SECRET_KEY']);\n\n$api = (new Uploadcare\\Api($configuration))->group();\n$groupInfo = $api->groupInfo('c5bec8c7-d4b6-4921-9e55-6edb027546bc~1');\necho \\sprintf(\"Group: %s files:\\n\", $groupInfo->getUrl());\nforeach ($groupInfo->getFiles() as $file) {\n    \\sprintf('File: %s (%s)', $file->getUrl(), $file->getUuid());\n}\n"
+      - lang: Python
+        label: Python
+        source: 'from pyuploadcare import Uploadcare
+
+          uploadcare = Uploadcare(public_key=''YOUR_PUBLIC_KEY'', secret_key=''YOUR_SECRET_KEY'')
+
+
+          group = uploadcare.file_group("c5bec8c7-d4b6-4921-9e55-6edb027546bc~1")
+
+          print(group.info)
+
+          '
+      - lang: Ruby
+        label: Ruby
+        source: 'require ''uploadcare''
+
+          Uploadcare.config.public_key = ''YOUR_PUBLIC_KEY''
+
+          Uploadcare.config.secret_key = ''YOUR_SECRET_KEY''
+
+
+          uuid = ''c5bec8c7-d4b6-4921-9e55-6edb027546bc~1''
+
+          puts Uploadcare::Group.info(uuid).inspect
+
+          '
+      - lang: Swift
+        label: Swift
+        source: 'import Uploadcare
+
+
+          let uploadcare = Uploadcare(withPublicKey: "YOUR_PUBLIC_KEY", secretKey: "YOUR_SECRET_KEY")
+
+
+          let group = try await uploadcare.groupInfo(withUUID: "c5bec8c7-d4b6-4921-9e55-6edb027546bc~1")
+
+          print(group)
+
+          '
+      - lang: Kotlin
+        label: Kotlin
+        source: 'import com.uploadcare.android.library.api.UploadcareClient
+
+
+          val uploadcare = UploadcareClient(publicKey = "YOUR_PUBLIC_KEY", secretKey = "YOUR_SECRET_KEY")
+
+
+          val group = uploadcare.getGroup(groupId = "c5bec8c7-d4b6-4921-9e55-6edb027546bc~1")
+
+          Log.d("TAG", group.toString())
+
+          '
+    delete:
+      summary: Delete group
+      description: 'Delete a file group by its ID.
+
+
+        **Note**: The operation only removes the group object itself. **All the files that were part of the group are left as is.**
+
+        '
+      operationId: deleteGroup
+      tags:
+      - Group
+      parameters:
+      - in: header
+        name: Accept
+        description: Version header.
+        schema:
+          type: string
+          nullable: true
+          enum:
+          - application/vnd.uploadcare-v0.7+json
+          example: application/vnd.uploadcare-v0.7+json
+        required: true
+      - in: path
+        name: uuid
+        description: Group UUID.
+        required: true
+        schema:
+          type: string
+          example: badfc9f7-f88f-4921-9cc0-22e2c08aa2da~12
+      responses:
+        '204':
+          description: The group has been deleted successfully.
+        '400':
+          $ref: '#/components/responses/simpleAuthHTTPForbiddenResponse'
+        '401':
+          $ref: '#/components/responses/authorizationProblemsResponse'
+        '404':
+          $ref: '#/components/responses/groupNotFound'
+        '406':
+          $ref: '#/components/responses/invalidAcceptHeader'
+        '429':
+          $ref: '#/components/responses/requestWasThrottledError'
+      x-codeSamples:
+      - lang: JavaScript
+        label: JS
+        source: "import {\n  deleteGroup,\n  UploadcareSimpleAuthSchema,\n} from '@uploadcare/rest-client';\n\nconst uploadcareSimpleAuthSchema = new UploadcareSimpleAuthSchema({\n  publicKey: 'YOUR_PUBLIC_KEY',\n  secretKey: 'YOUR_SECRET_KEY',\n});\n\nconst result = await deleteGroup(\n  {\n    uuid: 'c5bec8c7-d4b6-4921-9e55-6edb027546bc~1',\n  },\n  { authSchema: uploadcareSimpleAuthSchema }\n)\n"
+      - lang: PHP
+        label: PHP
+        source: "<?php\n$configuration = Uploadcare\\Configuration::create((string) $_ENV['UPLOADCARE_PUBLIC_KEY'], (string) $_ENV['UPLOADCARE_SECRET_KEY']);\n\n$api = (new Uploadcare\\Api($configuration))->group();\ntry {\n    $api->removeGroup('c5bec8c7-d4b6-4921-9e55-6edb027546bc~1');\n} catch (\\Throwable $e) {\n    echo \\sprintf('Error while group deletion: %s', $e->getMessage());\n}\necho 'Group successfully deleted';\n"
+      - lang: Python
+        label: Python
+        source: 'from pyuploadcare import Uploadcare
+
+          uploadcare = Uploadcare(public_key=''YOUR_PUBLIC_KEY'', secret_key=''YOUR_SECRET_KEY'')
+
+
+          file_group = uploadcare.file_group("c5bec8c7-d4b6-4921-9e55-6edb027546bc~1")
+
+          file_group.delete()
+
+          '
+      - lang: Ruby
+        label: Ruby
+        source: 'require ''uploadcare''
+
+          Uploadcare.config.public_key = ''YOUR_PUBLIC_KEY''
+
+          Uploadcare.config.secret_key = ''YOUR_SECRET_KEY''
+
+
+          puts Uploadcare::Group.delete(''c5bec8c7-d4b6-4921-9e55-6edb027546bc~1'')
+
+          '
+      - lang: Swift
+        label: Swift
+        source: 'import Uploadcare
+
+
+          let uploadcare = Uploadcare(withPublicKey: "YOUR_PUBLIC_KEY", secretKey: "YOUR_SECRET_KEY")
+
+
+          try await uploadcare.deleteGroup(withUUID: "c5bec8c7-d4b6-4921-9e55-6edb027546bc~1")
+
+          '
+      - lang: Kotlin
+        label: Kotlin
+        source: 'import com.uploadcare.android.library.api.UploadcareClient
+
+
+          val uploadcare = UploadcareClient(publicKey = "YOUR_PUBLIC_KEY", secretKey = "YOUR_SECRET_KEY")
+
+
+          uploadcare.deleteGroup(groupId = "c5bec8c7-d4b6-4921-9e55-6edb027546bc~1")
+
+          '
+components:
+  schemas:
+    contentInfo:
+      type: object
+      nullable: true
+      description: Information about file content.
+      properties:
+        mime:
+          type: object
+          description: MIME type.
+          required:
+          - mime
+          - type
+          - subtype
+          properties:
+            mime:
+              type: string
+              description: Full MIME type.
+              example: image/jpeg
+            type:
+              type: string
+              description: Type of MIME type.
+              example: image
+            subtype:
+              type: string
+              description: Subtype of MIME type.
+              example: jpeg
+        image:
+          $ref: '#/components/schemas/imageInfo'
+        video:
+          $ref: '#/components/schemas/videoInfo'
+    awsRekognitionDetectModerationLabels_v2016_06_27:
+      allOf:
+      - $ref: '#/components/schemas/applicationData'
+      - type: object
+        properties:
+          version:
+            type: string
+            enum:
+            - '2016-06-27'
+          data:
+            type: object
+            description: Dictionary with a result of an aws rekognition detect moderation labels execution result.
+            properties:
+              ModerationModelVersion:
+                type: string
+              ModerationLabels:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    Confidence:
+                      type: number
+                    Name:
+                      type: string
+                    ParentName:
+                      type: string
+                  required:
+                  - Name
+                  - ParentName
+                  - Confidence
+            required:
+            - ModerationLabels
+            - ModerationModelVersion
+            example:
+              value:
+                aws_rekognition_detect_moderation_labels:
+                  data:
+                    ModerationModelVersion: '6.0'
+                    ModerationLabels:
+                    - Confidence: 93.41645812988281
+                      Name: Weapons
+                      ParentName: Violence
+                  version: '2016-06-27'
+                  datetime_created: '2023-02-21T11:25:31.259763Z'
+                  datetime_updated: '2023-02-21T11:27:33.359763Z'
+    videoInfo:
+      type: object
+      description: Video metadata.
+      required:
+      - duration
+      - format
+      - bitrate
+      - audio
+      - video
+      properties:
+        duration:
+          type: integer
+          description: Video file's duration in milliseconds.
+          nullable: true
+          example: 261827
+        format:
+          type: string
+          description: Video file's format.
+          example: mp4
+        bitrate:
+          type: integer
+          description: Video file's bitrate.
+          nullable: true
+          example: 393
+        audio:
+          type: array
+          items:
+            type: object
+            description: Audio stream's metadata.
+            required:
+            - bitrate
+            - codec
+            - sample_rate
+            - channels
+            properties:
+              bitrate:
+                type: integer
+                description: Audio stream's bitrate.
+                nullable: true
+                example: 78
+              codec:
+                type: string
+                description: Audio stream's codec.
+                nullable: true
+                example: aac
+              sample_rate:
+                type: integer
+                description: Audio stream's sample rate.
+                nullable: true
+                example: 44100
+              channels:
+                type: integer
+                description: Audio stream's number of channels.
+                nullable: true
+                example: 2
+        video:
+          type: array
+          items:
+            type: object
+            description: Video stream's metadata.
+            required:
+            - height
+            - width
+            - frame_rate
+            - bitrate
+            - codec
+            properties:
+              height:
+                type: integer
+                description: Video stream's image height.
+                example: 360
+              width:
+                type: integer
+                description: Video stream's image width.
+                example: 640
+              frame_rate:
+                type: number
+                description: Video stream's frame rate.
+                example: 30
+              bitrate:
+                type: integer
+                description: Video stream's bitrate.
+                nullable: true
+                example: 315
+              codec:
+                type: string
+                description: Video stream's codec.
+                nullable: true
+                example: h264
+    groupWithFiles:
+      allOf:
+      - $ref: '#/components/schemas/group'
+      - type: object
+        properties:
+          files:
+            type: array
+            description: 'The list of files in the group. An array may contain null values if a file has been removed.
+
+              '
+            nullable: true
+            allOf:
+            - $ref: '#/components/schemas/file'
+            - type: object
+              properties:
+                default_effects:
+                  type: string
+                  format: uri
+                  description: The field contains a set of processing operations applied to the file when the group was created. This set is applied by default when the file is reffered via a group CDN URL and `/nth/N/` operator.
+                  example: resize/x800/
+        example:
+          id: dd43982b-5447-44b2-86f6-1c3b52afa0ff~1
+          datetime_created: '2018-11-27T14:14:37.583654Z'
+          files_count: 1
+          cdn_url: https://ucarecdn.com/dd43982b-5447-44b2-86f6-1c3b52afa0ff~1/
+          url: https://api.uploadcare.com/groups/dd43982b-5447-44b2-86f6-1c3b52afa0ff~1/
+          files:
+          - datetime_removed: null
+            datetime_stored: '2018-11-26T12:49:10.477888Z'
+            datetime_uploaded: '2018-11-26T12:49:09.945335Z'
+            variations: null
+            is_image: true
+            is_ready: true
+            mime_type: image/jpeg
+            original_file_url: https://ucarecdn.com/22240276-2f06-41f8-9411-755c8ce926ed/pineapple.jpg
+            original_filename: pineapple.jpg
+            size: 642
+            url: https://api.uploadcare.com/files/22240276-2f06-41f8-9411-755c8ce926ed/
+            uuid: 22240276-2f06-41f8-9411-755c8ce926ed
+            content_info:
+              mime:
+                mime: image/jpeg
+                type: image
+                subtype: jpeg
+              image:
+                format: JPEG
+                width: 500
+                height: 500
+                sequence: false
+                color_mode: RGB
+                orientation: 6
+                geo_location:
+                  latitude: 55.62013611111111
+                  longitude: 37.66299166666666
+                datetime_original: '2018-08-20T08:59:50'
+                dpi:
+                - 72
+                - 72
+            metadata:
+              subsystem: uploader
+              pet: cat
+            default_effects: resize/x800/
+    ucClamavVirusScan:
+      allOf:
+      - $ref: '#/components/schemas/applicationData'
+      - type: object
+        properties:
+          version:
+            type: string
+            enum:
+            - 0.104.2
+            - 0.104.3
+            - 0.105.0
+            - 0.105.1
+          data:
+            type: object
+            description: Dictionary with a result of ClamAV execution result.
+            properties:
+              infected:
+                type: boolean
+              infected_with:
+                type: string
+            required:
+            - infected
+        example:
+          value:
+            uc_clamav_virus_scan:
+              data:
+                infected: true
+                infected_with: Win.Test.EICAR_HDB-1
+              version: 0.104.2
+              datetime_created: '2021-09-21T11:24:33.159663Z'
+              datetime_updated: '2021-09-21T11:24:33.159663Z'
+    applicationDataObject:
+      type: object
+      nullable: true
+      description: Dictionary of application names and data associated with these applications.
+      properties:
+        aws_rekognition_detect_labels:
+          $ref: '#/components/schemas/awsRekognitionDetectLabels_v2016_06_27'
+        aws_rekognition_detect_moderation_labels:
+          $ref: '#/components/schemas/awsRekognitionDetectModerationLabels_v2016_06_27'
+        remove_bg:
+          $ref: '#/components/schemas/removeBg_v1_0'
+        uc_clamav_virus_scan:
+          $ref: '#/components/schemas/ucClamavVirusScan'
+    removeBg_v1_0:
+      allOf:
+      - $ref: '#/components/schemas/applicationData'
+      - type: object
+        properties:
+          version:
+            type: string
+            enum:
+            - '1.0'
+          data:
+            type: object
+            description: Dictionary with a result of an remove.bg information about an image.
+            properties:
+              foreground_type:
+                type: string
+                description: foreground classification type (present if type_level was set)
+        example:
+          value:
+            remove_bg:
+              data:
+                foreground_type: person
+              version: '1.0'
+              datetime_created: '2021-07-25T12:24:33.159663Z'
+              datetime_updated: '2021-07-25T12:24:33.159663Z'
+    awsRekognitionDetectLabels_v2016_06_27:
+      allOf:
+      - $ref: '#/components/schemas/applicationData'
+      - type: object
+        properties:
+          version:
+            type: string
+            enum:
+            - '2016-06-27'
+          data:
+            type: object
+            description: Dictionary with a result of an aws rekognition detect labels execution result.
+            properties:
+              LabelModelVersion:
+                type: string
+              Labels:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    Confidence:
+                      type: number
+                    Instances:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          BoundingBox:
+                            type: object
+                            properties:
+                              Height:
+                                type: number
+                              Left:
+                                type: number
+                              Top:
+                                type: number
+                              Width:
+                                type: number
+                          Confidence:
+                            type: number
+                    Name:
+                      type: string
+                    Parents:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          Name:
+                            type: string
+                  required:
+                  - Name
+                  - Parents
+                  - Instances
+                  - Confidence
+            required:
+            - Labels
+            - LabelModelVersion
+            example:
+              value:
+                aws_rekognition_detect_labels:
+                  data:
+                    LabelModelVersion: '2.0'
+                    Labels:
+                    - Confidence: 93.41645812988281
+                      Instances: []
+                      Name: Home Decor
+                      Parents: []
+                    - Confidence: 70.75951385498047
+                      Instances: []
+                      Name: Linen
+                      Parents:
+                      - Name: Home Decor
+                    - Confidence: 64.7123794555664
+                      Instances: []
+                      Name: Sunlight
+                      Parents: []
+                    - Confidence: 56.264793395996094
+                      Instances: []
+                      Name: Flare
+                      Parents:
+                      - Name: Light
+                    - Confidence: 50.47153854370117
+                      Instances: []
+                      Name: Tree
+                      Parents:
+                      - Name: Plant
+                  version: '2016-06-27'
+                  datetime_created: '2021-09-21T11:25:31.259763Z'
+                  datetime_updated: '2021-09-21T11:27:33.359763Z'
+    group:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Group's identifier.
+        datetime_created:
+          type: string
+          format: date-time
+          description: ISO-8601 date and time when the group was created.
+        files_count:
+          type: integer
+          minimum: 1
+          description: Number of the files in the group.
+        cdn_url:
+          type: string
+          format: uri
+          description: Group's CDN URL.
+        url:
+          type: string
+          format: uri
+          description: Group's API resource URL.
+      example:
+        id: dd43982b-5447-44b2-86f6-1c3b52afa0ff~1
+        datetime_created: '2018-11-27T14:14:37.583654Z'
+        files_count: 1
+        cdn_url: https://ucarecdn.com/dd43982b-5447-44b2-86f6-1c3b52afa0ff~1/
+        url: https://api.uploadcare.com/groups/dd43982b-5447-44b2-86f6-1c3b52afa0ff~1/
+    metadata:
+      type: object
+      nullable: true
+      description: Arbitrary metadata associated with a file.
+    file:
+      type: object
+      required:
+      - datetime_removed
+      - datetime_stored
+      - datetime_uploaded
+      - is_image
+      - is_ready
+      - mime_type
+      - original_file_url
+      - original_filename
+      - size
+      - url
+      - uuid
+      - variations
+      - content_info
+      - metadata
+      properties:
+        datetime_removed:
+          type: string
+          format: date-time
+          nullable: true
+          description: Date and time when a file was removed, if any.
+        datetime_stored:
+          type: string
+          format: date-time
+          nullable: true
+          description: Date and time of the last store request, if any.
+        datetime_uploaded:
+          type: string
+          format: date-time
+          description: Date and time when a file was uploaded.
+        is_image:
+          type: boolean
+          description: Is file is image.
+          example: true
+        is_ready:
+          type: boolean
+          description: Is file is ready to be used after upload.
+          example: true
+        mime_type:
+          type: string
+          description: File MIME-type.
+          example: image/jpeg
+        original_file_url:
+          type: string
+          format: uri
+          description: Publicly available file CDN URL. Available if a file is not deleted.
+          nullable: true
+          example: https://ucarecdn.com/e575ed4e8-f4e8-4c14-a58b-1527b6d9ee46/EU_4.jpg
+        original_filename:
+          type: string
+          description: Original file name taken from uploaded file.
+          example: EU_4.jpg
+        size:
+          type: integer
+          description: File size in bytes.
+          example: 145212
+        url:
+          type: string
+          format: uri
+          description: API resource URL for a particular file.
+          example: https://api.uploadcare.com/files/e10ce759-42c3-4185-bae5-e22a9143d68f/
+        uuid:
+          type: string
+          format: uuid
+          description: File UUID.
+          example: 575ed4e8-f4e8-4c14-a58b-1527b6d9ee46
+        appdata:
+          $ref: '#/components/schemas/applicationDataObject'
+        variations:
+          type: object
+          nullable: true
+          description: 'Dictionary of other files that were created using this file as a source. It''s used for video processing and document conversion jobs. E.g., `<conversion_path>: <uuid>`.'
+        content_info:
+          $ref: '#/components/schemas/contentInfo'
+        metadata:
+          $ref: '#/components/schemas/metadata'
+      example:
+        datetime_removed: null
+        datetime_stored: '2018-11-26T12:49:10.477888Z'
+        datetime_uploaded: '2018-11-26T12:49:09.945335Z'
+        variations: null
+        is_image: true
+        is_ready: true
+        mime_type: image/jpeg
+        original_file_url: https://ucarecdn.com/22240276-2f06-41f8-9411-755c8ce926ed/pineapple.jpg
+        original_filename: pineapple.jpg
+        size: 642
+        url: https://api.uploadcare.com/files/22240276-2f06-41f8-9411-755c8ce926ed/
+        uuid: 22240276-2f06-41f8-9411-755c8ce926ed
+        content_info:
+          mime:
+            mime: image/jpeg
+            type: image
+            subtype: jpeg
+          image:
+            format: JPEG
+            width: 500
+            height: 500
+            sequence: false
+            color_mode: RGB
+            orientation: 6
+            geo_location:
+              latitude: 55.62013611111111
+              longitude: 37.66299166666666
+            datetime_original: '2018-08-20T08:59:50'
+            dpi:
+            - 72
+            - 72
+        metadata:
+          subsystem: uploader
+          pet: cat
+        appdata:
+          aws_rekognition_detect_labels:
+            data:
+              LabelModelVersion: '2.0'
+              Labels:
+              - Confidence: 93.41645812988281
+                Instances: []
+                Name: Home Decor
+                Parents: []
+              - Confidence: 70.75951385498047
+                Instances: []
+                Name: Linen
+                Parents:
+                - Name: Home Decor
+              - Confidence: 64.7123794555664
+                Instances: []
+                Name: Sunlight
+                Parents: []
+              - Confidence: 56.264793395996094
+                Instances: []
+                Name: Flare
+                Parents:
+                - Name: Light
+              - Confidence: 50.47153854370117
+                Instances: []
+                Name: Tree
+                Parents:
+                - Name: Plant
+            version: '2016-06-27'
+            datetime_created: '2021-09-21T11:25:31.259763Z'
+            datetime_updated: '2021-09-21T11:27:33.359763Z'
+          aws_rekognition_detect_moderation_labels:
+            data:
+              ModerationModelVersion: '6.0'
+              ModerationLabels:
+              - Confidence: 93.41645812988281
+                Name: Weapons
+                ParentName: Violence
+            version: '2016-06-27'
+            datetime_created: '2023-02-21T11:25:31.259763Z'
+            datetime_updated: '2023-02-21T11:27:33.359763Z'
+          remove_bg:
+            data:
+              foreground_type: person
+            version: '1.0'
+            datetime_created: '2021-07-25T12:24:33.159663Z'
+            datetime_updated: '2021-07-25T12:24:33.159663Z'
+          uc_clamav_virus_scan:
+            data:
+              infected: true
+              infected_with: Win.Test.EICAR_HDB-1
+            version: 0.104.2
+            datetime_created: '2021-09-21T11:24:33.159663Z'
+            datetime_updated: '2021-09-21T11:24:33.159663Z'
+    imageInfo:
+      type: object
+      description: Image metadata.
+      required:
+      - color_mode
+      - orientation
+      - format
+      - height
+      - width
+      - geo_location
+      - datetime_original
+      - dpi
+      - sequence
+      properties:
+        color_mode:
+          type: string
+          description: Image color mode.
+          enum:
+          - RGB
+          - RGBA
+          - RGBa
+          - RGBX
+          - L
+          - LA
+          - La
+          - P
+          - PA
+          - CMYK
+          - YCbCr
+          - HSV
+          - LAB
+          example: RGBA
+        orientation:
+          type: integer
+          description: Image orientation from EXIF.
+          nullable: true
+          minimum: 0
+          maximum: 8
+          example: 6
+        format:
+          type: string
+          description: Image format.
+          example: JPEG
+        sequence:
+          type: boolean
+          description: Set to true if a file contains a sequence of images (GIF for example).
+          example: false
+        height:
+          type: integer
+          description: Image height in pixels.
+          example: 2352
+        width:
+          type: integer
+          description: Image width in pixels.
+          example: 2935
+        geo_location:
+          description: Geo-location of image from EXIF.
+          type: object
+          nullable: true
+          required:
+          - latitude
+          - longitude
+          properties:
+            latitude:
+              type: number
+              description: Location latitude.
+              example: -1.1884555555555556
+            longitude:
+              type: number
+              description: Location longitude.
+              example: 52.66996666666667
+        datetime_original:
+          type: string
+          description: Image date and time from EXIF. Please be aware that this data is not always formatted and displayed exactly as it appears in the EXIF.
+          nullable: true
+          format: date-time
+          example: '2018-09-13T16:23:40'
+        dpi:
+          type: array
+          description: Image DPI for two dimensions.
+          nullable: true
+          items:
+            type: number
+            example: 72
+          minItems: 2
+          maxItems: 2
+          example:
+          - 72
+          - 72
+    applicationData:
+      type: object
+      properties:
+        version:
+          type: string
+          description: An application version.
+        datetime_created:
+          type: string
+          format: date-time
+          description: Date and time when an application data was created.
+        datetime_updated:
+          type: string
+          format: date-time
+          description: Date and time when an application data was updated.
+        data:
+          type: object
+          description: Dictionary with a result of an application execution result.
+      required:
+      - version
+      - datetime_created
+      - datetime_updated
+      - data
+    simpleAuthHTTPForbidden:
+      type: object
+      properties:
+        detail:
+          type: string
+          default: Simple authentication over HTTP is forbidden. Please, use HTTPS or signed requests instead.
+      example:
+        detail: Simple authentication over HTTP is forbidden. Please, use HTTPS or signed requests instead.
+  responses:
+    groupNotFound:
+      description: Group with `uuid` not found.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              detail:
+                type: string
+                description: Group not found.
+                example: Not found.
+    invalidAcceptHeader:
+      description: Invalid version header `Accept` for this endpoint.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              detail:
+                type: string
+                example: Incorrect Accept header provided. Make sure to specify API version. Refer to REST API docs for details.
+                default: Incorrect Accept header provided. Make sure to specify API version. Refer to REST API docs for details.
+    paginatedGroupsResponse:
+      description: A list of groups, paginated.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              next:
+                type: string
+                format: uri
+                description: Next page URL.
+                nullable: true
+                example: https://api.uploadcare.com/groups/?limit=3&from=2018-11-27T01%3A00%3A24.296613%2B00%3A00&offset=0
+              previous:
+                type: string
+                format: uri
+                description: Previous page URL.
+                nullable: true
+                example: https://api.uploadcare.com/groups/?limit=3&to=2018-11-27T01%3A00%3A36.436838%2B00%3A00&offset=0
+              total:
+                type: integer
+                minimum: 0
+                description: Total number of groups in the project.
+                example: 26
+              per_page:
+                type: integer
+                description: Number of groups per page.
+                example: 100
+              results:
+                type: array
+                items:
+                  $ref: '#/components/schemas/group'
+          examples:
+            List:
+              $ref: '#/components/examples/group_list'
+    simpleAuthHTTPForbiddenResponse:
+      description: Simple authentication over HTTP is forbidden. Please, use HTTPS or signed requests instead.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/simpleAuthHTTPForbidden'
+    requestWasThrottledError:
+      description: Request was throttled.
+      headers:
+        Retry-After:
+          description: Number of seconds to wait before the next request.
+          schema:
+            type: integer
+            example: 10
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              detail:
+                type: string
+                example: Request was throttled. Expected available in 10 seconds.
+    authorizationProblemsResponse:
+      description: Authorization errors.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              detail:
+                type: string
+                enum:
+                - Incorrect authentication credentials.
+                - Public key {public_key} not found.
+                - Secret key not found.
+                - Invalid signature. Please check your Secret key.
+                example: Incorrect authentication credentials.
+  examples:
+    group_list:
+      value:
+        next: https://api.uploadcare.com/groups/?limit=3&from=2016-11-09T14%3A30%3A22.421889%2B00%3A00&offset=0
+        previous: null
+        total: 100
+        per_page: 2
+        results:
+        - id: dd43982b-5447-44b2-86f6-1c3b52afa0ff~1
+          datetime_created: '2018-11-27T14:14:37.583654Z'
+          files_count: 1
+          cdn_url: https://ucarecdn.com/dd43982b-5447-44b2-86f6-1c3b52afa0ff~1/
+          url: https://api.uploadcare.com/groups/dd43982b-5447-44b2-86f6-1c3b52afa0ff~1/
+        - id: fd59dbcb-40a1-4f3a-8062-cc7d23f66885~1
+          datetime_created: '2018-11-27T15:14:39.586674Z'
+          files_count: 1
+          cdn_url: https://ucarecdn.com/fd59dbcb-40a1-4f3a-8062-cc7d23f66885~1/
+          url: https://api.uploadcare.com/groups/fd59dbcb-40a1-4f3a-8062-cc7d23f66885~1/
