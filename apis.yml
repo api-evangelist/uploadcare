@@ -7,7 +7,20 @@ description: Uploadcare is a file uploading and processing platform that provide
   CDN API, handle multipart uploads for large files, configure webhooks, and leverage
   add-ons for extended processing capabilities.
 type: Index
-image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+accessModel:
+  pricing: freemium
+  onboarding: self-serve
+  trial: false
+  try_now: true
+  public: false
+  label: Freemium · Self-serve signup
+  confidence: high
+  source:
+  - plans
+  - authentication
+  generated: '2026-07-22'
+  method: derived
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/uploadcare.png
 url: https://raw.githubusercontent.com/api-evangelist/uploadcare/refs/heads/main/apis.yml
 created: 2026-06-12
 modified: 2026-06-12
@@ -23,37 +36,12 @@ tags:
 - Storage
 - Webhooks
 apis:
-- aid: uploadcare:rest-api
-  name: Uploadcare REST API
-  description: Low-level REST API providing access to Uploadcare platform features
-    including managing files, metadata, groups, add-ons, projects, webhooks, file
-    conversions, and video encoding. All requests must be signed with HMAC/SHA256
-    authentication.
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-  humanURL: https://uploadcare.com/api-refs/rest-api/v0.7.0/
-  baseURL: https://api.uploadcare.com
-  tags:
-  - Files
-  - Groups
-  - Webhooks
-  - Add-ons
-  - Conversions
-  - Video
-  properties:
-  - type: Documentation
-    url: https://uploadcare.com/docs/rest_api/
-  - type: OpenAPI
-    url: https://uploadcare.com/api-refs/rest-api/v0.7.0/
-  - type: OpenAPI
-    url: openapi/uploadcare-rest-api-openapi.yml
-  - url: graphql/uploadcare-graphql.md
-    type: GraphQL
 - aid: uploadcare:upload-api
   name: Uploadcare Upload API
-  description: Upload API for direct binary file uploads, multipart uploads for large
-    files (up to 5 TB), URL-based uploads, UUID-based uploads, and file group creation.
-    Supports direct uploads from browser or server without routing files through your
-    own infrastructure.
+  description: >-
+    Upload API for direct binary file uploads, multipart uploads for large files (up to 5 TB), URL-based
+    uploads, UUID-based uploads, and file group creation. Supports direct uploads from browser or server
+    without routing files through your own infrastructure.
   image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
   humanURL: https://uploadcare.com/api-refs/upload-api/
   baseURL: https://upload.uploadcare.com
@@ -69,25 +57,254 @@ apis:
     url: https://uploadcare.com/api-refs/upload-api/
   - type: OpenAPI
     url: openapi/uploadcare-upload-api-openapi.yml
-- aid: uploadcare:cdn-api
-  name: Uploadcare CDN & Image Transformation API
-  description: URL-based CDN API for on-the-fly image transformations including resizing,
-    cropping, format conversion, compression, and effects. Transformed images are
-    cached on the global Smart CDN network and not counted toward storage limits.
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-  humanURL: https://uploadcare.com/docs/transformations/image/
-  baseURL: https://ucarecdn.com
+- aid: uploadcare:uploadcare-add-ons-api
+  name: Uploadcare Add-Ons API
+  description: >-
+    An `Add-On` is an application implemented by Uploadcare that accepts uploaded files as an
+
+    input and can produce other files and/or [appdata](#operation/fileInfo) as an output.
+  humanURL: https://uploadcare.com/api-refs/rest-api/v0.7.0/
+  baseURL: https://api.uploadcare.com
   tags:
-  - CDN
-  - Image Transformation
-  - Resize
-  - Crop
-  - Format Conversion
+  - Add-Ons
   properties:
+  - type: OpenAPI
+    url: openapi/uploadcare-add-ons-api-openapi.yml
+  - type: Documentation
+    url: https://uploadcare.com/docs/rest_api/
+  - type: GraphQL
+    url: graphql/uploadcare-graphql.md
   - type: Documentation
     url: https://uploadcare.com/docs/api_reference/cdn/
+- aid: uploadcare:uploadcare-conversion-api
+  name: Uploadcare Conversion API
+  description: The Conversion API from Uploadcare — 5 operation(s) for conversion.
+  humanURL: https://uploadcare.com/api-refs/rest-api/v0.7.0/
+  baseURL: https://api.uploadcare.com
+  tags:
+  - Conversion
+  properties:
   - type: OpenAPI
-    url: openapi/uploadcare-cdn-api-openapi.yml
+    url: openapi/uploadcare-conversion-api-openapi.yml
+  - type: Documentation
+    url: https://uploadcare.com/docs/rest_api/
+  - type: GraphQL
+    url: graphql/uploadcare-graphql.md
+  - type: Documentation
+    url: https://uploadcare.com/docs/api_reference/cdn/
+- aid: uploadcare:uploadcare-file-api
+  name: Uploadcare File API
+  description: The File API from Uploadcare — 6 operation(s) for file.
+  humanURL: https://uploadcare.com/api-refs/rest-api/v0.7.0/
+  baseURL: https://api.uploadcare.com
+  tags:
+  - File
+  properties:
+  - type: OpenAPI
+    url: openapi/uploadcare-file-api-openapi.yml
+  - type: Documentation
+    url: https://uploadcare.com/docs/rest_api/
+  - type: GraphQL
+    url: graphql/uploadcare-graphql.md
+  - type: Documentation
+    url: https://uploadcare.com/docs/api_reference/cdn/
+- aid: uploadcare:uploadcare-file-information-api
+  name: Uploadcare File information API
+  description: >-
+    There are a few ways to get information about uploaded file.
+
+    One of them is on-the-fly with a request to CDN.
+
+
+    Note: Other APIs also let you read file info:
+
+    [after Upload](/docs/api/upload/upload/file-upload-info)
+
+    and [at REST](/docs/api/rest/file/info).
+  humanURL: https://uploadcare.com/api-refs/rest-api/v0.7.0/
+  baseURL: https://api.uploadcare.com
+  tags:
+  - File information
+  properties:
+  - type: OpenAPI
+    url: openapi/uploadcare-file-information-api-openapi.yml
+  - type: Documentation
+    url: https://uploadcare.com/docs/rest_api/
+  - type: GraphQL
+    url: graphql/uploadcare-graphql.md
+  - type: Documentation
+    url: https://uploadcare.com/docs/api_reference/cdn/
+- aid: uploadcare:uploadcare-file-metadata-api
+  name: Uploadcare File metadata API
+  description: >-
+    File metadata is additional, arbitrary data, associated with uploaded file. As an example, you could
+    store unique file identifier from your system.
+
+
+    Metadata is key-value data. You can specify up to 50 keys, with key names up to 64 characters long
+    and values up to 512 characters long.
+
+    Read more in the [docs](https://uploadcare.com/docs/file-metadata/).
+
+
+    **Notice:** Do not store any sensitive information (bank account numbers, card details, etc.) as metadata.
+
+
+    **Notice:** File metadata is provided by the end-users uploading the files and can contain symbols
+    unsafe in, for example, HTML context. Please escape the metadata before use according to the rules
+    of the target runtime context (HTML browser, SQL query parameter, etc).
+  humanURL: https://uploadcare.com/api-refs/rest-api/v0.7.0/
+  baseURL: https://api.uploadcare.com
+  tags:
+  - File metadata
+  properties:
+  - type: OpenAPI
+    url: openapi/uploadcare-file-metadata-api-openapi.yml
+  - type: Documentation
+    url: https://uploadcare.com/docs/rest_api/
+  - type: GraphQL
+    url: graphql/uploadcare-graphql.md
+  - type: Documentation
+    url: https://uploadcare.com/docs/api_reference/cdn/
+- aid: uploadcare:uploadcare-file-names-api
+  name: Uploadcare File names API
+  description: >-
+    Your original filenames can be accessed via [REST API](/docs/api/rest/).
+
+    Make a request to receive a JSON response with file parameters including
+
+    `original_filename`.
+
+
+    You can set an optional filename that users will see instead of the original name:
+
+
+    ```https://ucarecdn.com/:uuid/:filename```
+
+
+    `:filename` should comply with [file name conventions](https://tools.ietf.org/html/rfc3986#section-3.3)
+
+    and it should be a valid part of a URL. For example, `filename.ext`.
+
+
+    Here are some examples with full CDN URLs:
+
+
+    ```
+
+    Safe:
+
+
+    // adding a simple filename
+
+    https://ucarecdn.com/85b5644f-e692-4855-9db0-8c5a83096e25/image.jpg
+
+
+    // using a char allowed in the pchar definition
+
+    https://ucarecdn.com/85b5644f-e692-4855-9db0-8c5a83096e25/image@2x.jpg
+
+
+    // allowed in pchar together with Image Transformations
+
+    https://ucarecdn.com/85b5644f-e692-4855-9db0-8c5a83096e25/-/preview/-/resize/550x/image@1x.jpg
+
+
+    // using a sub-delim allowed in pchar together with Image Transformations
+
+    https://ucarecdn.com/85b5644f-e692-4855-9db0-8c5a83096e25/-/preview/-/grayscale/image_black&white@2x.jpg
+
+
+    // using percent-encoded gen-delims that are not allowed in pchar
+
+    https://ucarecdn.com/85b5644f-e692-4855-9db0-8c5a83096e25/-/preview/-/grayscale/image%5Bdesaturated%5D@2x.jpg
+
+
+    Unsafe:
+
+
+    // using gen-delims that are not allowed in pchar without encoding
+
+    https://ucarecdn.com/85b5644f-e692-4855-9db0-8c5a83096e25/-/preview/-/grayscale/image[desaturated]@2x.jpg
+
+    ```
+  humanURL: https://uploadcare.com/api-refs/rest-api/v0.7.0/
+  baseURL: https://api.uploadcare.com
+  tags:
+  - File names
+  properties:
+  - type: OpenAPI
+    url: openapi/uploadcare-file-names-api-openapi.yml
+  - type: Documentation
+    url: https://uploadcare.com/docs/rest_api/
+  - type: GraphQL
+    url: graphql/uploadcare-graphql.md
+  - type: Documentation
+    url: https://uploadcare.com/docs/api_reference/cdn/
+- aid: uploadcare:uploadcare-group-api
+  name: Uploadcare Group API
+  description: The Group API from Uploadcare — 2 operation(s) for group.
+  humanURL: https://uploadcare.com/api-refs/rest-api/v0.7.0/
+  baseURL: https://api.uploadcare.com
+  tags:
+  - Group
+  properties:
+  - type: OpenAPI
+    url: openapi/uploadcare-group-api-openapi.yml
+  - type: Documentation
+    url: https://uploadcare.com/docs/rest_api/
+  - type: GraphQL
+    url: graphql/uploadcare-graphql.md
+  - type: Documentation
+    url: https://uploadcare.com/docs/api_reference/cdn/
+- aid: uploadcare:uploadcare-groups-api
+  name: Uploadcare Groups API
+  description: The Groups API from Uploadcare — 2 operation(s) for groups.
+  humanURL: https://uploadcare.com/api-refs/rest-api/v0.7.0/
+  baseURL: https://api.uploadcare.com
+  tags:
+  - Groups
+  properties:
+  - type: OpenAPI
+    url: openapi/uploadcare-groups-api-openapi.yml
+  - type: Documentation
+    url: https://uploadcare.com/docs/rest_api/
+  - type: GraphQL
+    url: graphql/uploadcare-graphql.md
+  - type: Documentation
+    url: https://uploadcare.com/docs/api_reference/cdn/
+- aid: uploadcare:uploadcare-project-api
+  name: Uploadcare Project API
+  description: The Project API from Uploadcare — 1 operation(s) for project.
+  humanURL: https://uploadcare.com/api-refs/rest-api/v0.7.0/
+  baseURL: https://api.uploadcare.com
+  tags:
+  - Project
+  properties:
+  - type: OpenAPI
+    url: openapi/uploadcare-project-api-openapi.yml
+  - type: Documentation
+    url: https://uploadcare.com/docs/rest_api/
+  - type: GraphQL
+    url: graphql/uploadcare-graphql.md
+  - type: Documentation
+    url: https://uploadcare.com/docs/api_reference/cdn/
+- aid: uploadcare:uploadcare-webhook-api
+  name: Uploadcare Webhook API
+  description: The Webhook API from Uploadcare — 3 operation(s) for webhook.
+  humanURL: https://uploadcare.com/api-refs/rest-api/v0.7.0/
+  baseURL: https://api.uploadcare.com
+  tags:
+  - Webhook
+  properties:
+  - type: OpenAPI
+    url: openapi/uploadcare-webhook-api-openapi.yml
+  - type: Documentation
+    url: https://uploadcare.com/docs/rest_api/
+  - type: GraphQL
+    url: graphql/uploadcare-graphql.md
+  - type: Documentation
+    url: https://uploadcare.com/docs/api_reference/cdn/
 common:
 - type: AgenticAccess
   url: agentic-access/uploadcare-agentic-access.yml
