@@ -1,0 +1,34 @@
+{
+  "provider": "uploadcare",
+  "sources": [
+    "uploadcare-add-ons-api-openapi.yml",
+    "uploadcare-conversion-api-openapi.yml",
+    "uploadcare-file-api-openapi.yml",
+    "uploadcare-file-information-api-openapi.yml",
+    "uploadcare-file-metadata-api-openapi.yml",
+    "uploadcare-file-names-api-openapi.yml",
+    "uploadcare-group-api-openapi.yml",
+    "uploadcare-groups-api-openapi.yml",
+    "uploadcare-project-api-openapi.yml",
+    "uploadcare-upload-api-openapi.yml",
+    "uploadcare-webhook-api-openapi.yml"
+  ],
+  "outputs": [
+    "uploadcare-add-ons-api-openapi.yml",
+    "uploadcare-conversion-api-openapi.yml",
+    "uploadcare-file-api-openapi.yml",
+    "uploadcare-file-information-api-openapi.yml",
+    "uploadcare-file-metadata-api-openapi.yml",
+    "uploadcare-file-names-api-openapi.yml",
+    "uploadcare-group-api-openapi.yml",
+    "uploadcare-groups-api-openapi.yml",
+    "uploadcare-project-api-openapi.yml",
+    "uploadcare-upload-api-openapi.yml",
+    "uploadcare-webhook-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}

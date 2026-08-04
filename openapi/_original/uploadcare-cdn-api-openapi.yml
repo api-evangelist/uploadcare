@@ -1,0 +1,569 @@
+openapi: 3.0.0
+info:
+  title: URL API Reference
+  version: '2022-11-28'
+  description: |
+    Every uploaded file is immediately available on the Uploadcare CDN.
+    The CDN includes on-the-fly processing features and can work as a proxy.
+
+    ## API endpoints
+    Access files in Uploadcare CDN at `ucarecdn.com` over HTTP/HTTPS like this:
+    ```https://ucarecdn.com/:uuid/```
+
+    You can add CDN operations by including directives in the CDN URL:
+    ```https://ucarecdn.com/:uuid/-/:operation/:params/:filename```
+
+    * `:uuid` stands for the unique file identifier, UUID, assigned on upload.
+    * `/-/` is a mandatory parsing delimiter to divide operations and other path components.
+    * `:operation/:params/` is a CDN operation directive with parameters.
+    * `:filename` is an optional filename you can add after a trailing slash /.
+
+    You can stack two and more operations like this:
+    ```-/:operation/:params/-/:operation/:params/```
+  contact:
+    name: API support
+    email: help@uploadcare.com
+  x-logo:
+    url: https://ucarecdn.com/12e3af14-392d-416f-8542-f210c2eb6ec4/logourlapi.svg
+    backgroundColor: '#fafafa'
+    altText: Uploadcare URL API Reference
+  x-meta:
+    title: URL API Reference — Uploadcare
+    description: A reference documentation for the Uploadcare's URL API.
+servers:
+  - url: https://ucarecdn.com
+    description: Production server
+tags:
+  - name: File information
+    description: |
+      There are a few ways to get information about uploaded file.
+      One of them is on-the-fly with a request to CDN.
+
+      Note: Other APIs also let you read file info:
+      [after Upload](/docs/api/upload/upload/file-upload-info)
+      and [at REST](/docs/api/rest/file/info).
+  - name: File names
+    description: |
+      Your original filenames can be accessed via [REST API](/docs/api/rest/).
+      Make a request to receive a JSON response with file parameters including
+      `original_filename`.
+
+      You can set an optional filename that users will see instead of the original name:
+
+      ```https://ucarecdn.com/:uuid/:filename```
+
+      `:filename` should comply with [file name conventions](https://tools.ietf.org/html/rfc3986#section-3.3)
+      and it should be a valid part of a URL. For example, `filename.ext`.
+
+      Here are some examples with full CDN URLs:
+
+      ```
+      Safe:
+
+      // adding a simple filename
+      https://ucarecdn.com/85b5644f-e692-4855-9db0-8c5a83096e25/image.jpg
+
+      // using a char allowed in the pchar definition
+      https://ucarecdn.com/85b5644f-e692-4855-9db0-8c5a83096e25/image@2x.jpg
+
+      // allowed in pchar together with Image Transformations
+      https://ucarecdn.com/85b5644f-e692-4855-9db0-8c5a83096e25/-/preview/-/resize/550x/image@1x.jpg
+
+      // using a sub-delim allowed in pchar together with Image Transformations
+      https://ucarecdn.com/85b5644f-e692-4855-9db0-8c5a83096e25/-/preview/-/grayscale/image_black&white@2x.jpg
+
+      // using percent-encoded gen-delims that are not allowed in pchar
+      https://ucarecdn.com/85b5644f-e692-4855-9db0-8c5a83096e25/-/preview/-/grayscale/image%5Bdesaturated%5D@2x.jpg
+
+      Unsafe:
+
+      // using gen-delims that are not allowed in pchar without encoding
+      https://ucarecdn.com/85b5644f-e692-4855-9db0-8c5a83096e25/-/preview/-/grayscale/image[desaturated]@2x.jpg
+      ```
+  - name: File groups
+    description: |
+      Groups are file collections. Use them to organize content in your Uploadcare
+      project. A common use case is to use them in the single content upload or delivery
+      transactions.
+
+      For instance, you can create groups when you upload multiple files.
+      For the [new uploader](https://uploadcare.com/docs/file-uploader/)
+      this option is turned off by default. For [jQuery widget](https://uploadcare.com/docs/uploads/file-uploader/),
+      a new group is automatically created.
+
+      When it's turned on, it stores UUIDs of uploaded files.
+      You can access file collections via `:group_uuid`:
+
+      ```cdn
+      https://ucarecdn.com/cd334b26-c641-4393-bcce-b5041546430d~11/
+      ```
+
+      `:group_uuid` is similar to a single file UUID, but it has the file number `~N`
+      at the end. A group can contain up to 1000 files.
+
+      A group URL will show a list of individual file URLs with their UUIDs, and
+      index numbers in that group.
+
+      Learn more about [creating](/docs/api/upload/groups/create-files-group)
+      and [managing](/docs/api/rest/group/) groups.
+
+      ### Accessing single files in a group
+
+      Request a specific file in a group by adding `/nth/i/`, where `i` is a file index,
+      starting from 0:
+
+      ```
+      /:group_uuid/nth/0/
+      /:group_uuid/nth/1/
+      /:group_uuid/nth/2/
+      ```
+
+      Note, there is no `/-/` separator after a group UUID. It's required for
+      transformations only.
+
+      By the way, you can apply image transformations to the individual files within a group:
+
+      ```
+      /:group_uuid/nth/0/-/resize/256x/
+      ```
+
+      You can also group the processed files with the respective operation sequences.
+      When you request a file by its group URL, it'll include all operations before
+      adding it to that group. Adding more operations after `/-/` will apply them over
+      the existing ones.
+
+      ### Get a group as an archive
+
+      Getting a group as an archive is done via the `archive` group processing
+      operation.
+
+      The operation limits are:
+
+      * A total size of uncompressed files ≤ 2 GB.
+      * Processing operations will be discarded. Only original files will be archived.
+
+      Here's how to get an archived file group:
+
+      ```
+      /:group_uuid/archive/:format/:filename
+      ```
+
+      * `:group_uuid` — UUID of a file group you want to get as an archive.
+      * `:format` — the format of that output archive, we support `zip` and `tar`.
+      * `:filename` (optional) — output archive filename.
+
+      Note: If the group contains a removed file, the archive operation will fail with a 404 error code.
+  - name: Image processing limitations
+    description: |
+      With Uploadcare, you can easily build custom image transformation workflows and automate most image manipulation and optimization tasks. For example, you can set up a chain of actions for user-generated images that'll unify their look.
+
+      Every URL image operation generates a modified image version on the fly, while the original file stays intact. The transformed image version will be cached on CDN nodes to optimize delivery.
+
+      ### Input image formats
+
+      List of supported image formats:
+      * AVIF
+      * BMP
+      * GIF
+      * HEIC
+      * JPEG
+      * PCX
+      * PNG
+      * TGA
+      * TIFF
+      * WEBP
+
+      Some formats have several variations, and we support the most popular ones.
+      [Contact sales](mailto:sales@uploadcare.com) if you require additional
+      formats or variations.
+
+      Without any image processing operation in the URL, CDN instructs browsers
+      to show images (`Content-Disposition: inline`) and download other file types
+      (`Content-Disposition: attachment`). Browsers may not show all image formats,
+      for example, TIFF and HEIC format. If you need to display an image, add any
+      image processing operation, `-/preview/` for instance. The `inline` control
+      allows you to change this behavior.
+
+      ```
+      -/inline/yes/
+      -/inline/no/
+      ```
+
+      ### Core operations
+
+      When processing images, add at least one of the following operations
+      via their respective URL directives:
+
+      * [`resize`](https://uploadcare.com/docs/transformations/image/resize-crop/#operation-resize)
+      * [`smart_resize`](https://uploadcare.com/docs/transformations/image/resize-crop/#operation-smart-resize)
+      * [`scale_crop`](https://uploadcare.com/docs/transformations/image/resize-crop/#operation-scale-crop)
+      * [`preview`](https://uploadcare.com/docs/transformations/image/resize-crop/#operation-preview)
+
+      ### Output image dimensions
+
+      The dimensions you specify for the last operation should not exceed 3000x3000
+      pixels. You can go up to 5000x5000 pixels by explicitly setting
+      your [image format](https://uploadcare.com/docs/transformations/image/compression/#operation-format)
+      to JPEG, `cdn›/format/jpeg/`.
+
+      You can extend the output max resolution up to 8192x8192, and up to 16384x16384
+      for JPEGs in trade-off for increased latency. [Contact sales](mailto:sales@uploadcare.com) to learn more
+      about this option.
+
+      ### SVG files
+
+      Any image transformation CDN URL is valid with an SVG file. Most operations
+      don't affect the response SVG body, while geometric operations
+      (`crop`, `preview`, `resize`, `scale_crop`) change SVG attributes and work as expected.
+
+      To apply full range of operations on SVG file, it should be rasterized by
+      applying `-/rasterize/` operation.
+
+      Note: Operation is safe to apply to any image. Non-SVG images won't be
+      affected by this operation.
+
+      *SVGs uploaded before May 26, 2021 still have `is_image: false` and adding
+      processing operations to them will result in error. Contact
+      [support](mailto:help@uploadcare.com) to batch process previously uploaded files.*
+
+      ### Image resolution
+
+      We don’t provide on-the-fly image processing for images greater than
+      75 Mpx in resolution: those are tagged as **non-image** files and can only be delivered
+      via CDN as-is. Adding processing operations to non-image files will result
+      in an error.
+
+      ### Simple rotation
+
+      When the only image transformation you want is rotating, consider using the
+      [`preview`](https://uploadcare.com/docs/transformations/image/resize-crop/#operation-preview)
+      control without any arguments. When you use any of the transformations, we
+      automatically rotate images according to their EXIF orientation.
+
+      ### Animated images
+
+      Animated images are treated as static by the transformations engine, consider
+      checking out our [GIF to Video](https://uploadcare.com/docs/transformations/gif-to-video/)
+      workflow optimized for animated images delivery.
+
+      ### REST API image processing
+
+      Most image processing operations work on-the-fly,
+      except some that must be called via [REST API](/docs/api/rest/):
+      * [Background removal](https://uploadcare.com/docs/remove-bg/)
+      * [Object recognition](https://uploadcare.com/docs/object-recognition/)
+      * [Video](https://uploadcare.com/docs/transformations/video-encoding/) and [document](https://uploadcare.com/docs/transformations/file-conversion/) thumbnail generation
+  - name: Image compression
+    description: |
+      | **Operation**                                                                                                       | **Syntax**                                                                                                                                                                                                                                              |
+      | ------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+      | [Format](https://uploadcare.com/docs/transformations/image/compression/#operation-format)                           | `-/format/:format/`                                                                                                                                                                                                                                     |
+      | [Quality](https://uploadcare.com/docs/transformations/image/compression/#operation-quality)                         | `-/quality/:value/`                                                                                                                                                                                                                                     |
+      | [Progressive JPEG](https://uploadcare.com/docs/transformations/image/compression/#operation-progressive)            | `-/progressive/yes/` `-/progressive/no/`                                                                                                                                                                                                                |
+      | [Meta information control](https://uploadcare.com/docs/transformations/image/compression/#meta-information-control) | `-/strip_meta/all/` `-/strip_meta/none/` `-/strip_meta/sensitive/`                                                                                                                                                                                      |
+      | [Animated image to video](https://uploadcare.com/docs/transformations/gif-to-video/)                                | `/gif2video/` `-/format/:value/` `-/quality/:value/` `-/preview/` `-/preview/:dimensions/` `-/resize/:one_or_two_dimensions/` `-/crop/:dimensions/` `-/crop/:dimensions/:alignment/` `-/scale_crop/:dimensions/` `-/scale_crop/:dimensions/:alignment/` |
+  - name: Image resize and crop
+    description: |
+      | **Operation**                                                                                                           | **Syntax**                                                                                                                             |
+      | ----------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+      | [Preview](https://uploadcare.com/docs/transformations/image/resize-crop/#operation-preview)                             | `-/preview/:dimensions/`                                                                                                               |
+      | [Resize](https://uploadcare.com/docs/transformations/image/resize-crop/#operation-resize)                               | `-/resize/:one_or_two_dimensions/`                                                                                                     |
+      | [Smart resize](https://uploadcare.com/docs/transformations/image/resize-crop/#operation-smart-resize)                   | `-/smart_resize/:dimensions/`                                                                                                          |
+      | [Crop](https://uploadcare.com/docs/transformations/image/resize-crop/#operation-crop)                                   | `-/crop/:dimensions/` `-/crop/:dimensions/:alignment/`                                                                                 |
+      | [Crop by ratio](https://uploadcare.com/docs/transformations/image/resize-crop/#operation-crop-aspect-ratio)             | `-/crop/:ratio/` `-/crop/:ratio/:alignment/`                                                                                           |
+      | [Crop by objects](https://uploadcare.com/docs/transformations/image/resize-crop/#operation-crop-tags)                   | `-/crop/:tag/` `-/crop/:tag/:ratio/` `-/crop/:tag/:ratio/:alignment/` `-/crop/:tag/:dimensions/` `-/crop/:tag/:dimensions/:alignment/` |
+      | [Scale crop](https://uploadcare.com/docs/transformations/image/resize-crop/#operation-scale-crop)                       | `-/scale_crop/:dimensions/` `-/scale_crop/:dimensions/:alignment/`                                                                     |
+      | [Smart crop](https://uploadcare.com/docs/transformations/image/resize-crop/#operation-smart-crop)                       | `-/scale_crop/:dimensions/:type/` `-/scale_crop/:dimensions/:type/:alignment/`                                                         |
+      | [Crop solid background](/docs/transformations/image/resize-crop/#operation-trim)                                        | `-/trim/` `-/trim/:tolerance/:padding/`                                                                                                |
+      | [Border radius and circle crop](https://uploadcare.com/docs/transformations/image/resize-crop/#operation-border-radius) | `-/border_radius/:radii/` `-/border_radius/:radii/:vertical_radii/`                                                                    |
+      | [Set fill color](https://uploadcare.com/docs/transformations/image/resize-crop/#operation-setfill)                      | `-/setfill/:color/`                                                                                                                    |
+      | [Zoom objects](https://uploadcare.com/docs/transformations/image/resize-crop/#operation-zoom-objects)                   | `-/zoom_objects/:zoom/`                                                                                                                |
+  - name: Image rotation
+    description: |
+      | **Operation**                                                                                                         | **Syntax**                             |
+      | --------------------------------------------------------------------------------------------------------------------- | -------------------------------------- |
+      | [Automatic rotation, EXIF-based](https://uploadcare.com/docs/transformations/image/rotate-flip/#operation-autorotate) | `-/autorotate/yes/` `-/autorotate/no/` |
+      | [Manual rotation](https://uploadcare.com/docs/transformations/image/rotate-flip/#operation-rotate)                    | `-/rotate/:angle/`                     |
+      | [Flip](https://uploadcare.com/docs/transformations/image/rotate-flip/#operation-flip)                                 | `-/flip/`                              |
+      | [Mirror](https://uploadcare.com/docs/transformations/image/rotate-flip/#operation-mirror)                             | `-/mirror/`                            |
+  - name: Image overlays
+    description: |
+      | **Operation**                                                                             | **Syntax**                                                                 |
+      | ----------------------------------------------------------------------------------------- | -------------------------------------------------------------------------- |
+      | [Image overlay](https://uploadcare.com/docs/transformations/image/overlay/#overlay-image) | `-/overlay/:uuid/` `-/overlay/:uuid/:rel_dimensions/:rel_coords/:opacity/` |
+      | [Self overlay](https://uploadcare.com/docs/transformations/image/overlay/#overlay-self)   | `-/overlay/self/` `-/overlay/self/:rel_dimensions/:rel_coords/:opacity/`   |
+      | [Text overlay](https://uploadcare.com/docs/transformations/image/overlay/#overlay-text)   | `-/text/:rel_dimensions/:rel_coords/:text/`                                |
+      | [Color overlay](https://uploadcare.com/docs/transformations/image/overlay/#overlay-solid) | `-/rect/:color/:relative_dimensions/:relative_coordinates/`                |
+  - name: Image colors
+    description: |
+      | **Operation**                                                                                                  | **Syntax**                                                                                                                                        |
+      | -------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+      | [Basic color adjustment](https://uploadcare.com/docs/transformations/image/colors/#image-colors-operations)    | `-/brightness/:value/` `-/exposure/:value/` `-/gamma/:value/` `-/contrast/:value/` `-/saturation/:value/` `-/vibrance/:value/` `-/warmth/:value/` |
+      | [Enhance](https://uploadcare.com/docs/transformations/image/colors/#operation-enhance)                         | `-/enhance/` `-/enhance/:strength/`                                                                                                               |
+      | [Grayscale](https://uploadcare.com/docs/transformations/image/colors/#operation-grayscale)                     | `-/grayscale/`                                                                                                                                    |
+      | [Inverting](https://uploadcare.com/docs/transformations/image/colors/#operation-invert)                        | `-/invert/`                                                                                                                                       |
+      | [Conversion to sRGB](https://uploadcare.com/docs/transformations/image/colors/#operation-srgb)                 | `-/srgb/fast/` `-/srgb/icc/` `-/srgb/keep_profile/`                                                                                               |
+      | [ICC profile size threshold](https://uploadcare.com/docs/transformations/image/colors/#operation-max-icc-size) | `-/max_icc_size/0/` `-/max_icc_size/:number/`                                                                                                     |
+      | [Photo filters](https://uploadcare.com/docs/transformations/image/photo-filters/)                              | `-/filter/:name/` `-/filter/:name/:amount/`                                                                                                       |
+  - name: Image definition
+    description: |
+      | **Operation**                                                                                             | **Syntax**                                                                                          |
+      | --------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
+      | [Blur](https://uploadcare.com/docs/transformations/image/blur-sharpen/#operation-blur)                    | `-/blur/` `-/blur/:strength/`                                                                       |
+      | [Blur region](https://uploadcare.com/docs/transformations/image/blur-sharpen/#operation-blur-region)      | `-/blur_region/:two_dimensions/:two_coords/` `-/blur_region/:two_dimensions/:two_coords/:strength/` |
+      | [Blur faces](https://uploadcare.com/docs/transformations/image/blur-sharpen/#operation-blur-region-faces) | `-/blur_region/faces/` `-/blur_region/faces/:strength/`                                             |
+      | [Unsharp masking](https://uploadcare.com/docs/transformations/image/blur-sharpen/#operation-blur-mask)    | `-/blur/:strength/:amount/`                                                                         |
+      | [Sharpen](https://uploadcare.com/docs/transformations/image/blur-sharpen/#operation-sharp)                | `-/sharp/` `-/sharp/:strength/`                                                                     |
+  - name: Image recognition
+    description: |
+      | **Operation**                                                                             | **Syntax**                         |
+      | ----------------------------------------------------------------------------------------- | ---------------------------------- |
+      | [Face detection](https://uploadcare.com/docs/face-detection/)                             | `/detect_faces/`                   |
+      | [Color recognition](https://uploadcare.com/docs/effects-enhancements/#color-recognition) | `-/main_colors/:number_of_colors/` |
+  - name: Other image operations
+    description: |
+      | **Operation**                                                           | **Syntax**     |
+      | ----------------------------------------------------------------------- | -------------- |
+      | [Rasterization](https://uploadcare.com/docs/transformations/image/svg/) | `-/rasterize/` |
+      | [Inline](https://uploadcare.com/docs/cdn-operations/#inline)            | `-/inline/`    |
+  - name: Proxy
+    description: |
+      In addition to faster page load and a better uptime in case some servers become inaccessible, Uploadcare CDN features on-the-fly image processing features and can work as a [proxy](https://uploadcare.com/docs/delivery/proxy/).
+  - name: Signed URLs
+    description: |
+      Control who and for how long can access files in your project via signed URLs. A signed URL is a URL that contains authentication information in its query string that provides limited permission and time to get the file. Learn more how to start using [signed URLs](https://uploadcare.com/docs/security/secure-delivery/).
+  - name: CDN settings
+    description: |
+      You can change various CDN settings or the entire CDN provider. Learn more about our [CDN settings](https://uploadcare.com/docs/delivery/cdn/).
+  - name: Integrations
+    description: |
+      You don't have to code most of the low-level API interactions. We have high-level [libraries](https://uploadcare.com/docs/integrations/) for all popular platforms.
+  - name: Other APIs
+    description: |
+      You can find the complete reference documentation for the Upload API [here](/docs/api/upload/) and the REST API [here](/docs/api/rest/).
+paths:
+  /{uuid}/-/json/:
+    parameters:
+      - $ref: '#/components/parameters/uuid'
+    get:
+      tags:
+        - File information
+      summary: File info as JSON
+      description: |
+        Returns file-related information, such as image dimensions or geo
+        tagging data in the JSON format.
+      operationId: fileInfoJson
+      responses:
+        '200':
+          description: File
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/file'
+        '404':
+          $ref: '#/components/responses/fileNotFoundError'
+  /{uuid}/{filename}:
+    parameters:
+      - $ref: '#/components/parameters/uuid'
+      - $ref: '#/components/parameters/filename'
+    get:
+      tags:
+        - File names
+      summary: File with a custom name
+      description: |
+        You can set an optional filename that users will see instead of
+        the original name.
+      operationId: fileWithName
+      responses:
+        '200':
+          description: File with a custom name
+          content:
+            image/jpeg:
+              schema:
+                type: string
+                format: binary
+              examples:
+                image:
+                  $ref: '#/components/examples/image'
+        '404':
+          $ref: '#/components/responses/fileNotFoundError'
+components:
+  parameters:
+    uuid:
+      in: path
+      description: Unique file identifier
+      name: uuid
+      required: true
+      schema:
+        type: string
+        example: d7fe74ac-65b8-4ade-875f-ccd92759a70f
+    filename:
+      in: path
+      description: |
+        An optional filename that users will see instead of the original name.
+      name: filename
+      required: true
+      schema:
+        type: string
+        example: cat.jpg
+  responses:
+    fileNotFoundError:
+      description: Image with "File not found" text.
+      content:
+        image/jpeg:
+          schema:
+            type: string
+            format: binary
+          examples:
+            imageNotFound:
+              $ref: '#/components/examples/imageNotFound'
+  schemas:
+    file:
+      description: File object.
+      type: object
+      additionalProperties: false
+      required:
+        - id
+      properties:
+        id:
+          description: File UUID.
+          type: string
+          format: uuid
+          example: 575ed4e8-f4e8-4c14-a58b-1527b6d9ee46
+          readOnly: true
+        dpi:
+          description: Image DPI for two dimensions.
+          type: array
+          nullable: true
+          items:
+            type: number
+            example: 72
+          minItems: 2
+          maxItems: 2
+          example:
+            - 72
+            - 72
+          readOnly: true
+        width:
+          description: Image width in pixels.
+          type: integer
+          example: 2935
+          readOnly: true
+        format:
+          description: Image format.
+          type: string
+          example: JPEG
+          readOnly: true
+        height:
+          description: Image height in pixels.
+          type: integer
+          example: 2352
+          readOnly: true
+        sequence:
+          description: Set to true if a file contains a sequence of images (GIF for example).
+          type: boolean
+          readOnly: true
+        color_mode:
+          description: Image color mode.
+          type: string
+          enum:
+            - RGB
+            - RGBA
+            - RGBa
+            - RGBX
+            - L
+            - LA
+            - La
+            - P
+            - PA
+            - CMYK
+            - YCbCr
+            - HSV
+            - LAB
+          example: RGBA
+          readOnly: true
+        orientation:
+          description: Image orientation from EXIF.
+          type: integer
+          nullable: true
+          minimum: 0
+          maximum: 8
+          example: 6
+          readOnly: true
+        geo_location:
+          description: Geo-location of image from EXIF.
+          type: object
+          nullable: true
+          required:
+            - latitude
+            - longitude
+          properties:
+            latitude:
+              type: number
+              description: Location latitude.
+              example: -1.1884555555555556
+            longitude:
+              type: number
+              description: Location longitude.
+              example: 52.66996666666667
+          readOnly: true
+        datetime_original:
+          description: Image date and time from EXIF. Please be aware that this data is not always formatted and displayed exactly as it appears in the EXIF.
+          type: string
+          nullable: true
+          format: date-time
+          example: '2018-09-13T16:23:40'
+          readOnly: true
+        hash:
+          description: |
+            A 64-bit perceptual hash represented as a hexadecimal string,
+            calculated from the image’s pixel content.
+            Learn more about [Perceptual hash](/docs/cdn-operations/#operation-json-phash).
+          type: string
+          nullable: true
+          example: 940f5fd09aa48ddc
+          readOnly: true
+        blurhash:
+          description: |
+            A compact string representation of the image, allowing reconstruction
+            of its general structure and color scheme without details, useful
+            as a blurred placeholder until the full image loads.
+            Learn more about [Blurhash](/docs/cdn-operations/#operation-json-blurhash).
+          type: string
+          nullable: true
+          example: WXOfGPL~?vkpNGxv-CwdInXSt7V@?^%gRPkCofV@I;X9s:i{tRoy
+          readOnly: true
+      example:
+        id: d7fe74ac-65b8-4ade-875f-ccd92759a70f
+        dpi:
+          - 300
+          - 300
+        width: 3432
+        format: JPEG
+        height: 3432
+        sequence: false
+        color_mode: RGB
+        orientation: null
+        geo_location: null
+        datetime_original: '2020-06-07T10:38:16'
+        hash: e98d9466a33a9c8b
+  examples:
+    file:
+      value:
+        id: d7fe74ac-65b8-4ade-875f-ccd92759a70f
+        dpi:
+          - 300
+          - 300
+        width: 3432
+        format: JPEG
+        height: 3432
+        sequence: false
+        color_mode: RGB
+        orientation: null
+        geo_location: null
+        datetime_original: '2020-06-07T10:38:16'
+        hash: e98d9466a33a9c8b
+    image:
+      externalValue: https://ucarecdn.com/d7fe74ac-65b8-4ade-875f-ccd92759a70f/cat.jpg
+    imageNotFound:
+      externalValue: https://ucarecdn.com/d7fe74ac-65b8-4ade-875f-ccd92759a700/imageNotFound.jpg
