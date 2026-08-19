@@ -1,0 +1,185 @@
+{
+  "item": [
+    {
+      "id": "9fbcae5c-ec6f-4b06-8aa9-15d47730e4cb",
+      "name": "File names",
+      "description": {
+        "content": "Your original filenames can be accessed via [REST API](/docs/api/rest/).\nMake a request to receive a JSON response with file parameters including\n`original_filename`.\n\nYou can set an optional filename that users will see instead of the original name:\n\n```https://ucarecdn.com/:uuid/:filename```\n\n`:filename` should comply with [file name conventions](https://tools.ietf.org/html/rfc3986#section-3.3)\nand it should be a valid part of a URL. For example, `filename.ext`.\n\nHere are some examples with full CDN URLs:\n\n```\nSafe:\n\n// adding a simple filename\nhttps://ucarecdn.com/85b5644f-e692-4855-9db0-8c5a83096e25/image.jpg\n\n// using a char allowed in the pchar definition\nhttps://ucarecdn.com/85b5644f-e692-4855-9db0-8c5a83096e25/image@2x.jpg\n\n// allowed in pchar together with Image Transformations\nhttps://ucarecdn.com/85b5644f-e692-4855-9db0-8c5a83096e25/-/preview/-/resize/550x/image@1x.jpg\n\n// using a sub-delim allowed in pchar together with Image Transformations\nhttps://ucarecdn.com/85b5644f-e692-4855-9db0-8c5a83096e25/-/preview/-/grayscale/image_black&white@2x.jpg\n\n// using percent-encoded gen-delims that are not allowed in pchar\nhttps://ucarecdn.com/85b5644f-e692-4855-9db0-8c5a83096e25/-/preview/-/grayscale/image%5Bdesaturated%5D@2x.jpg\n\nUnsafe:\n\n// using gen-delims that are not allowed in pchar without encoding\nhttps://ucarecdn.com/85b5644f-e692-4855-9db0-8c5a83096e25/-/preview/-/grayscale/image[desaturated]@2x.jpg\n```\n",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "0ee67015-b4d1-4429-a935-e4d015a2ca4e",
+          "name": "File with a custom name",
+          "request": {
+            "name": "File with a custom name",
+            "description": {
+              "content": "You can set an optional filename that users will see instead of\nthe original name.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                ":uuid",
+                ":filename"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "uuid",
+                  "description": "(Required) Unique file identifier"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "filename",
+                  "description": "(Required) An optional filename that users will see instead of the original name.\n"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "image/jpeg"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "fd9fde8f-4040-4881-9a50-2add81e95418",
+              "name": "File with a custom name",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    ":uuid",
+                    ":filename"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "uuid",
+                      "description": "(Required) Unique file identifier"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "filename",
+                      "description": "(Required) An optional filename that users will see instead of the original name.\n"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "image/jpeg"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "image/jpeg"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "afacca24-3ff7-43e6-a7df-9d940b5f14fb",
+              "name": "Image with \"File not found\" text.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    ":uuid",
+                    ":filename"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "uuid",
+                      "description": "(Required) Unique file identifier"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "filename",
+                      "description": "(Required) An optional filename that users will see instead of the original name.\n"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "image/jpeg"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "image/jpeg"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://ucarecdn.com",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "88647ad0-c6c4-4024-9489-69abdf1c82c6",
+    "name": "URL API Reference Add-Ons File names API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Every uploaded file is immediately available on the Uploadcare CDN.\nThe CDN includes on-the-fly processing features and can work as a proxy.\n\n## API endpoints\nAccess files in Uploadcare CDN at `ucarecdn.com` over HTTP/HTTPS like this:\n```https://ucarecdn.com/:uuid/```\n\nYou can add CDN operations by including directives in the CDN URL:\n```https://ucarecdn.com/:uuid/-/:operation/:params/:filename```\n\n* `:uuid` stands for the unique file identifier, UUID, assigned on upload.\n* `/-/` is a mandatory parsing delimiter to divide operations and other path components.\n* `:operation/:params/` is a CDN operation directive with parameters.\n* `:filename` is an optional filename you can add after a trailing slash /.\n\nYou can stack two and more operations like this:\n```-/:operation/:params/-/:operation/:params/```\n\n\nContact Support:\n Name: API support\n Email: help@uploadcare.com",
+      "type": "text/plain"
+    }
+  }
+}

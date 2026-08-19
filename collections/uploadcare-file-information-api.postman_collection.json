@@ -1,0 +1,170 @@
+{
+  "item": [
+    {
+      "id": "79b6d5d0-120e-4898-a1c2-a3f926089fda",
+      "name": "File information",
+      "description": {
+        "content": "There are a few ways to get information about uploaded file.\nOne of them is on-the-fly with a request to CDN.\n\nNote: Other APIs also let you read file info:\n[after Upload](/docs/api/upload/upload/file-upload-info)\nand [at REST](/docs/api/rest/file/info).\n",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "72fdcfa2-f199-40f1-b646-833a84a14f5e",
+          "name": "File info as JSON",
+          "request": {
+            "name": "File info as JSON",
+            "description": {
+              "content": "Returns file-related information, such as image dimensions or geo\ntagging data in the JSON format.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                ":uuid",
+                "-",
+                "json",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "uuid",
+                  "description": "(Required) Unique file identifier"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "4161232e-64e8-4310-a159-c91c71edf410",
+              "name": "File",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    ":uuid",
+                    "-",
+                    "json",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "uuid",
+                      "description": "(Required) Unique file identifier"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"575ed4e8-f4e8-4c14-a58b-1527b6d9ee46\",\n  \"dpi\": [\n    72,\n    72\n  ],\n  \"width\": 2935,\n  \"format\": \"JPEG\",\n  \"height\": 2352,\n  \"sequence\": false,\n  \"color_mode\": \"RGBA\",\n  \"orientation\": 6,\n  \"geo_location\": {\n    \"latitude\": -1.1884555555555556,\n    \"longitude\": 52.66996666666667\n  },\n  \"datetime_original\": \"2018-09-13T16:23:40\",\n  \"hash\": \"940f5fd09aa48ddc\",\n  \"blurhash\": \"WXOfGPL~?vkpNGxv-CwdInXSt7V@?^%gRPkCofV@I;X9s:i{tRoy\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "43b0202e-4d41-4f27-ab78-73f38503e56d",
+              "name": "Image with \"File not found\" text.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    ":uuid",
+                    "-",
+                    "json",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "uuid",
+                      "description": "(Required) Unique file identifier"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "image/jpeg"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "image/jpeg"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://ucarecdn.com",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "6e728878-de73-4cdb-9f6a-480fa5556c60",
+    "name": "URL API Reference Add-Ons File information API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Every uploaded file is immediately available on the Uploadcare CDN.\nThe CDN includes on-the-fly processing features and can work as a proxy.\n\n## API endpoints\nAccess files in Uploadcare CDN at `ucarecdn.com` over HTTP/HTTPS like this:\n```https://ucarecdn.com/:uuid/```\n\nYou can add CDN operations by including directives in the CDN URL:\n```https://ucarecdn.com/:uuid/-/:operation/:params/:filename```\n\n* `:uuid` stands for the unique file identifier, UUID, assigned on upload.\n* `/-/` is a mandatory parsing delimiter to divide operations and other path components.\n* `:operation/:params/` is a CDN operation directive with parameters.\n* `:filename` is an optional filename you can add after a trailing slash /.\n\nYou can stack two and more operations like this:\n```-/:operation/:params/-/:operation/:params/```\n\n\nContact Support:\n Name: API support\n Email: help@uploadcare.com",
+      "type": "text/plain"
+    }
+  }
+}

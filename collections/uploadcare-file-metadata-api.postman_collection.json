@@ -1,0 +1,1277 @@
+{
+  "item": [
+    {
+      "id": "257810cd-627a-4eb3-8afe-202ab742cda7",
+      "name": "File metadata",
+      "description": {
+        "content": "File metadata is additional, arbitrary data, associated with uploaded file. As an example, you could store unique file identifier from your system.\n\nMetadata is key-value data. You can specify up to 50 keys, with key names up to 64 characters long and values up to 512 characters long.\nRead more in the [docs](https://uploadcare.com/docs/file-metadata/).\n\n**Notice:** Do not store any sensitive information (bank account numbers, card details, etc.) as metadata.\n\n**Notice:** File metadata is provided by the end-users uploading the files and can contain symbols unsafe in, for example, HTML context. Please escape the metadata before use according to the rules of the target runtime context (HTML browser, SQL query parameter, etc).\n",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "cf111ab8-3993-4a14-b04e-41a348ecf57a",
+          "name": "Get file's metadata",
+          "request": {
+            "name": "Get file's metadata",
+            "description": {
+              "content": "Get file's metadata keys and values.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "files",
+                ":uuid",
+                "metadata",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "uuid",
+                  "description": "(Required) File UUID."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "9e8fe9ab-dc93-4f6b-9f9c-9c5f368edb8d",
+              "name": "File metadata in JSON.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "files",
+                    ":uuid",
+                    "metadata",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "uuid",
+                      "description": "(Required) File UUID."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Version header.",
+                    "key": "Accept",
+                    "value": "application/vnd.uploadcare-v0.7+json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"subsystem\": \"uploader\",\n  \"pet\": \"cat\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e116c2db-2f5c-42e8-9e34-4c6b803ef6d0",
+              "name": "Simple authentication over HTTP is forbidden. Please, use HTTPS or signed requests instead.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "files",
+                    ":uuid",
+                    "metadata",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "uuid",
+                      "description": "(Required) File UUID."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Version header.",
+                    "key": "Accept",
+                    "value": "application/vnd.uploadcare-v0.7+json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Simple authentication over HTTP is forbidden. Please, use HTTPS or signed requests instead.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b956a743-082f-4932-8568-9eb0521b3956",
+              "name": "Authorization errors.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "files",
+                    ":uuid",
+                    "metadata",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "uuid",
+                      "description": "(Required) File UUID."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Version header.",
+                    "key": "Accept",
+                    "value": "application/vnd.uploadcare-v0.7+json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Incorrect authentication credentials.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "fcd260a3-6c94-41ee-928e-1f4416cb4981",
+              "name": "Invalid version header `Accept` for this endpoint.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "files",
+                    ":uuid",
+                    "metadata",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "uuid",
+                      "description": "(Required) File UUID."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Version header.",
+                    "key": "Accept",
+                    "value": "application/vnd.uploadcare-v0.7+json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Acceptable",
+              "code": 406,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Incorrect Accept header provided. Make sure to specify API version. Refer to REST API docs for details.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "c1fed6e6-0971-458b-8ab9-cc0312f066b4",
+          "name": "Get metadata key's value",
+          "request": {
+            "name": "Get metadata key's value",
+            "description": {
+              "content": "Get the value of a single metadata key.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "files",
+                ":uuid",
+                "metadata",
+                ":key",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "uuid",
+                  "description": "(Required) File UUID."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "key",
+                  "description": "(Required) Key of file metadata.\nList of allowed characters for the key:\n  - Latin letters in lower or upper case (a-z,A-Z)\n  - digits (0-9)\n  - underscore `_`\n  - a hyphen `-`\n  - dot `.`\n  - colon `:`\n"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "1d4ccfcb-a203-4100-8b6d-15a44ae886e6",
+              "name": "Value of a file's metadata key.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "files",
+                    ":uuid",
+                    "metadata",
+                    ":key",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "uuid",
+                      "description": "(Required) File UUID."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "key",
+                      "description": "(Required) Key of file metadata.\nList of allowed characters for the key:\n  - Latin letters in lower or upper case (a-z,A-Z)\n  - digits (0-9)\n  - underscore `_`\n  - a hyphen `-`\n  - dot `.`\n  - colon `:`\n"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Version header.",
+                    "key": "Accept",
+                    "value": "application/vnd.uploadcare-v0.7+json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"uploader\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "bd741540-8b6b-4685-b4a7-f4222e0d4c8c",
+              "name": "Simple authentication over HTTP is forbidden. Please, use HTTPS or signed requests instead.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "files",
+                    ":uuid",
+                    "metadata",
+                    ":key",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "uuid",
+                      "description": "(Required) File UUID."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "key",
+                      "description": "(Required) Key of file metadata.\nList of allowed characters for the key:\n  - Latin letters in lower or upper case (a-z,A-Z)\n  - digits (0-9)\n  - underscore `_`\n  - a hyphen `-`\n  - dot `.`\n  - colon `:`\n"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Version header.",
+                    "key": "Accept",
+                    "value": "application/vnd.uploadcare-v0.7+json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Simple authentication over HTTP is forbidden. Please, use HTTPS or signed requests instead.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "850ee57a-c3a8-473a-a00b-8de9be9f72ba",
+              "name": "Authorization errors.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "files",
+                    ":uuid",
+                    "metadata",
+                    ":key",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "uuid",
+                      "description": "(Required) File UUID."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "key",
+                      "description": "(Required) Key of file metadata.\nList of allowed characters for the key:\n  - Latin letters in lower or upper case (a-z,A-Z)\n  - digits (0-9)\n  - underscore `_`\n  - a hyphen `-`\n  - dot `.`\n  - colon `:`\n"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Version header.",
+                    "key": "Accept",
+                    "value": "application/vnd.uploadcare-v0.7+json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Incorrect authentication credentials.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "131f4f68-62d2-4ff6-aab8-aaf6c3c1ae9e",
+              "name": "Invalid version header `Accept` for this endpoint.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "files",
+                    ":uuid",
+                    "metadata",
+                    ":key",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "uuid",
+                      "description": "(Required) File UUID."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "key",
+                      "description": "(Required) Key of file metadata.\nList of allowed characters for the key:\n  - Latin letters in lower or upper case (a-z,A-Z)\n  - digits (0-9)\n  - underscore `_`\n  - a hyphen `-`\n  - dot `.`\n  - colon `:`\n"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Version header.",
+                    "key": "Accept",
+                    "value": "application/vnd.uploadcare-v0.7+json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Acceptable",
+              "code": 406,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Incorrect Accept header provided. Make sure to specify API version. Refer to REST API docs for details.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "4dea49e1-7686-4c8b-b19d-78028fcfcd9c",
+          "name": "Update metadata key's value",
+          "request": {
+            "name": "Update metadata key's value",
+            "description": {
+              "content": "Update the value of a single metadata key. If the key does not exist, it will be created.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "files",
+                ":uuid",
+                "metadata",
+                ":key",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "uuid",
+                  "description": "(Required) File UUID."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "key",
+                  "description": "(Required) Key of file metadata.\nList of allowed characters for the key:\n  - Latin letters in lower or upper case (a-z,A-Z)\n  - digits (0-9)\n  - underscore `_`\n  - a hyphen `-`\n  - dot `.`\n  - colon `:`\n"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "<string>",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "204ad3f8-da52-4996-8eec-68fff65f9bae",
+              "name": "Value of a file's metadata key successfully updated.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "files",
+                    ":uuid",
+                    "metadata",
+                    ":key",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "uuid",
+                      "description": "(Required) File UUID."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "key",
+                      "description": "(Required) Key of file metadata.\nList of allowed characters for the key:\n  - Latin letters in lower or upper case (a-z,A-Z)\n  - digits (0-9)\n  - underscore `_`\n  - a hyphen `-`\n  - dot `.`\n  - colon `:`\n"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Version header.",
+                    "key": "Accept",
+                    "value": "application/vnd.uploadcare-v0.7+json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "<string>",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"uploader\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b7d6a7ab-72d4-4766-a870-98410697f11a",
+              "name": "Key of a file metadata successfully added.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "files",
+                    ":uuid",
+                    "metadata",
+                    ":key",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "uuid",
+                      "description": "(Required) File UUID."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "key",
+                      "description": "(Required) Key of file metadata.\nList of allowed characters for the key:\n  - Latin letters in lower or upper case (a-z,A-Z)\n  - digits (0-9)\n  - underscore `_`\n  - a hyphen `-`\n  - dot `.`\n  - colon `:`\n"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Version header.",
+                    "key": "Accept",
+                    "value": "application/vnd.uploadcare-v0.7+json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "<string>",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"uploader\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5fb0bd8a-43d7-43e7-8691-7626c6023b51",
+              "name": "Simple authentication over HTTP is forbidden. Please, use HTTPS or signed requests instead.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "files",
+                    ":uuid",
+                    "metadata",
+                    ":key",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "uuid",
+                      "description": "(Required) File UUID."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "key",
+                      "description": "(Required) Key of file metadata.\nList of allowed characters for the key:\n  - Latin letters in lower or upper case (a-z,A-Z)\n  - digits (0-9)\n  - underscore `_`\n  - a hyphen `-`\n  - dot `.`\n  - colon `:`\n"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Version header.",
+                    "key": "Accept",
+                    "value": "application/vnd.uploadcare-v0.7+json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "<string>",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Simple authentication over HTTP is forbidden. Please, use HTTPS or signed requests instead.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8aadad66-8757-4ba1-8c0f-7cc2e2641b16",
+              "name": "Authorization errors.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "files",
+                    ":uuid",
+                    "metadata",
+                    ":key",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "uuid",
+                      "description": "(Required) File UUID."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "key",
+                      "description": "(Required) Key of file metadata.\nList of allowed characters for the key:\n  - Latin letters in lower or upper case (a-z,A-Z)\n  - digits (0-9)\n  - underscore `_`\n  - a hyphen `-`\n  - dot `.`\n  - colon `:`\n"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Version header.",
+                    "key": "Accept",
+                    "value": "application/vnd.uploadcare-v0.7+json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "<string>",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Incorrect authentication credentials.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1bf1bd0f-2203-4d26-a6e4-b5d3ac104e1e",
+              "name": "Invalid version header `Accept` for this endpoint.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "files",
+                    ":uuid",
+                    "metadata",
+                    ":key",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "uuid",
+                      "description": "(Required) File UUID."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "key",
+                      "description": "(Required) Key of file metadata.\nList of allowed characters for the key:\n  - Latin letters in lower or upper case (a-z,A-Z)\n  - digits (0-9)\n  - underscore `_`\n  - a hyphen `-`\n  - dot `.`\n  - colon `:`\n"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Version header.",
+                    "key": "Accept",
+                    "value": "application/vnd.uploadcare-v0.7+json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "<string>",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Acceptable",
+              "code": 406,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Incorrect Accept header provided. Make sure to specify API version. Refer to REST API docs for details.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "a9dfc9ff-bb56-43bc-a7ed-8b07e8223c2d",
+          "name": "Delete metadata key",
+          "request": {
+            "name": "Delete metadata key",
+            "description": {
+              "content": "Delete a file's metadata key.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "files",
+                ":uuid",
+                "metadata",
+                ":key",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "uuid",
+                  "description": "(Required) File UUID."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "key",
+                  "description": "(Required) Key of file metadata.\nList of allowed characters for the key:\n  - Latin letters in lower or upper case (a-z,A-Z)\n  - digits (0-9)\n  - underscore `_`\n  - a hyphen `-`\n  - dot `.`\n  - colon `:`\n"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "6bdbdaa7-a961-489b-a63c-ef9889104e97",
+              "name": "Key of a file metadata successfully deleted.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "files",
+                    ":uuid",
+                    "metadata",
+                    ":key",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "uuid",
+                      "description": "(Required) File UUID."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "key",
+                      "description": "(Required) Key of file metadata.\nList of allowed characters for the key:\n  - Latin letters in lower or upper case (a-z,A-Z)\n  - digits (0-9)\n  - underscore `_`\n  - a hyphen `-`\n  - dot `.`\n  - colon `:`\n"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Version header.",
+                    "key": "Accept",
+                    "value": "application/vnd.uploadcare-v0.7+json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "7cfbb128-c827-4728-93f8-91e94795e532",
+              "name": "Simple authentication over HTTP is forbidden. Please, use HTTPS or signed requests instead.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "files",
+                    ":uuid",
+                    "metadata",
+                    ":key",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "uuid",
+                      "description": "(Required) File UUID."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "key",
+                      "description": "(Required) Key of file metadata.\nList of allowed characters for the key:\n  - Latin letters in lower or upper case (a-z,A-Z)\n  - digits (0-9)\n  - underscore `_`\n  - a hyphen `-`\n  - dot `.`\n  - colon `:`\n"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Version header.",
+                    "key": "Accept",
+                    "value": "application/vnd.uploadcare-v0.7+json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Simple authentication over HTTP is forbidden. Please, use HTTPS or signed requests instead.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2e9a2be5-8238-4238-b348-c4750c7351d0",
+              "name": "Authorization errors.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "files",
+                    ":uuid",
+                    "metadata",
+                    ":key",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "uuid",
+                      "description": "(Required) File UUID."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "key",
+                      "description": "(Required) Key of file metadata.\nList of allowed characters for the key:\n  - Latin letters in lower or upper case (a-z,A-Z)\n  - digits (0-9)\n  - underscore `_`\n  - a hyphen `-`\n  - dot `.`\n  - colon `:`\n"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Version header.",
+                    "key": "Accept",
+                    "value": "application/vnd.uploadcare-v0.7+json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Incorrect authentication credentials.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a0e758a2-7ed7-4897-a645-eed0ff5a3c00",
+              "name": "Invalid version header `Accept` for this endpoint.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "files",
+                    ":uuid",
+                    "metadata",
+                    ":key",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "uuid",
+                      "description": "(Required) File UUID."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "key",
+                      "description": "(Required) Key of file metadata.\nList of allowed characters for the key:\n  - Latin letters in lower or upper case (a-z,A-Z)\n  - digits (0-9)\n  - underscore `_`\n  - a hyphen `-`\n  - dot `.`\n  - colon `:`\n"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Version header.",
+                    "key": "Accept",
+                    "value": "application/vnd.uploadcare-v0.7+json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Acceptable",
+              "code": 406,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Incorrect Accept header provided. Make sure to specify API version. Refer to REST API docs for details.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://ucarecdn.com",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "f70c710f-c248-489e-a8ea-b02add1640c0",
+    "name": "URL API Reference Add-Ons File metadata API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Every uploaded file is immediately available on the Uploadcare CDN.\nThe CDN includes on-the-fly processing features and can work as a proxy.\n\n## API endpoints\nAccess files in Uploadcare CDN at `ucarecdn.com` over HTTP/HTTPS like this:\n```https://ucarecdn.com/:uuid/```\n\nYou can add CDN operations by including directives in the CDN URL:\n```https://ucarecdn.com/:uuid/-/:operation/:params/:filename```\n\n* `:uuid` stands for the unique file identifier, UUID, assigned on upload.\n* `/-/` is a mandatory parsing delimiter to divide operations and other path components.\n* `:operation/:params/` is a CDN operation directive with parameters.\n* `:filename` is an optional filename you can add after a trailing slash /.\n\nYou can stack two and more operations like this:\n```-/:operation/:params/-/:operation/:params/```\n\n\nContact Support:\n Name: API support\n Email: help@uploadcare.com",
+      "type": "text/plain"
+    }
+  }
+}

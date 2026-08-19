@@ -1,0 +1,2863 @@
+{
+  "item": [
+    {
+      "id": "1991090a-3850-46af-b999-b47821c75526",
+      "name": "File",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "bd4160b9-0639-44d1-85e7-4d0e2451d7da",
+          "name": "List of files",
+          "request": {
+            "name": "List of files",
+            "description": {
+              "content": "Getting a paginated list of files. If you need multiple results pages, use `previous`/`next` from the response to navigate back/forth.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "files",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "removed",
+                  "value": "false",
+                  "description": "`true` to only include removed files in the response, `false` to include existing files. Defaults to `false`."
+                },
+                {
+                  "disabled": false,
+                  "key": "stored",
+                  "value": "<boolean>",
+                  "description": "`true` to only include files that were stored, `false` to include temporary ones. The default is unset: both stored and not stored files are returned."
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "100",
+                  "description": "A preferred amount of files in a list for a single response. Defaults to 100, while the maximum is 1000."
+                },
+                {
+                  "disabled": false,
+                  "key": "ordering",
+                  "value": "datetime_uploaded",
+                  "description": "Specifies the way files are sorted in a returned list. `datetime_uploaded` for ascending order, `-datetime_uploaded` for descending order."
+                },
+                {
+                  "disabled": false,
+                  "key": "from",
+                  "value": "<string>",
+                  "description": "A starting point for filtering the files. If provided, the value MUST adhere to the ISO 8601 Extended Date/Time Format (`YYYY-MM-DDTHH:MM:SSZ`)."
+                },
+                {
+                  "disabled": false,
+                  "key": "include",
+                  "value": "<string>",
+                  "description": "Include additional fields to the file object, such as: appdata."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "0637b1d3-4f53-4b8f-90c9-807aeea0b29a",
+              "name": "A list of files, paginated.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "files",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "removed",
+                      "value": "true"
+                    },
+                    {
+                      "key": "stored",
+                      "value": "true"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "100"
+                    },
+                    {
+                      "key": "ordering",
+                      "value": "-datetime_uploaded"
+                    },
+                    {
+                      "key": "from",
+                      "value": "2015-09-10T10:00:00Z"
+                    },
+                    {
+                      "key": "include",
+                      "value": "appdata"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Version header.",
+                    "key": "Accept",
+                    "value": "application/vnd.uploadcare-v0.7+json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"next\": \"https://api.uploadcare.com/files/?limit=1&from=2018-11-27T01%3A00%3A43.001705%2B00%3A00&offset=0\",\n  \"previous\": \"https://api.uploadcare.com/files/?limit=1&to=2018-11-27T01%3A00%3A36.436838%2B00%3A00&offset=0\",\n  \"total\": 2484,\n  \"totals\": {\n    \"removed\": 0,\n    \"stored\": 2480,\n    \"unstored\": 4\n  },\n  \"per_page\": 1,\n  \"results\": [\n    {\n      \"datetime_removed\": null,\n      \"datetime_stored\": \"2018-11-26T12:49:10.477888Z\",\n      \"datetime_uploaded\": \"2018-11-26T12:49:09.945335Z\",\n      \"variations\": null,\n      \"is_image\": true,\n      \"is_ready\": true,\n      \"mime_type\": \"image/jpeg\",\n      \"original_file_url\": \"https://ucarecdn.com/22240276-2f06-41f8-9411-755c8ce926ed/pineapple.jpg\",\n      \"original_filename\": \"pineapple.jpg\",\n      \"size\": 642,\n      \"url\": \"https://api.uploadcare.com/files/22240276-2f06-41f8-9411-755c8ce926ed/\",\n      \"uuid\": \"22240276-2f06-41f8-9411-755c8ce926ed\",\n      \"content_info\": {\n        \"mime\": {\n          \"mime\": \"image/jpeg\",\n          \"type\": \"image\",\n          \"subtype\": \"jpeg\"\n        },\n        \"image\": {\n          \"format\": \"JPEG\",\n          \"width\": 500,\n          \"height\": 500,\n          \"sequence\": false,\n          \"color_mode\": \"RGB\",\n          \"orientation\": 6,\n          \"geo_location\": {\n            \"latitude\": 55.62013611111111,\n            \"longitude\": 37.66299166666666\n          },\n          \"datetime_original\": \"2018-08-20T08:59:50\",\n          \"dpi\": [\n            72,\n            72\n          ]\n        }\n      },\n      \"metadata\": {\n        \"subsystem\": \"uploader\",\n        \"pet\": \"cat\"\n      },\n      \"appdata\": {\n        \"uc_clamav_virus_scan\": {\n          \"data\": {\n            \"infected\": true,\n            \"infected_with\": \"Win.Test.EICAR_HDB-1\"\n          },\n          \"version\": \"0.104.2\",\n          \"datetime_created\": \"2021-09-21T11:24:33.159663Z\",\n          \"datetime_updated\": \"2021-09-21T11:24:33.159663Z\"\n        }\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "09892db4-44ae-41f4-982b-6010b70f1009",
+              "name": "Simple authentication over HTTP is forbidden. Please, use HTTPS or signed requests instead.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "files",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "removed",
+                      "value": "true"
+                    },
+                    {
+                      "key": "stored",
+                      "value": "true"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "100"
+                    },
+                    {
+                      "key": "ordering",
+                      "value": "-datetime_uploaded"
+                    },
+                    {
+                      "key": "from",
+                      "value": "2015-09-10T10:00:00Z"
+                    },
+                    {
+                      "key": "include",
+                      "value": "appdata"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Version header.",
+                    "key": "Accept",
+                    "value": "application/vnd.uploadcare-v0.7+json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Simple authentication over HTTP is forbidden. Please, use HTTPS or signed requests instead.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "201f9ad6-5052-487f-a60f-cfd007e77827",
+              "name": "Authorization errors.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "files",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "removed",
+                      "value": "true"
+                    },
+                    {
+                      "key": "stored",
+                      "value": "true"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "100"
+                    },
+                    {
+                      "key": "ordering",
+                      "value": "-datetime_uploaded"
+                    },
+                    {
+                      "key": "from",
+                      "value": "2015-09-10T10:00:00Z"
+                    },
+                    {
+                      "key": "include",
+                      "value": "appdata"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Version header.",
+                    "key": "Accept",
+                    "value": "application/vnd.uploadcare-v0.7+json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Incorrect authentication credentials.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f0d55509-ed75-424e-bea2-6f8a743abd98",
+              "name": "Invalid version header `Accept` for this endpoint.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "files",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "removed",
+                      "value": "true"
+                    },
+                    {
+                      "key": "stored",
+                      "value": "true"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "100"
+                    },
+                    {
+                      "key": "ordering",
+                      "value": "-datetime_uploaded"
+                    },
+                    {
+                      "key": "from",
+                      "value": "2015-09-10T10:00:00Z"
+                    },
+                    {
+                      "key": "include",
+                      "value": "appdata"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Version header.",
+                    "key": "Accept",
+                    "value": "application/vnd.uploadcare-v0.7+json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Acceptable",
+              "code": 406,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Incorrect Accept header provided. Make sure to specify API version. Refer to REST API docs for details.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7d7d58a2-866b-4dc1-acb9-b65b3061803c",
+              "name": "Request was throttled.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "files",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "removed",
+                      "value": "true"
+                    },
+                    {
+                      "key": "stored",
+                      "value": "true"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "100"
+                    },
+                    {
+                      "key": "ordering",
+                      "value": "-datetime_uploaded"
+                    },
+                    {
+                      "key": "from",
+                      "value": "2015-09-10T10:00:00Z"
+                    },
+                    {
+                      "key": "include",
+                      "value": "appdata"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Version header.",
+                    "key": "Accept",
+                    "value": "application/vnd.uploadcare-v0.7+json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Number of seconds to wait before the next request.",
+                  "key": "Retry-After",
+                  "value": "10"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Request was throttled. Expected available in 10 seconds.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "9a573708-21c7-4ff5-9299-852bcd111b93",
+          "name": "Store file",
+          "request": {
+            "name": "Store file",
+            "description": {
+              "content": "Store a single file by UUID. When file is stored, it is available permanently. If not stored — it will only be available for 24 hours. If the parameter is omitted, it checks the `Auto file storing` setting of your Uploadcare project identified by the `public_key` provided in the `auth-param`.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "files",
+                ":uuid",
+                "storage",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "uuid",
+                  "description": "(Required) File UUID."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "a3f62bd4-8ec4-4cd3-8020-22d26cd72639",
+              "name": "File stored. File info in JSON.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "files",
+                    ":uuid",
+                    "storage",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "uuid",
+                      "description": "(Required) File UUID."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Version header.",
+                    "key": "Accept",
+                    "value": "application/vnd.uploadcare-v0.7+json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"datetime_removed\": \"2012-06-28T16:50:15.412Z\",\n  \"datetime_stored\": \"1950-09-25T22:51:16.613Z\",\n  \"datetime_uploaded\": \"1970-05-20T14:16:40.402Z\",\n  \"is_image\": true,\n  \"is_ready\": true,\n  \"mime_type\": \"image/jpeg\",\n  \"original_file_url\": \"https://ucarecdn.com/e575ed4e8-f4e8-4c14-a58b-1527b6d9ee46/EU_4.jpg\",\n  \"original_filename\": \"EU_4.jpg\",\n  \"size\": 145212,\n  \"url\": \"https://api.uploadcare.com/files/e10ce759-42c3-4185-bae5-e22a9143d68f/\",\n  \"uuid\": \"575ed4e8-f4e8-4c14-a58b-1527b6d9ee46\",\n  \"variations\": {},\n  \"content_info\": {\n    \"mime\": {\n      \"mime\": \"image/jpeg\",\n      \"type\": \"image\",\n      \"subtype\": \"jpeg\"\n    },\n    \"image\": {\n      \"color_mode\": \"RGBA\",\n      \"orientation\": 6,\n      \"format\": \"JPEG\",\n      \"height\": 2352,\n      \"width\": 2935,\n      \"geo_location\": {\n        \"latitude\": -1.1884555555555556,\n        \"longitude\": 52.66996666666667\n      },\n      \"datetime_original\": \"2018-09-13T16:23:40\",\n      \"dpi\": [\n        72,\n        72\n      ],\n      \"sequence\": false\n    },\n    \"video\": {\n      \"duration\": 261827,\n      \"format\": \"mp4\",\n      \"bitrate\": 393,\n      \"audio\": [\n        {\n          \"bitrate\": 78,\n          \"codec\": \"aac\",\n          \"sample_rate\": 44100,\n          \"channels\": 2\n        },\n        {\n          \"bitrate\": 78,\n          \"codec\": \"aac\",\n          \"sample_rate\": 44100,\n          \"channels\": 2\n        }\n      ],\n      \"video\": [\n        {\n          \"height\": 360,\n          \"width\": 640,\n          \"frame_rate\": 30,\n          \"bitrate\": 315,\n          \"codec\": \"h264\"\n        },\n        {\n          \"height\": 360,\n          \"width\": 640,\n          \"frame_rate\": 30,\n          \"bitrate\": 315,\n          \"codec\": \"h264\"\n        }\n      ]\n    }\n  },\n  \"metadata\": {},\n  \"appdata\": {\n    \"aws_rekognition_detect_labels\": {\n      \"version\": \"2016-06-27\",\n      \"datetime_created\": \"2019-08-27T06:04:55.256Z\",\n      \"datetime_updated\": \"2024-06-21T09:30:56.358Z\",\n      \"data\": {\n        \"Labels\": [\n          {\n            \"Name\": \"string\",\n            \"Parents\": [\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            ],\n            \"Instances\": [\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            ],\n            \"Confidence\": 2895.653798744421\n          },\n          {\n            \"Name\": \"string\",\n            \"Parents\": [\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            ],\n            \"Instances\": [\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            ],\n            \"Confidence\": 8951.681144806136\n          }\n        ],\n        \"LabelModelVersion\": \"string\"\n      }\n    },\n    \"aws_rekognition_detect_moderation_labels\": {\n      \"version\": \"2016-06-27\",\n      \"datetime_created\": \"1960-10-02T18:10:56.345Z\",\n      \"datetime_updated\": \"1947-12-08T00:05:05.870Z\",\n      \"data\": {\n        \"ModerationLabels\": [\n          {\n            \"Name\": \"string\",\n            \"ParentName\": \"string\",\n            \"Confidence\": 5099.900956547698\n          },\n          {\n            \"Name\": \"string\",\n            \"ParentName\": \"string\",\n            \"Confidence\": 6280.240585046639\n          }\n        ],\n        \"ModerationModelVersion\": \"string\"\n      }\n    },\n    \"remove_bg\": {\n      \"version\": \"1.0\",\n      \"datetime_created\": \"1986-03-23T13:23:37.155Z\",\n      \"datetime_updated\": \"2018-05-28T09:10:21.666Z\",\n      \"data\": {\n        \"foreground_type\": \"string\"\n      }\n    },\n    \"uc_clamav_virus_scan\": {\n      \"version\": \"0.105.1\",\n      \"datetime_created\": \"1985-10-06T20:45:57.975Z\",\n      \"datetime_updated\": \"1993-12-17T23:01:17.842Z\",\n      \"data\": {\n        \"infected\": true,\n        \"infected_with\": \"string\"\n      }\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "dba256e7-e190-4735-8a32-191559935c73",
+              "name": "Simple authentication over HTTP is forbidden. Please, use HTTPS or signed requests instead.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "files",
+                    ":uuid",
+                    "storage",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "uuid",
+                      "description": "(Required) File UUID."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Version header.",
+                    "key": "Accept",
+                    "value": "application/vnd.uploadcare-v0.7+json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Simple authentication over HTTP is forbidden. Please, use HTTPS or signed requests instead.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "93c75484-0804-4e2e-974f-d5468ee76217",
+              "name": "Authorization errors.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "files",
+                    ":uuid",
+                    "storage",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "uuid",
+                      "description": "(Required) File UUID."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Version header.",
+                    "key": "Accept",
+                    "value": "application/vnd.uploadcare-v0.7+json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Incorrect authentication credentials.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9f3e2d03-ab3d-498d-8f9a-e47bb334467b",
+              "name": "File not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "files",
+                    ":uuid",
+                    "storage",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "uuid",
+                      "description": "(Required) File UUID."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Version header.",
+                    "key": "Accept",
+                    "value": "application/vnd.uploadcare-v0.7+json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Not found.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2ff420c2-aa90-482b-9e15-5aba28f057cc",
+              "name": "Invalid version header `Accept` for this endpoint.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "files",
+                    ":uuid",
+                    "storage",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "uuid",
+                      "description": "(Required) File UUID."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Version header.",
+                    "key": "Accept",
+                    "value": "application/vnd.uploadcare-v0.7+json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {}
+              },
+              "status": "Not Acceptable",
+              "code": 406,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Incorrect Accept header provided. Make sure to specify API version. Refer to REST API docs for details.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "dd9b0e41-ed20-4bbc-aab8-9bb06146b775",
+              "name": "Request was throttled.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "files",
+                    ":uuid",
+                    "storage",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "uuid",
+                      "description": "(Required) File UUID."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Version header.",
+                    "key": "Accept",
+                    "value": "application/vnd.uploadcare-v0.7+json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Number of seconds to wait before the next request.",
+                  "key": "Retry-After",
+                  "value": "10"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Request was throttled. Expected available in 10 seconds.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "7df71d62-2cda-45a5-a068-4c1c99ee4268",
+          "name": "Delete file",
+          "request": {
+            "name": "Delete file",
+            "description": {
+              "content": "Removes individual files. Returns file info.\n\nNote: this operation removes the file from storage but doesn't invalidate CDN cache.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "files",
+                ":uuid",
+                "storage",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "uuid",
+                  "description": "(Required) File UUID."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "7fbbc6a3-4300-42d4-8a3e-0355be9be4e9",
+              "name": "File deleted. File info in JSON.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "files",
+                    ":uuid",
+                    "storage",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "uuid",
+                      "description": "(Required) File UUID."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Version header.",
+                    "key": "Accept",
+                    "value": "application/vnd.uploadcare-v0.7+json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"datetime_removed\": \"2018-11-26T12:49:11.477888Z\",\n  \"datetime_stored\": null,\n  \"datetime_uploaded\": \"2018-11-26T12:49:09.945335Z\",\n  \"variations\": null,\n  \"is_image\": true,\n  \"is_ready\": true,\n  \"mime_type\": \"image/jpeg\",\n  \"original_file_url\": \"https://ucarecdn.com/22240276-2f06-41f8-9411-755c8ce926ed/pineapple.jpg\",\n  \"original_filename\": \"pineapple.jpg\",\n  \"size\": 642,\n  \"url\": \"https://api.uploadcare.com/files/22240276-2f06-41f8-9411-755c8ce926ed/\",\n  \"uuid\": \"22240276-2f06-41f8-9411-755c8ce926ed\",\n  \"content_info\": {\n    \"mime\": {\n      \"mime\": \"image/jpeg\",\n      \"type\": \"image\",\n      \"subtype\": \"jpeg\"\n    },\n    \"image\": {\n      \"format\": \"JPEG\",\n      \"width\": 500,\n      \"height\": 500,\n      \"sequence\": false,\n      \"color_mode\": \"RGB\",\n      \"orientation\": 6,\n      \"geo_location\": {\n        \"latitude\": 55.62013611111111,\n        \"longitude\": 37.66299166666666\n      },\n      \"datetime_original\": \"2018-08-20T08:59:50\",\n      \"dpi\": [\n        72,\n        72\n      ]\n    }\n  },\n  \"metadata\": {\n    \"subsystem\": \"uploader\",\n    \"pet\": \"cat\"\n  },\n  \"appdata\": {\n    \"uc_clamav_virus_scan\": {\n      \"data\": {\n        \"infected\": true,\n        \"infected_with\": \"Win.Test.EICAR_HDB-1\"\n      },\n      \"version\": \"0.104.2\",\n      \"datetime_created\": \"2021-09-21T11:24:33.159663Z\",\n      \"datetime_updated\": \"2021-09-21T11:24:33.159663Z\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "62c7cae2-dc2d-43f2-a2ee-a4ff38c928ae",
+              "name": "Simple authentication over HTTP is forbidden. Please, use HTTPS or signed requests instead.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "files",
+                    ":uuid",
+                    "storage",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "uuid",
+                      "description": "(Required) File UUID."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Version header.",
+                    "key": "Accept",
+                    "value": "application/vnd.uploadcare-v0.7+json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Simple authentication over HTTP is forbidden. Please, use HTTPS or signed requests instead.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f06ce115-9abd-4518-94fa-cb5f1b79705b",
+              "name": "Authorization errors.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "files",
+                    ":uuid",
+                    "storage",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "uuid",
+                      "description": "(Required) File UUID."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Version header.",
+                    "key": "Accept",
+                    "value": "application/vnd.uploadcare-v0.7+json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Incorrect authentication credentials.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "aa94d0bb-867f-4a8c-841f-9816d6bc89c2",
+              "name": "File not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "files",
+                    ":uuid",
+                    "storage",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "uuid",
+                      "description": "(Required) File UUID."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Version header.",
+                    "key": "Accept",
+                    "value": "application/vnd.uploadcare-v0.7+json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Not found.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2008edb5-d061-4f07-aea2-13b1636ce3af",
+              "name": "Invalid version header `Accept` for this endpoint.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "files",
+                    ":uuid",
+                    "storage",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "uuid",
+                      "description": "(Required) File UUID."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Version header.",
+                    "key": "Accept",
+                    "value": "application/vnd.uploadcare-v0.7+json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Acceptable",
+              "code": 406,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Incorrect Accept header provided. Make sure to specify API version. Refer to REST API docs for details.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c3e9f01d-1272-45ba-b06b-3915adb2cc0b",
+              "name": "Request was throttled.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "files",
+                    ":uuid",
+                    "storage",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "uuid",
+                      "description": "(Required) File UUID."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Version header.",
+                    "key": "Accept",
+                    "value": "application/vnd.uploadcare-v0.7+json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Number of seconds to wait before the next request.",
+                  "key": "Retry-After",
+                  "value": "10"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Request was throttled. Expected available in 10 seconds.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "96324f91-845f-4004-a1c9-25cddc588e8d",
+          "name": "File info",
+          "request": {
+            "name": "File info",
+            "description": {
+              "content": "Get file information by its UUID (immutable).",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "files",
+                ":uuid",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "include",
+                  "value": "<string>",
+                  "description": "Include additional fields to the file object, such as: appdata."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "uuid",
+                  "description": "(Required) File UUID."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "feb8a6ae-bb86-495d-8a19-ecb424995918",
+              "name": "File info in JSON.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "files",
+                    ":uuid",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "include",
+                      "value": "appdata"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "uuid",
+                      "description": "(Required) File UUID."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Version header.",
+                    "key": "Accept",
+                    "value": "application/vnd.uploadcare-v0.7+json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"datetime_removed\": null,\n  \"datetime_stored\": \"2018-11-26T12:49:10.477888Z\",\n  \"datetime_uploaded\": \"2018-11-26T12:49:09.945335Z\",\n  \"variations\": null,\n  \"is_image\": true,\n  \"is_ready\": true,\n  \"mime_type\": \"image/jpeg\",\n  \"original_file_url\": \"https://ucarecdn.com/22240276-2f06-41f8-9411-755c8ce926ed/pineapple.jpg\",\n  \"original_filename\": \"pineapple.jpg\",\n  \"size\": 642,\n  \"url\": \"https://api.uploadcare.com/files/22240276-2f06-41f8-9411-755c8ce926ed/\",\n  \"uuid\": \"22240276-2f06-41f8-9411-755c8ce926ed\",\n  \"content_info\": {\n    \"mime\": {\n      \"mime\": \"image/jpeg\",\n      \"type\": \"image\",\n      \"subtype\": \"jpeg\"\n    },\n    \"image\": {\n      \"format\": \"JPEG\",\n      \"width\": 500,\n      \"height\": 500,\n      \"sequence\": false,\n      \"color_mode\": \"RGB\",\n      \"orientation\": 6,\n      \"geo_location\": {\n        \"latitude\": 55.62013611111111,\n        \"longitude\": 37.66299166666666\n      },\n      \"datetime_original\": \"2018-08-20T08:59:50\",\n      \"dpi\": [\n        72,\n        72\n      ]\n    }\n  },\n  \"metadata\": {\n    \"subsystem\": \"uploader\",\n    \"pet\": \"cat\"\n  },\n  \"appdata\": {\n    \"aws_rekognition_detect_labels\": {\n      \"data\": {\n        \"LabelModelVersion\": \"2.0\",\n        \"Labels\": [\n          {\n            \"Confidence\": 93.41645812988281,\n            \"Instances\": [],\n            \"Name\": \"Home Decor\",\n            \"Parents\": []\n          },\n          {\n            \"Confidence\": 70.75951385498047,\n            \"Instances\": [],\n            \"Name\": \"Linen\",\n            \"Parents\": [\n              {\n                \"Name\": \"Home Decor\"\n              }\n            ]\n          },\n          {\n            \"Confidence\": 64.7123794555664,\n            \"Instances\": [],\n            \"Name\": \"Sunlight\",\n            \"Parents\": []\n          },\n          {\n            \"Confidence\": 56.264793395996094,\n            \"Instances\": [],\n            \"Name\": \"Flare\",\n            \"Parents\": [\n              {\n                \"Name\": \"Light\"\n              }\n            ]\n          },\n          {\n            \"Confidence\": 50.47153854370117,\n            \"Instances\": [],\n            \"Name\": \"Tree\",\n            \"Parents\": [\n              {\n                \"Name\": \"Plant\"\n              }\n            ]\n          }\n        ]\n      },\n      \"version\": \"2016-06-27\",\n      \"datetime_created\": \"2021-09-21T11:25:31.259763Z\",\n      \"datetime_updated\": \"2021-09-21T11:27:33.359763Z\"\n    },\n    \"aws_rekognition_detect_moderation_labels\": {\n      \"data\": {\n        \"ModerationModelVersion\": \"6.0\",\n        \"ModerationLabels\": [\n          {\n            \"Confidence\": 93.41645812988281,\n            \"Name\": \"Weapons\",\n            \"ParentName\": \"Violence\"\n          }\n        ]\n      },\n      \"version\": \"2016-06-27\",\n      \"datetime_created\": \"2023-02-21T11:25:31.259763Z\",\n      \"datetime_updated\": \"2023-02-21T11:27:33.359763Z\"\n    },\n    \"remove_bg\": {\n      \"data\": {\n        \"foreground_type\": \"person\"\n      },\n      \"version\": \"1.0\",\n      \"datetime_created\": \"2021-07-25T12:24:33.159663Z\",\n      \"datetime_updated\": \"2021-07-25T12:24:33.159663Z\"\n    },\n    \"uc_clamav_virus_scan\": {\n      \"data\": {\n        \"infected\": true,\n        \"infected_with\": \"Win.Test.EICAR_HDB-1\"\n      },\n      \"version\": \"0.104.2\",\n      \"datetime_created\": \"2021-09-21T11:24:33.159663Z\",\n      \"datetime_updated\": \"2021-09-21T11:24:33.159663Z\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b0da672c-1724-4996-96ae-cf0128bec33d",
+              "name": "Simple authentication over HTTP is forbidden. Please, use HTTPS or signed requests instead.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "files",
+                    ":uuid",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "include",
+                      "value": "appdata"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "uuid",
+                      "description": "(Required) File UUID."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Version header.",
+                    "key": "Accept",
+                    "value": "application/vnd.uploadcare-v0.7+json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Simple authentication over HTTP is forbidden. Please, use HTTPS or signed requests instead.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ef3ccd2a-21ae-4c8a-a57c-d565769ed136",
+              "name": "Authorization errors.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "files",
+                    ":uuid",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "include",
+                      "value": "appdata"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "uuid",
+                      "description": "(Required) File UUID."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Version header.",
+                    "key": "Accept",
+                    "value": "application/vnd.uploadcare-v0.7+json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Incorrect authentication credentials.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "550d2a77-1095-46f5-ba71-ece434f9b42a",
+              "name": "File not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "files",
+                    ":uuid",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "include",
+                      "value": "appdata"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "uuid",
+                      "description": "(Required) File UUID."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Version header.",
+                    "key": "Accept",
+                    "value": "application/vnd.uploadcare-v0.7+json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Not found.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ad65d3c6-bb9d-4cc3-af9c-decea8407b7c",
+              "name": "Invalid version header `Accept` for this endpoint.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "files",
+                    ":uuid",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "include",
+                      "value": "appdata"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "uuid",
+                      "description": "(Required) File UUID."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Version header.",
+                    "key": "Accept",
+                    "value": "application/vnd.uploadcare-v0.7+json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Acceptable",
+              "code": 406,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Incorrect Accept header provided. Make sure to specify API version. Refer to REST API docs for details.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d1672505-78c5-4798-90a4-9b65dbb573f1",
+              "name": "Request was throttled.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "files",
+                    ":uuid",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "include",
+                      "value": "appdata"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "uuid",
+                      "description": "(Required) File UUID."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Version header.",
+                    "key": "Accept",
+                    "value": "application/vnd.uploadcare-v0.7+json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Number of seconds to wait before the next request.",
+                  "key": "Retry-After",
+                  "value": "10"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Request was throttled. Expected available in 10 seconds.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "43b49c2c-dee9-48b6-a495-716e2ddeb955",
+          "name": "Batch file storing",
+          "request": {
+            "name": "Batch file storing",
+            "description": {
+              "content": "Used to store multiple files in one go. Up to 100 files are supported per request. A JSON object holding your File list SHOULD be put into a request body.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "files",
+                "storage",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "[\n  \"<uuid>\",\n  \"<uuid>\"\n]",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "d2d3db81-4363-4193-83d2-3a61d2f21cd4",
+              "name": "OK. See `problems` and `result` fields in the response. In case a file list provided in a request holds invalid UUIDs, they'll be included in the `problems` structure. Invalid UUIDs can be incomplete, associated with files that no longer exist, etc.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "files",
+                    "storage",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Version header.",
+                    "key": "Accept",
+                    "value": "application/vnd.uploadcare-v0.7+json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  \"21975c81-7f57-4c7a-aef9-acfe28779f78\",\n  \"cbaf2d73-5169-4b2b-a543-496cf2813dff\"\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": \"ok\",\n  \"problems\": {\n    \"21975c81-7f57-4c7a-aef9-acfe28779f78\": \"Missing in the project\",\n    \"4j334o01-8bs3\": \"Invalid\"\n  },\n  \"result\": [\n    {\n      \"datetime_removed\": null,\n      \"datetime_stored\": \"2018-11-26T12:49:10.477888Z\",\n      \"datetime_uploaded\": \"2018-11-26T12:49:09.945335Z\",\n      \"variations\": null,\n      \"is_image\": true,\n      \"is_ready\": true,\n      \"mime_type\": \"image/jpeg\",\n      \"original_file_url\": \"https://ucarecdn.com/22240276-2f06-41f8-9411-755c8ce926ed/pineapple.jpg\",\n      \"original_filename\": \"pineapple.jpg\",\n      \"size\": 642,\n      \"url\": \"https://api.uploadcare.com/files/22240276-2f06-41f8-9411-755c8ce926ed/\",\n      \"uuid\": \"22240276-2f06-41f8-9411-755c8ce926ed\",\n      \"content_info\": {\n        \"mime\": {\n          \"mime\": \"image/jpeg\",\n          \"type\": \"image\",\n          \"subtype\": \"jpeg\"\n        },\n        \"image\": {\n          \"format\": \"JPEG\",\n          \"width\": 500,\n          \"height\": 500,\n          \"sequence\": false,\n          \"color_mode\": \"RGB\",\n          \"orientation\": 6,\n          \"geo_location\": {\n            \"latitude\": 55.62013611111111,\n            \"longitude\": 37.66299166666666\n          },\n          \"datetime_original\": \"2018-08-20T08:59:50\",\n          \"dpi\": [\n            72,\n            72\n          ]\n        }\n      },\n      \"metadata\": {\n        \"subsystem\": \"uploader\",\n        \"pet\": \"cat\"\n      },\n      \"appdata\": {\n        \"aws_rekognition_detect_labels\": {\n          \"data\": {\n            \"LabelModelVersion\": \"2.0\",\n            \"Labels\": [\n              {\n                \"Confidence\": 93.41645812988281,\n                \"Instances\": [],\n                \"Name\": \"Home Decor\",\n                \"Parents\": []\n              },\n              {\n                \"Confidence\": 70.75951385498047,\n                \"Instances\": [],\n                \"Name\": \"Linen\",\n                \"Parents\": [\n                  {\n                    \"Name\": \"Home Decor\"\n                  }\n                ]\n              },\n              {\n                \"Confidence\": 64.7123794555664,\n                \"Instances\": [],\n                \"Name\": \"Sunlight\",\n                \"Parents\": []\n              },\n              {\n                \"Confidence\": 56.264793395996094,\n                \"Instances\": [],\n                \"Name\": \"Flare\",\n                \"Parents\": [\n                  {\n                    \"Name\": \"Light\"\n                  }\n                ]\n              },\n              {\n                \"Confidence\": 50.47153854370117,\n                \"Instances\": [],\n                \"Name\": \"Tree\",\n                \"Parents\": [\n                  {\n                    \"Name\": \"Plant\"\n                  }\n                ]\n              }\n            ]\n          },\n          \"version\": \"2016-06-27\",\n          \"datetime_created\": \"2021-09-21T11:25:31.259763Z\",\n          \"datetime_updated\": \"2021-09-21T11:27:33.359763Z\"\n        },\n        \"aws_rekognition_detect_moderation_labels\": {\n          \"data\": {\n            \"ModerationModelVersion\": \"6.0\",\n            \"ModerationLabels\": [\n              {\n                \"Confidence\": 93.41645812988281,\n                \"Name\": \"Weapons\",\n                \"ParentName\": \"Violence\"\n              }\n            ]\n          },\n          \"version\": \"2016-06-27\",\n          \"datetime_created\": \"2023-02-21T11:25:31.259763Z\",\n          \"datetime_updated\": \"2023-02-21T11:27:33.359763Z\"\n        },\n        \"remove_bg\": {\n          \"data\": {\n            \"foreground_type\": \"person\"\n          },\n          \"version\": \"1.0\",\n          \"datetime_created\": \"2021-07-25T12:24:33.159663Z\",\n          \"datetime_updated\": \"2021-07-25T12:24:33.159663Z\"\n        },\n        \"uc_clamav_virus_scan\": {\n          \"data\": {\n            \"infected\": true,\n            \"infected_with\": \"Win.Test.EICAR_HDB-1\"\n          },\n          \"version\": \"0.104.2\",\n          \"datetime_created\": \"2021-09-21T11:24:33.159663Z\",\n          \"datetime_updated\": \"2021-09-21T11:24:33.159663Z\"\n        }\n      }\n    },\n    {\n      \"datetime_removed\": null,\n      \"datetime_stored\": \"2018-11-26T12:49:10.477888Z\",\n      \"datetime_uploaded\": \"2018-11-26T12:49:09.945335Z\",\n      \"variations\": null,\n      \"is_image\": true,\n      \"is_ready\": true,\n      \"mime_type\": \"image/jpeg\",\n      \"original_file_url\": \"https://ucarecdn.com/22240276-2f06-41f8-9411-755c8ce926ed/pineapple.jpg\",\n      \"original_filename\": \"pineapple.jpg\",\n      \"size\": 642,\n      \"url\": \"https://api.uploadcare.com/files/22240276-2f06-41f8-9411-755c8ce926ed/\",\n      \"uuid\": \"22240276-2f06-41f8-9411-755c8ce926ed\",\n      \"content_info\": {\n        \"mime\": {\n          \"mime\": \"image/jpeg\",\n          \"type\": \"image\",\n          \"subtype\": \"jpeg\"\n        },\n        \"image\": {\n          \"format\": \"JPEG\",\n          \"width\": 500,\n          \"height\": 500,\n          \"sequence\": false,\n          \"color_mode\": \"RGB\",\n          \"orientation\": 6,\n          \"geo_location\": {\n            \"latitude\": 55.62013611111111,\n            \"longitude\": 37.66299166666666\n          },\n          \"datetime_original\": \"2018-08-20T08:59:50\",\n          \"dpi\": [\n            72,\n            72\n          ]\n        }\n      },\n      \"metadata\": {\n        \"subsystem\": \"uploader\",\n        \"pet\": \"cat\"\n      },\n      \"appdata\": {\n        \"aws_rekognition_detect_labels\": {\n          \"data\": {\n            \"LabelModelVersion\": \"2.0\",\n            \"Labels\": [\n              {\n                \"Confidence\": 93.41645812988281,\n                \"Instances\": [],\n                \"Name\": \"Home Decor\",\n                \"Parents\": []\n              },\n              {\n                \"Confidence\": 70.75951385498047,\n                \"Instances\": [],\n                \"Name\": \"Linen\",\n                \"Parents\": [\n                  {\n                    \"Name\": \"Home Decor\"\n                  }\n                ]\n              },\n              {\n                \"Confidence\": 64.7123794555664,\n                \"Instances\": [],\n                \"Name\": \"Sunlight\",\n                \"Parents\": []\n              },\n              {\n                \"Confidence\": 56.264793395996094,\n                \"Instances\": [],\n                \"Name\": \"Flare\",\n                \"Parents\": [\n                  {\n                    \"Name\": \"Light\"\n                  }\n                ]\n              },\n              {\n                \"Confidence\": 50.47153854370117,\n                \"Instances\": [],\n                \"Name\": \"Tree\",\n                \"Parents\": [\n                  {\n                    \"Name\": \"Plant\"\n                  }\n                ]\n              }\n            ]\n          },\n          \"version\": \"2016-06-27\",\n          \"datetime_created\": \"2021-09-21T11:25:31.259763Z\",\n          \"datetime_updated\": \"2021-09-21T11:27:33.359763Z\"\n        },\n        \"aws_rekognition_detect_moderation_labels\": {\n          \"data\": {\n            \"ModerationModelVersion\": \"6.0\",\n            \"ModerationLabels\": [\n              {\n                \"Confidence\": 93.41645812988281,\n                \"Name\": \"Weapons\",\n                \"ParentName\": \"Violence\"\n              }\n            ]\n          },\n          \"version\": \"2016-06-27\",\n          \"datetime_created\": \"2023-02-21T11:25:31.259763Z\",\n          \"datetime_updated\": \"2023-02-21T11:27:33.359763Z\"\n        },\n        \"remove_bg\": {\n          \"data\": {\n            \"foreground_type\": \"person\"\n          },\n          \"version\": \"1.0\",\n          \"datetime_created\": \"2021-07-25T12:24:33.159663Z\",\n          \"datetime_updated\": \"2021-07-25T12:24:33.159663Z\"\n        },\n        \"uc_clamav_virus_scan\": {\n          \"data\": {\n            \"infected\": true,\n            \"infected_with\": \"Win.Test.EICAR_HDB-1\"\n          },\n          \"version\": \"0.104.2\",\n          \"datetime_created\": \"2021-09-21T11:24:33.159663Z\",\n          \"datetime_updated\": \"2021-09-21T11:24:33.159663Z\"\n        }\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "befef0c9-70d6-46ca-9e4c-c08c67a1ba44",
+              "name": "File UUIDs list validation errors.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "files",
+                    "storage",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Version header.",
+                    "key": "Accept",
+                    "value": "application/vnd.uploadcare-v0.7+json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  \"21975c81-7f57-4c7a-aef9-acfe28779f78\",\n  \"cbaf2d73-5169-4b2b-a543-496cf2813dff\"\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Simple authentication over HTTP is forbidden. Please, use HTTPS or signed requests instead.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "20367e9d-8969-4c34-9eab-d2cf343918a6",
+              "name": "Authorization errors.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "files",
+                    "storage",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Version header.",
+                    "key": "Accept",
+                    "value": "application/vnd.uploadcare-v0.7+json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  \"21975c81-7f57-4c7a-aef9-acfe28779f78\",\n  \"cbaf2d73-5169-4b2b-a543-496cf2813dff\"\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Incorrect authentication credentials.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "97ab5ef6-6d19-4b40-ae2d-0c21ae9f7af5",
+              "name": "Invalid version header `Accept` for this endpoint.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "files",
+                    "storage",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Version header.",
+                    "key": "Accept",
+                    "value": "application/vnd.uploadcare-v0.7+json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  \"21975c81-7f57-4c7a-aef9-acfe28779f78\",\n  \"cbaf2d73-5169-4b2b-a543-496cf2813dff\"\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Acceptable",
+              "code": 406,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Incorrect Accept header provided. Make sure to specify API version. Refer to REST API docs for details.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "eff644b0-acb1-4ba7-bcd6-3b8c90c3d0dc",
+              "name": "Request was throttled.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "files",
+                    "storage",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Version header.",
+                    "key": "Accept",
+                    "value": "application/vnd.uploadcare-v0.7+json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  \"21975c81-7f57-4c7a-aef9-acfe28779f78\",\n  \"cbaf2d73-5169-4b2b-a543-496cf2813dff\"\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Number of seconds to wait before the next request.",
+                  "key": "Retry-After",
+                  "value": "10"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Request was throttled. Expected available in 10 seconds.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "f4473971-653d-444f-899d-47ea7cabd471",
+          "name": "Batch file delete",
+          "request": {
+            "name": "Batch file delete",
+            "description": {
+              "content": "Used to delete multiple files in one go. Up to 100 files are supported per request. A JSON object holding your File list SHOULD be put into a request body.\n\nNote: this operation removes files from storage but doesn't invalidate CDN cache.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "files",
+                "storage",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "[\n  \"<uuid>\",\n  \"<uuid>\"\n]",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "e1da9bb6-ced0-4788-96ec-46b53b30dea3",
+              "name": "OK. See `problems` and `result` fields in the response. In case a file list provided in a request holds invalid UUIDs, they'll be included in the `problems` structure. Invalid UUIDs can be incomplete, associated with files that no longer exist, etc.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "files",
+                    "storage",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Version header.",
+                    "key": "Accept",
+                    "value": "application/vnd.uploadcare-v0.7+json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  \"21975c81-7f57-4c7a-aef9-acfe28779f78\",\n  \"cbaf2d73-5169-4b2b-a543-496cf2813dff\"\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": \"ok\",\n  \"problems\": {\n    \"21975c81-7f57-4c7a-aef9-acfe28779f78\": \"Missing in the project\",\n    \"4j334o01-8bs3\": \"Invalid\"\n  },\n  \"result\": [\n    {\n      \"datetime_removed\": null,\n      \"datetime_stored\": \"2018-11-26T12:49:10.477888Z\",\n      \"datetime_uploaded\": \"2018-11-26T12:49:09.945335Z\",\n      \"variations\": null,\n      \"is_image\": true,\n      \"is_ready\": true,\n      \"mime_type\": \"image/jpeg\",\n      \"original_file_url\": \"https://ucarecdn.com/22240276-2f06-41f8-9411-755c8ce926ed/pineapple.jpg\",\n      \"original_filename\": \"pineapple.jpg\",\n      \"size\": 642,\n      \"url\": \"https://api.uploadcare.com/files/22240276-2f06-41f8-9411-755c8ce926ed/\",\n      \"uuid\": \"22240276-2f06-41f8-9411-755c8ce926ed\",\n      \"content_info\": {\n        \"mime\": {\n          \"mime\": \"image/jpeg\",\n          \"type\": \"image\",\n          \"subtype\": \"jpeg\"\n        },\n        \"image\": {\n          \"format\": \"JPEG\",\n          \"width\": 500,\n          \"height\": 500,\n          \"sequence\": false,\n          \"color_mode\": \"RGB\",\n          \"orientation\": 6,\n          \"geo_location\": {\n            \"latitude\": 55.62013611111111,\n            \"longitude\": 37.66299166666666\n          },\n          \"datetime_original\": \"2018-08-20T08:59:50\",\n          \"dpi\": [\n            72,\n            72\n          ]\n        }\n      },\n      \"metadata\": {\n        \"subsystem\": \"uploader\",\n        \"pet\": \"cat\"\n      },\n      \"appdata\": {\n        \"aws_rekognition_detect_labels\": {\n          \"data\": {\n            \"LabelModelVersion\": \"2.0\",\n            \"Labels\": [\n              {\n                \"Confidence\": 93.41645812988281,\n                \"Instances\": [],\n                \"Name\": \"Home Decor\",\n                \"Parents\": []\n              },\n              {\n                \"Confidence\": 70.75951385498047,\n                \"Instances\": [],\n                \"Name\": \"Linen\",\n                \"Parents\": [\n                  {\n                    \"Name\": \"Home Decor\"\n                  }\n                ]\n              },\n              {\n                \"Confidence\": 64.7123794555664,\n                \"Instances\": [],\n                \"Name\": \"Sunlight\",\n                \"Parents\": []\n              },\n              {\n                \"Confidence\": 56.264793395996094,\n                \"Instances\": [],\n                \"Name\": \"Flare\",\n                \"Parents\": [\n                  {\n                    \"Name\": \"Light\"\n                  }\n                ]\n              },\n              {\n                \"Confidence\": 50.47153854370117,\n                \"Instances\": [],\n                \"Name\": \"Tree\",\n                \"Parents\": [\n                  {\n                    \"Name\": \"Plant\"\n                  }\n                ]\n              }\n            ]\n          },\n          \"version\": \"2016-06-27\",\n          \"datetime_created\": \"2021-09-21T11:25:31.259763Z\",\n          \"datetime_updated\": \"2021-09-21T11:27:33.359763Z\"\n        },\n        \"aws_rekognition_detect_moderation_labels\": {\n          \"data\": {\n            \"ModerationModelVersion\": \"6.0\",\n            \"ModerationLabels\": [\n              {\n                \"Confidence\": 93.41645812988281,\n                \"Name\": \"Weapons\",\n                \"ParentName\": \"Violence\"\n              }\n            ]\n          },\n          \"version\": \"2016-06-27\",\n          \"datetime_created\": \"2023-02-21T11:25:31.259763Z\",\n          \"datetime_updated\": \"2023-02-21T11:27:33.359763Z\"\n        },\n        \"remove_bg\": {\n          \"data\": {\n            \"foreground_type\": \"person\"\n          },\n          \"version\": \"1.0\",\n          \"datetime_created\": \"2021-07-25T12:24:33.159663Z\",\n          \"datetime_updated\": \"2021-07-25T12:24:33.159663Z\"\n        },\n        \"uc_clamav_virus_scan\": {\n          \"data\": {\n            \"infected\": true,\n            \"infected_with\": \"Win.Test.EICAR_HDB-1\"\n          },\n          \"version\": \"0.104.2\",\n          \"datetime_created\": \"2021-09-21T11:24:33.159663Z\",\n          \"datetime_updated\": \"2021-09-21T11:24:33.159663Z\"\n        }\n      }\n    },\n    {\n      \"datetime_removed\": null,\n      \"datetime_stored\": \"2018-11-26T12:49:10.477888Z\",\n      \"datetime_uploaded\": \"2018-11-26T12:49:09.945335Z\",\n      \"variations\": null,\n      \"is_image\": true,\n      \"is_ready\": true,\n      \"mime_type\": \"image/jpeg\",\n      \"original_file_url\": \"https://ucarecdn.com/22240276-2f06-41f8-9411-755c8ce926ed/pineapple.jpg\",\n      \"original_filename\": \"pineapple.jpg\",\n      \"size\": 642,\n      \"url\": \"https://api.uploadcare.com/files/22240276-2f06-41f8-9411-755c8ce926ed/\",\n      \"uuid\": \"22240276-2f06-41f8-9411-755c8ce926ed\",\n      \"content_info\": {\n        \"mime\": {\n          \"mime\": \"image/jpeg\",\n          \"type\": \"image\",\n          \"subtype\": \"jpeg\"\n        },\n        \"image\": {\n          \"format\": \"JPEG\",\n          \"width\": 500,\n          \"height\": 500,\n          \"sequence\": false,\n          \"color_mode\": \"RGB\",\n          \"orientation\": 6,\n          \"geo_location\": {\n            \"latitude\": 55.62013611111111,\n            \"longitude\": 37.66299166666666\n          },\n          \"datetime_original\": \"2018-08-20T08:59:50\",\n          \"dpi\": [\n            72,\n            72\n          ]\n        }\n      },\n      \"metadata\": {\n        \"subsystem\": \"uploader\",\n        \"pet\": \"cat\"\n      },\n      \"appdata\": {\n        \"aws_rekognition_detect_labels\": {\n          \"data\": {\n            \"LabelModelVersion\": \"2.0\",\n            \"Labels\": [\n              {\n                \"Confidence\": 93.41645812988281,\n                \"Instances\": [],\n                \"Name\": \"Home Decor\",\n                \"Parents\": []\n              },\n              {\n                \"Confidence\": 70.75951385498047,\n                \"Instances\": [],\n                \"Name\": \"Linen\",\n                \"Parents\": [\n                  {\n                    \"Name\": \"Home Decor\"\n                  }\n                ]\n              },\n              {\n                \"Confidence\": 64.7123794555664,\n                \"Instances\": [],\n                \"Name\": \"Sunlight\",\n                \"Parents\": []\n              },\n              {\n                \"Confidence\": 56.264793395996094,\n                \"Instances\": [],\n                \"Name\": \"Flare\",\n                \"Parents\": [\n                  {\n                    \"Name\": \"Light\"\n                  }\n                ]\n              },\n              {\n                \"Confidence\": 50.47153854370117,\n                \"Instances\": [],\n                \"Name\": \"Tree\",\n                \"Parents\": [\n                  {\n                    \"Name\": \"Plant\"\n                  }\n                ]\n              }\n            ]\n          },\n          \"version\": \"2016-06-27\",\n          \"datetime_created\": \"2021-09-21T11:25:31.259763Z\",\n          \"datetime_updated\": \"2021-09-21T11:27:33.359763Z\"\n        },\n        \"aws_rekognition_detect_moderation_labels\": {\n          \"data\": {\n            \"ModerationModelVersion\": \"6.0\",\n            \"ModerationLabels\": [\n              {\n                \"Confidence\": 93.41645812988281,\n                \"Name\": \"Weapons\",\n                \"ParentName\": \"Violence\"\n              }\n            ]\n          },\n          \"version\": \"2016-06-27\",\n          \"datetime_created\": \"2023-02-21T11:25:31.259763Z\",\n          \"datetime_updated\": \"2023-02-21T11:27:33.359763Z\"\n        },\n        \"remove_bg\": {\n          \"data\": {\n            \"foreground_type\": \"person\"\n          },\n          \"version\": \"1.0\",\n          \"datetime_created\": \"2021-07-25T12:24:33.159663Z\",\n          \"datetime_updated\": \"2021-07-25T12:24:33.159663Z\"\n        },\n        \"uc_clamav_virus_scan\": {\n          \"data\": {\n            \"infected\": true,\n            \"infected_with\": \"Win.Test.EICAR_HDB-1\"\n          },\n          \"version\": \"0.104.2\",\n          \"datetime_created\": \"2021-09-21T11:24:33.159663Z\",\n          \"datetime_updated\": \"2021-09-21T11:24:33.159663Z\"\n        }\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2cfb0f45-c789-47e7-b92d-23a5b49d555f",
+              "name": "File UUIDs list validation errors.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "files",
+                    "storage",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Version header.",
+                    "key": "Accept",
+                    "value": "application/vnd.uploadcare-v0.7+json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  \"21975c81-7f57-4c7a-aef9-acfe28779f78\",\n  \"cbaf2d73-5169-4b2b-a543-496cf2813dff\"\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Simple authentication over HTTP is forbidden. Please, use HTTPS or signed requests instead.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "36a250f6-672b-4f41-8494-c82eb854e4ac",
+              "name": "Authorization errors.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "files",
+                    "storage",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Version header.",
+                    "key": "Accept",
+                    "value": "application/vnd.uploadcare-v0.7+json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  \"21975c81-7f57-4c7a-aef9-acfe28779f78\",\n  \"cbaf2d73-5169-4b2b-a543-496cf2813dff\"\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Incorrect authentication credentials.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "43151775-2599-4b69-9fd6-d69ceb406f86",
+              "name": "Invalid version header `Accept` for this endpoint.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "files",
+                    "storage",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Version header.",
+                    "key": "Accept",
+                    "value": "application/vnd.uploadcare-v0.7+json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  \"21975c81-7f57-4c7a-aef9-acfe28779f78\",\n  \"cbaf2d73-5169-4b2b-a543-496cf2813dff\"\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Acceptable",
+              "code": 406,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Incorrect Accept header provided. Make sure to specify API version. Refer to REST API docs for details.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "06d3ce85-bd55-4271-939b-9037f943b6f5",
+              "name": "Request was throttled.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "files",
+                    "storage",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Version header.",
+                    "key": "Accept",
+                    "value": "application/vnd.uploadcare-v0.7+json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  \"21975c81-7f57-4c7a-aef9-acfe28779f78\",\n  \"cbaf2d73-5169-4b2b-a543-496cf2813dff\"\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Number of seconds to wait before the next request.",
+                  "key": "Retry-After",
+                  "value": "10"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Request was throttled. Expected available in 10 seconds.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "643de43b-8aaa-4049-888e-2fb758bff5c6",
+          "name": "Copy file to local storage",
+          "request": {
+            "name": "Copy file to local storage",
+            "description": {
+              "content": "POST requests are used to copy original files or their modified versions to a default storage.\n\nSource files MAY either be stored or just uploaded and MUST NOT be deleted.\n\nCopying of large files is not supported at the moment. If the file CDN URL includes transformation operators, its size MUST NOT exceed 100 MB. If not, the size MUST NOT exceed 5 GB.\n\nNote: In the immediate 201 response, the `result.size` can be `0` and the `result.mime_type` can be `application/octet-stream`. This indicates the copy has been initiated but is not yet completed.\nOnce the copy finishes, fetching the file info (e.g., `GET /files/{uuid}/`) will return the actual size and MIME type.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "files",
+                "local_copy",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"source\": \"<uri>\",\n  \"store\": \"false\",\n  \"metadata\": \"<object>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "5d490ac0-f18e-4365-bf20-2b0fb85a1e75",
+              "name": "The file was copied successfully. HTTP response contains `result` field with information about the copy.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "files",
+                    "local_copy",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Version header.",
+                    "key": "Accept",
+                    "value": "application/vnd.uploadcare-v0.7+json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"source\": \"03ccf9ab-f266-43fb-973d-a6529c55c2ae\",\n  \"store\": \"true\",\n  \"metadata\": {\n    \"subsystem\": \"uploader\",\n    \"pet\": \"cat\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"file\",\n  \"result\": {\n    \"datetime_removed\": \"2010-07-01T10:31:51.809Z\",\n    \"datetime_stored\": \"1964-12-21T10:17:05.915Z\",\n    \"datetime_uploaded\": \"1985-01-08T10:04:40.698Z\",\n    \"is_image\": true,\n    \"is_ready\": true,\n    \"mime_type\": \"image/jpeg\",\n    \"original_file_url\": \"https://KyrcyeAIdngI.mtpV492vCIEQsOJq1F3LZXQ8y6trjX425\",\n    \"original_filename\": \"EU_4.jpg\",\n    \"size\": 0,\n    \"url\": \"http://bLJCHTGmZmRMVmgUH.hiyED9mr0lgl+oThzx2Js61kVM5HYnEzuY\",\n    \"uuid\": \"575ed4e8-f4e8-4c14-a58b-1527b6d9ee46\",\n    \"variations\": {},\n    \"content_info\": {},\n    \"metadata\": {}\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "052bdf9f-df15-4c84-b535-96586285de21",
+              "name": "Possible errors for file copy endpoint.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "files",
+                    "local_copy",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Version header.",
+                    "key": "Accept",
+                    "value": "application/vnd.uploadcare-v0.7+json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"source\": \"03ccf9ab-f266-43fb-973d-a6529c55c2ae\",\n  \"store\": \"true\",\n  \"metadata\": {\n    \"subsystem\": \"uploader\",\n    \"pet\": \"cat\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"File is not ready yet.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "17eca682-9e24-4643-83df-5831b9bfbb11",
+              "name": "Authorization errors.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "files",
+                    "local_copy",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Version header.",
+                    "key": "Accept",
+                    "value": "application/vnd.uploadcare-v0.7+json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"source\": \"03ccf9ab-f266-43fb-973d-a6529c55c2ae\",\n  \"store\": \"true\",\n  \"metadata\": {\n    \"subsystem\": \"uploader\",\n    \"pet\": \"cat\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Incorrect authentication credentials.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a1576245-4c52-4812-b096-48b4a551b8ee",
+              "name": "Invalid version header `Accept` for this endpoint.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "files",
+                    "local_copy",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Version header.",
+                    "key": "Accept",
+                    "value": "application/vnd.uploadcare-v0.7+json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"source\": \"03ccf9ab-f266-43fb-973d-a6529c55c2ae\",\n  \"store\": \"true\",\n  \"metadata\": {\n    \"subsystem\": \"uploader\",\n    \"pet\": \"cat\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Acceptable",
+              "code": 406,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Incorrect Accept header provided. Make sure to specify API version. Refer to REST API docs for details.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e6079df5-d2a6-4eb4-8ce2-76017d104ee4",
+              "name": "Request was throttled.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "files",
+                    "local_copy",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Version header.",
+                    "key": "Accept",
+                    "value": "application/vnd.uploadcare-v0.7+json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"source\": \"03ccf9ab-f266-43fb-973d-a6529c55c2ae\",\n  \"store\": \"true\",\n  \"metadata\": {\n    \"subsystem\": \"uploader\",\n    \"pet\": \"cat\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Number of seconds to wait before the next request.",
+                  "key": "Retry-After",
+                  "value": "10"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Request was throttled. Expected available in 10 seconds.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "c7133672-2a9c-4ba4-b37a-1b41da7a4b85",
+          "name": "Copy file to remote storage",
+          "request": {
+            "name": "Copy file to remote storage",
+            "description": {
+              "content": "POST requests are used to copy original files or their modified versions to the S3 bucket.\n\nSource files MAY either be stored or just uploaded and MUST NOT be deleted.\n\nCopying of large files is not supported at the moment. File size MUST NOT exceed 5 GB.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "files",
+                "remote_copy",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"source\": \"<uri>\",\n  \"target\": \"<string>\",\n  \"make_public\": true,\n  \"pattern\": \"${default}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "208c0a0b-b110-41dc-b1b3-95a8a9fd02d7",
+              "name": "Destination file with that name already exists. Check the `pattern` parameter.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "files",
+                    "remote_copy",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Version header.",
+                    "key": "Accept",
+                    "value": "application/vnd.uploadcare-v0.7+json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"source\": \"03ccf9ab-f266-43fb-973d-a6529c55c2ae\",\n  \"target\": \"mytarget\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"url\",\n  \"result\": \"s3://mybucket/03ccf9ab-f266-43fb-973d-a6529c55c2ae/image.png\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9fd4a6e9-d5fd-43e2-b65d-d09626605673",
+              "name": "The file was copied successfully. HTTP response contains `result` field with the URL of the file on the remote storage.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "files",
+                    "remote_copy",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Version header.",
+                    "key": "Accept",
+                    "value": "application/vnd.uploadcare-v0.7+json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"source\": \"03ccf9ab-f266-43fb-973d-a6529c55c2ae\",\n  \"target\": \"mytarget\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"url\",\n  \"result\": \"s3://mybucket/03ccf9ab-f266-43fb-973d-a6529c55c2ae/image.png\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a2f1fa44-8917-4af2-ac46-430ba29192d6",
+              "name": "Simple HTTP auth. on HTTP or file copy errors.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "files",
+                    "remote_copy",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Version header.",
+                    "key": "Accept",
+                    "value": "application/vnd.uploadcare-v0.7+json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"source\": \"03ccf9ab-f266-43fb-973d-a6529c55c2ae\",\n  \"target\": \"mytarget\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Simple authentication over HTTP is forbidden. Please, use HTTPS or signed requests instead.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "698834b0-a22a-4453-815b-802bf28350da",
+              "name": "Authorization errors.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "files",
+                    "remote_copy",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Version header.",
+                    "key": "Accept",
+                    "value": "application/vnd.uploadcare-v0.7+json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"source\": \"03ccf9ab-f266-43fb-973d-a6529c55c2ae\",\n  \"target\": \"mytarget\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Incorrect authentication credentials.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d9001957-257f-4378-8539-cd3e97ac6383",
+              "name": "Invalid version header `Accept` for this endpoint.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "files",
+                    "remote_copy",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Version header.",
+                    "key": "Accept",
+                    "value": "application/vnd.uploadcare-v0.7+json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"source\": \"03ccf9ab-f266-43fb-973d-a6529c55c2ae\",\n  \"target\": \"mytarget\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Acceptable",
+              "code": 406,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Incorrect Accept header provided. Make sure to specify API version. Refer to REST API docs for details.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f1e61f02-0b6b-4d61-b8fc-4fc5a18c189a",
+              "name": "Request was throttled.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "files",
+                    "remote_copy",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Version header.",
+                    "key": "Accept",
+                    "value": "application/vnd.uploadcare-v0.7+json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"source\": \"03ccf9ab-f266-43fb-973d-a6529c55c2ae\",\n  \"target\": \"mytarget\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Number of seconds to wait before the next request.",
+                  "key": "Retry-After",
+                  "value": "10"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Request was throttled. Expected available in 10 seconds.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://ucarecdn.com",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "f77e0273-9928-4bb8-a136-4a3c14f6d210",
+    "name": "URL API Reference Add-Ons File API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Every uploaded file is immediately available on the Uploadcare CDN.\nThe CDN includes on-the-fly processing features and can work as a proxy.\n\n## API endpoints\nAccess files in Uploadcare CDN at `ucarecdn.com` over HTTP/HTTPS like this:\n```https://ucarecdn.com/:uuid/```\n\nYou can add CDN operations by including directives in the CDN URL:\n```https://ucarecdn.com/:uuid/-/:operation/:params/:filename```\n\n* `:uuid` stands for the unique file identifier, UUID, assigned on upload.\n* `/-/` is a mandatory parsing delimiter to divide operations and other path components.\n* `:operation/:params/` is a CDN operation directive with parameters.\n* `:filename` is an optional filename you can add after a trailing slash /.\n\nYou can stack two and more operations like this:\n```-/:operation/:params/-/:operation/:params/```\n\n\nContact Support:\n Name: API support\n Email: help@uploadcare.com",
+      "type": "text/plain"
+    }
+  }
+}

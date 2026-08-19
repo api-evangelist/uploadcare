@@ -1,0 +1,238 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "URL API Reference Add-Ons File API",
+    "version": "2022-11-28"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "File",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List of files",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://ucarecdn.com/files/",
+            "headers": [
+              {
+                "name": "Accept",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "removed",
+                "value": "",
+                "type": "query",
+                "description": "`true` to only include removed files in the response, `false` to include existing files. Defaults to `false`."
+              },
+              {
+                "name": "stored",
+                "value": "",
+                "type": "query",
+                "description": "`true` to only include files that were stored, `false` to include temporary ones. The default is unset: both stored and not stored files are returned."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "A preferred amount of files in a list for a single response. Defaults to 100, while the maximum is 1000."
+              },
+              {
+                "name": "ordering",
+                "value": "",
+                "type": "query",
+                "description": "Specifies the way files are sorted in a returned list. `datetime_uploaded` for ascending order, `-datetime_uploaded` for descending order."
+              },
+              {
+                "name": "from",
+                "value": "",
+                "type": "query",
+                "description": "A starting point for filtering the files. If provided, the value MUST adhere to the ISO 8601 Extended Date/Time Format (`YYYY-MM-DDTHH:MM:SSZ`)."
+              },
+              {
+                "name": "include",
+                "value": "appdata",
+                "type": "query",
+                "description": "Include additional fields to the file object, such as: appdata."
+              }
+            ]
+          },
+          "docs": "Getting a paginated list of files. If you need multiple results pages, use `previous`/`next` from the response to navigate back/forth."
+        },
+        {
+          "info": {
+            "name": "Store file",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://ucarecdn.com/files/:uuid/storage/",
+            "headers": [
+              {
+                "name": "Accept",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "uuid",
+                "value": "",
+                "type": "path",
+                "description": "File UUID."
+              }
+            ]
+          },
+          "docs": "Store a single file by UUID. When file is stored, it is available permanently. If not stored — it will only be available for 24 hours. If the parameter is omitted, it checks the `Auto file storing` setting of your Uploadcare project identified by the `public_key` provided in the `auth-param`."
+        },
+        {
+          "info": {
+            "name": "Delete file",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://ucarecdn.com/files/:uuid/storage/",
+            "headers": [
+              {
+                "name": "Accept",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "uuid",
+                "value": "",
+                "type": "path",
+                "description": "File UUID."
+              }
+            ]
+          },
+          "docs": "Removes individual files. Returns file info.\n\nNote: this operation removes the file from storage but doesn't invalidate CDN cache.\n"
+        },
+        {
+          "info": {
+            "name": "File info",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://ucarecdn.com/files/:uuid/",
+            "headers": [
+              {
+                "name": "Accept",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "uuid",
+                "value": "",
+                "type": "path",
+                "description": "File UUID."
+              },
+              {
+                "name": "include",
+                "value": "appdata",
+                "type": "query",
+                "description": "Include additional fields to the file object, such as: appdata."
+              }
+            ]
+          },
+          "docs": "Get file information by its UUID (immutable)."
+        },
+        {
+          "info": {
+            "name": "Batch file storing",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://ucarecdn.com/files/storage/",
+            "headers": [
+              {
+                "name": "Accept",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Used to store multiple files in one go. Up to 100 files are supported per request. A JSON object holding your File list SHOULD be put into a request body."
+        },
+        {
+          "info": {
+            "name": "Batch file delete",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://ucarecdn.com/files/storage/",
+            "headers": [
+              {
+                "name": "Accept",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Used to delete multiple files in one go. Up to 100 files are supported per request. A JSON object holding your File list SHOULD be put into a request body.\n\nNote: this operation removes files from storage but doesn't invalidate CDN cache.\n"
+        },
+        {
+          "info": {
+            "name": "Copy file to local storage",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://ucarecdn.com/files/local_copy/",
+            "headers": [
+              {
+                "name": "Accept",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "POST requests are used to copy original files or their modified versions to a default storage.\n\nSource files MAY either be stored or just uploaded and MUST NOT be deleted.\n\nCopying of large files is not supported at the moment. If the file CDN URL includes transformation operators, its size MUST NOT exceed 100 MB. If not, the size MUST NOT exceed 5 GB.\n\nNote: In the immediate 201 response, the `result.size` can be `0` and the `result.mime_type` can be `application/octet-stream`. This indicates t"
+        },
+        {
+          "info": {
+            "name": "Copy file to remote storage",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://ucarecdn.com/files/remote_copy/",
+            "headers": [
+              {
+                "name": "Accept",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "POST requests are used to copy original files or their modified versions to the S3 bucket.\n\nSource files MAY either be stored or just uploaded and MUST NOT be deleted.\n\nCopying of large files is not supported at the moment. File size MUST NOT exceed 5 GB.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

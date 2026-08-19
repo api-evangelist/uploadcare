@@ -1,0 +1,1804 @@
+{
+  "item": [
+    {
+      "id": "f1921a30-d3fd-4e7e-94a2-4fb1f9c91331",
+      "name": "Conversion",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "c3b1d6fa-a2b2-4dea-9269-2bc4bbdedfd0",
+          "name": "Document info",
+          "request": {
+            "name": "Document info",
+            "description": {
+              "content": "The endpoint allows you to determine the document format and possible conversion formats.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "convert",
+                "document",
+                ":uuid",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "uuid",
+                  "description": "(Required) File uuid."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "e832fada-029c-4b9d-a172-cd09635b4fef",
+              "name": "Success.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "convert",
+                    "document",
+                    ":uuid",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "uuid",
+                      "description": "(Required) File uuid."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Version header.",
+                    "key": "Accept",
+                    "value": "application/vnd.uploadcare-v0.7+json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": null,\n  \"format\": {\n    \"name\": \"txt\",\n    \"conversion_formats\": [\n      {\n        \"name\": \"epub\"\n      },\n      {\n        \"name\": \"pdf\"\n      }\n    ]\n  },\n  \"converted_groups\": {\n    \"pdf\": \"49732da8-1530-470c-8743-998c4c634718~5\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "00494c2a-d441-42ec-9783-c64ebcf0267b",
+              "name": "Simple HTTP Auth or document conversion permission errors.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "convert",
+                    "document",
+                    ":uuid",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "uuid",
+                      "description": "(Required) File uuid."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Version header.",
+                    "key": "Accept",
+                    "value": "application/vnd.uploadcare-v0.7+json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Simple authentication over HTTP is forbidden. Please, use HTTPS or signed requests instead.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b7d858f3-fbfe-4fc9-9f71-2a31ab4e74a6",
+              "name": "Authorization errors.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "convert",
+                    "document",
+                    ":uuid",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "uuid",
+                      "description": "(Required) File uuid."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Version header.",
+                    "key": "Accept",
+                    "value": "application/vnd.uploadcare-v0.7+json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Incorrect authentication credentials.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "83a49a88-2f1c-4f74-8f62-9adfd1ca4cf5",
+              "name": "Document with specified ID is not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "convert",
+                    "document",
+                    ":uuid",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "uuid",
+                      "description": "(Required) File uuid."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Version header.",
+                    "key": "Accept",
+                    "value": "application/vnd.uploadcare-v0.7+json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Not found.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b061fbf2-d61c-4dad-92bf-477a00af44ca",
+              "name": "Invalid version header `Accept` for this endpoint.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "convert",
+                    "document",
+                    ":uuid",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "uuid",
+                      "description": "(Required) File uuid."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Version header.",
+                    "key": "Accept",
+                    "value": "application/vnd.uploadcare-v0.7+json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Acceptable",
+              "code": 406,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Incorrect Accept header provided. Make sure to specify API version. Refer to REST API docs for details.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a5668317-dcc7-42ef-8439-f7b850a1d05f",
+              "name": "Request was throttled.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "convert",
+                    "document",
+                    ":uuid",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "uuid",
+                      "description": "(Required) File uuid."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Version header.",
+                    "key": "Accept",
+                    "value": "application/vnd.uploadcare-v0.7+json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Number of seconds to wait before the next request.",
+                  "key": "Retry-After",
+                  "value": "10"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Request was throttled. Expected available in 10 seconds.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f7c3b921-98a1-487a-9a05-01aab11d8b6d",
+              "name": "Conversion service error.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "convert",
+                    "document",
+                    ":uuid",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "uuid",
+                      "description": "(Required) File uuid."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Version header.",
+                    "key": "Accept",
+                    "value": "application/vnd.uploadcare-v0.7+json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "text/plain"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "string",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "5bbe14fc-5668-4260-a065-c2fc760dff42",
+          "name": "Convert document",
+          "request": {
+            "name": "Convert document",
+            "description": {
+              "content": "Uploadcare allows you to convert files to different target formats. Check out the [conversion capabilities](https://uploadcare.com/docs/transformations/file-conversion/#document-file-formats) for each supported format.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "convert",
+                "document",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"paths\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"store\": \"<string>\",\n  \"save_in_group\": \"0\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "c2726e9c-8958-4764-8a74-e6ee56ef9904",
+              "name": "Success.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "convert",
+                    "document",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Version header.",
+                    "key": "Accept",
+                    "value": "application/vnd.uploadcare-v0.7+json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"paths\": [\n    \"https://cdn.uploadcare.com/5ffa2545-ea40-4e71-a9e4-3a8e49b7b737/document/-/format/jpg/-/page/1/\",\n    \"18574696-50b5-4d6a-84c2-48ffc3de1d40/document/-/format/jpg/-/dpi/150/\",\n    \"18574696-50b5-4d6a-84c2-48ffc3de1d40/document/-/format/jpg/-/quality/80/\",\n    \"18574696-50b5-4d6a-84c2-48ffc3de1d40/document/-/format/jpg/-/dpi/200/-/quality/90/\",\n    \"88a51210-bd69-4411-bc72-a9952d9512cd/document/-/format/pdf/\",\n    \"8ddbbb48-0927-4df7-afac-c6031668b01b/document/\"\n  ],\n  \"store\": \"1\",\n  \"save_in_group\": \"1\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"problems\": {\n    \"key_0\": \"40491468-1ea6-3326-f47c-8d1dcae38376\"\n  },\n  \"result\": [\n    {\n      \"original_source\": \"string\",\n      \"uuid\": \"ca18ac0d-f8fe-f02e-42d6-5b6acb040080\",\n      \"token\": 9611\n    },\n    {\n      \"original_source\": \"string\",\n      \"uuid\": \"c918f4dc-c18f-c298-88c6-44328ffb14e4\",\n      \"token\": 3472\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "efef2c8d-3991-49e6-a46b-2c30f2775342",
+              "name": "Simple HTTP Auth or document conversion permission errors.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "convert",
+                    "document",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Version header.",
+                    "key": "Accept",
+                    "value": "application/vnd.uploadcare-v0.7+json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"paths\": [\n    \"https://cdn.uploadcare.com/5ffa2545-ea40-4e71-a9e4-3a8e49b7b737/document/-/format/jpg/-/page/1/\",\n    \"18574696-50b5-4d6a-84c2-48ffc3de1d40/document/-/format/jpg/-/dpi/150/\",\n    \"18574696-50b5-4d6a-84c2-48ffc3de1d40/document/-/format/jpg/-/quality/80/\",\n    \"18574696-50b5-4d6a-84c2-48ffc3de1d40/document/-/format/jpg/-/dpi/200/-/quality/90/\",\n    \"88a51210-bd69-4411-bc72-a9952d9512cd/document/-/format/pdf/\",\n    \"8ddbbb48-0927-4df7-afac-c6031668b01b/document/\"\n  ],\n  \"store\": \"1\",\n  \"save_in_group\": \"1\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Simple authentication over HTTP is forbidden. Please, use HTTPS or signed requests instead.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "33a23d0e-2e79-4825-8e25-9fd024e62bbe",
+              "name": "Authorization errors.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "convert",
+                    "document",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Version header.",
+                    "key": "Accept",
+                    "value": "application/vnd.uploadcare-v0.7+json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"paths\": [\n    \"https://cdn.uploadcare.com/5ffa2545-ea40-4e71-a9e4-3a8e49b7b737/document/-/format/jpg/-/page/1/\",\n    \"18574696-50b5-4d6a-84c2-48ffc3de1d40/document/-/format/jpg/-/dpi/150/\",\n    \"18574696-50b5-4d6a-84c2-48ffc3de1d40/document/-/format/jpg/-/quality/80/\",\n    \"18574696-50b5-4d6a-84c2-48ffc3de1d40/document/-/format/jpg/-/dpi/200/-/quality/90/\",\n    \"88a51210-bd69-4411-bc72-a9952d9512cd/document/-/format/pdf/\",\n    \"8ddbbb48-0927-4df7-afac-c6031668b01b/document/\"\n  ],\n  \"store\": \"1\",\n  \"save_in_group\": \"1\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Incorrect authentication credentials.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "587460ec-cdf9-4974-b91f-9c0d300321ad",
+              "name": "Invalid version header `Accept` for this endpoint.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "convert",
+                    "document",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Version header.",
+                    "key": "Accept",
+                    "value": "application/vnd.uploadcare-v0.7+json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"paths\": [\n    \"https://cdn.uploadcare.com/5ffa2545-ea40-4e71-a9e4-3a8e49b7b737/document/-/format/jpg/-/page/1/\",\n    \"18574696-50b5-4d6a-84c2-48ffc3de1d40/document/-/format/jpg/-/dpi/150/\",\n    \"18574696-50b5-4d6a-84c2-48ffc3de1d40/document/-/format/jpg/-/quality/80/\",\n    \"18574696-50b5-4d6a-84c2-48ffc3de1d40/document/-/format/jpg/-/dpi/200/-/quality/90/\",\n    \"88a51210-bd69-4411-bc72-a9952d9512cd/document/-/format/pdf/\",\n    \"8ddbbb48-0927-4df7-afac-c6031668b01b/document/\"\n  ],\n  \"store\": \"1\",\n  \"save_in_group\": \"1\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Acceptable",
+              "code": 406,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Incorrect Accept header provided. Make sure to specify API version. Refer to REST API docs for details.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "c7ddcd77-e131-422f-8c4f-8bc350511c31",
+          "name": "Document conversion job status",
+          "request": {
+            "name": "Document conversion job status",
+            "description": {
+              "content": "Once you get a conversion job result, you can acquire a conversion job status via token. Just put it in your request URL as `:token`.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "convert",
+                "document",
+                "status",
+                ":token",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "token",
+                  "description": "(Required) Job token."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "d63cd310-dfc2-4596-a878-166a990afe7d",
+              "name": "Success.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "convert",
+                    "document",
+                    "status",
+                    ":token",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "token",
+                      "description": "(Required) Job token."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Version header.",
+                    "key": "Accept",
+                    "value": "application/vnd.uploadcare-v0.7+json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": \"processing\",\n  \"error\": null,\n  \"result\": {\n    \"uuid\": \"500196bc-9da5-4aaf-8f3e-70a4ce86edae\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7ee218c9-f895-4318-85d3-00a30e599ad8",
+              "name": "Simple HTTP Auth or document conversion permission errors.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "convert",
+                    "document",
+                    "status",
+                    ":token",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "token",
+                      "description": "(Required) Job token."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Version header.",
+                    "key": "Accept",
+                    "value": "application/vnd.uploadcare-v0.7+json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Simple authentication over HTTP is forbidden. Please, use HTTPS or signed requests instead.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "42098676-059e-4f96-8e75-21af85f75d3e",
+              "name": "Authorization errors.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "convert",
+                    "document",
+                    "status",
+                    ":token",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "token",
+                      "description": "(Required) Job token."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Version header.",
+                    "key": "Accept",
+                    "value": "application/vnd.uploadcare-v0.7+json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Incorrect authentication credentials.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6cb1e89f-e656-41eb-84ae-3b7059739de1",
+              "name": "Job with specified ID is not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "convert",
+                    "document",
+                    "status",
+                    ":token",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "token",
+                      "description": "(Required) Job token."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Version header.",
+                    "key": "Accept",
+                    "value": "application/vnd.uploadcare-v0.7+json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Not found.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b8161a5a-4cca-4f0b-b195-16dc229b80ab",
+              "name": "Invalid version header `Accept` for this endpoint.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "convert",
+                    "document",
+                    "status",
+                    ":token",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "token",
+                      "description": "(Required) Job token."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Version header.",
+                    "key": "Accept",
+                    "value": "application/vnd.uploadcare-v0.7+json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Acceptable",
+              "code": 406,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Incorrect Accept header provided. Make sure to specify API version. Refer to REST API docs for details.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a6133178-5d11-4334-b81a-01a0eae267ef",
+              "name": "Request was throttled.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "convert",
+                    "document",
+                    "status",
+                    ":token",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "token",
+                      "description": "(Required) Job token."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Version header.",
+                    "key": "Accept",
+                    "value": "application/vnd.uploadcare-v0.7+json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Number of seconds to wait before the next request.",
+                  "key": "Retry-After",
+                  "value": "10"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Request was throttled. Expected available in 10 seconds.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5d788a99-8ff6-4c41-8732-27b5c18824a1",
+              "name": "Conversion service error.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "convert",
+                    "document",
+                    "status",
+                    ":token",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "token",
+                      "description": "(Required) Job token."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Version header.",
+                    "key": "Accept",
+                    "value": "application/vnd.uploadcare-v0.7+json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "text/plain"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "string",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "68dc0aa8-e5f2-4344-894b-b8ff277d42ca",
+          "name": "Convert video",
+          "request": {
+            "name": "Convert video",
+            "description": {
+              "content": "Uploadcare video processing adjusts video quality, format (mp4, webm, ogg), and size, cuts it, and generates thumbnails. Processed video is instantly available over CDN.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "convert",
+                "video",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"paths\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"store\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "3fc7e83b-df64-4b95-95d7-7595d16860b2",
+              "name": "Success.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "convert",
+                    "video",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Version header.",
+                    "key": "Accept",
+                    "value": "application/vnd.uploadcare-v0.7+json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"paths\": [\n    \"https://cdn.uploadcare.com/5ffa2545-ea40-4e71-a9e4-3a8e49b7b737/video/-/format/webm/\",\n    \"88a51210-bd69-4411-bc72-a9952d9512cd/video/-/format/ogg/-/quality/best/\",\n    \"8ddbbb48-0927-4df7-afac-c6031668b01b/video/\"\n  ],\n  \"store\": \"1\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"problems\": {\n    \"key_0\": \"630d6762-54de-3f14-977f-9aabf0732caa\"\n  },\n  \"result\": [\n    {\n      \"original_source\": \"string\",\n      \"uuid\": \"87d51566-e129-4c0b-9cde-e30f55cfa631\",\n      \"token\": 5045,\n      \"thumbnails_group_uuid\": \"fbb28c64-3e61-b0f9-e7c4-59912b909a93\"\n    },\n    {\n      \"original_source\": \"string\",\n      \"uuid\": \"f4f8e982-4b51-f3e5-8769-0508c2b6ea0d\",\n      \"token\": 6045,\n      \"thumbnails_group_uuid\": \"ba1a1e00-e31e-c336-27a7-c8ab59843d2c\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5775841b-2ef0-477a-84d4-914a4aaeb4e2",
+              "name": "Simple HTTP Auth or video conversion permission errors.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "convert",
+                    "video",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Version header.",
+                    "key": "Accept",
+                    "value": "application/vnd.uploadcare-v0.7+json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"paths\": [\n    \"https://cdn.uploadcare.com/5ffa2545-ea40-4e71-a9e4-3a8e49b7b737/video/-/format/webm/\",\n    \"88a51210-bd69-4411-bc72-a9952d9512cd/video/-/format/ogg/-/quality/best/\",\n    \"8ddbbb48-0927-4df7-afac-c6031668b01b/video/\"\n  ],\n  \"store\": \"1\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Simple authentication over HTTP is forbidden. Please, use HTTPS or signed requests instead.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "843b0e2a-27f3-44ce-bb2c-a75fb6015646",
+              "name": "Authorization errors.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "convert",
+                    "video",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Version header.",
+                    "key": "Accept",
+                    "value": "application/vnd.uploadcare-v0.7+json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"paths\": [\n    \"https://cdn.uploadcare.com/5ffa2545-ea40-4e71-a9e4-3a8e49b7b737/video/-/format/webm/\",\n    \"88a51210-bd69-4411-bc72-a9952d9512cd/video/-/format/ogg/-/quality/best/\",\n    \"8ddbbb48-0927-4df7-afac-c6031668b01b/video/\"\n  ],\n  \"store\": \"1\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Incorrect authentication credentials.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "42ca4835-2f7d-410c-b288-973496b94ed6",
+              "name": "Invalid version header `Accept` for this endpoint.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "convert",
+                    "video",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Version header.",
+                    "key": "Accept",
+                    "value": "application/vnd.uploadcare-v0.7+json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"paths\": [\n    \"https://cdn.uploadcare.com/5ffa2545-ea40-4e71-a9e4-3a8e49b7b737/video/-/format/webm/\",\n    \"88a51210-bd69-4411-bc72-a9952d9512cd/video/-/format/ogg/-/quality/best/\",\n    \"8ddbbb48-0927-4df7-afac-c6031668b01b/video/\"\n  ],\n  \"store\": \"1\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Acceptable",
+              "code": 406,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Incorrect Accept header provided. Make sure to specify API version. Refer to REST API docs for details.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "b85804c5-55ad-44f0-a1ac-26bef9c743c1",
+          "name": "Video conversion job status",
+          "request": {
+            "name": "Video conversion job status",
+            "description": {
+              "content": "Once you get a processing job result, you can acquire a processing job status via token. Just put it in your request URL as `:token`.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "convert",
+                "video",
+                "status",
+                ":token",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "token",
+                  "description": "(Required) Job token."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "54d87b0f-d84c-4edf-8ada-a0d50bbb50c2",
+              "name": "Success.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "convert",
+                    "video",
+                    "status",
+                    ":token",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "token",
+                      "description": "(Required) Job token."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Version header.",
+                    "key": "Accept",
+                    "value": "application/vnd.uploadcare-v0.7+json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": \"processing\",\n  \"error\": \"string\",\n  \"result\": {\n    \"uuid\": \"bbbadb4e-f4bf-0182-9f7a-b7cb02fc5f67\",\n    \"thumbnails_group_uuid\": \"96edd81e-9e5d-15d3-6c4d-7721c4ebb2b3\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6d426c1c-674f-4e39-b5fb-fd3b81df8f8e",
+              "name": "Simple HTTP Auth or video conversion permission errors.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "convert",
+                    "video",
+                    "status",
+                    ":token",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "token",
+                      "description": "(Required) Job token."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Version header.",
+                    "key": "Accept",
+                    "value": "application/vnd.uploadcare-v0.7+json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Simple authentication over HTTP is forbidden. Please, use HTTPS or signed requests instead.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f853f7c3-c83d-4ff8-9110-e41f053c2736",
+              "name": "Authorization errors.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "convert",
+                    "video",
+                    "status",
+                    ":token",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "token",
+                      "description": "(Required) Job token."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Version header.",
+                    "key": "Accept",
+                    "value": "application/vnd.uploadcare-v0.7+json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Incorrect authentication credentials.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "44580618-0478-4dc1-aa48-59c60b1b9f7d",
+              "name": "Job with specified ID is not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "convert",
+                    "video",
+                    "status",
+                    ":token",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "token",
+                      "description": "(Required) Job token."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Version header.",
+                    "key": "Accept",
+                    "value": "application/vnd.uploadcare-v0.7+json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Not found.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "fa0de51b-c3d8-4e1b-a25e-55cbeccfb0ce",
+              "name": "Invalid version header `Accept` for this endpoint.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "convert",
+                    "video",
+                    "status",
+                    ":token",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "token",
+                      "description": "(Required) Job token."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Version header.",
+                    "key": "Accept",
+                    "value": "application/vnd.uploadcare-v0.7+json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Acceptable",
+              "code": 406,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Incorrect Accept header provided. Make sure to specify API version. Refer to REST API docs for details.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2342100d-0671-4667-88db-a676d6a19966",
+              "name": "Request was throttled.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "convert",
+                    "video",
+                    "status",
+                    ":token",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "token",
+                      "description": "(Required) Job token."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Version header.",
+                    "key": "Accept",
+                    "value": "application/vnd.uploadcare-v0.7+json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Number of seconds to wait before the next request.",
+                  "key": "Retry-After",
+                  "value": "10"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Request was throttled. Expected available in 10 seconds.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1f69b46b-4b1b-4086-a0f7-71940f312b64",
+              "name": "Conversion service error.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "convert",
+                    "video",
+                    "status",
+                    ":token",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "token",
+                      "description": "(Required) Job token."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Version header.",
+                    "key": "Accept",
+                    "value": "application/vnd.uploadcare-v0.7+json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "text/plain"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "string",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://ucarecdn.com",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "3300a2d7-d551-45b4-ac52-10947b60b590",
+    "name": "URL API Reference Add-Ons Conversion API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Every uploaded file is immediately available on the Uploadcare CDN.\nThe CDN includes on-the-fly processing features and can work as a proxy.\n\n## API endpoints\nAccess files in Uploadcare CDN at `ucarecdn.com` over HTTP/HTTPS like this:\n```https://ucarecdn.com/:uuid/```\n\nYou can add CDN operations by including directives in the CDN URL:\n```https://ucarecdn.com/:uuid/-/:operation/:params/:filename```\n\n* `:uuid` stands for the unique file identifier, UUID, assigned on upload.\n* `/-/` is a mandatory parsing delimiter to divide operations and other path components.\n* `:operation/:params/` is a CDN operation directive with parameters.\n* `:filename` is an optional filename you can add after a trailing slash /.\n\nYou can stack two and more operations like this:\n```-/:operation/:params/-/:operation/:params/```\n\n\nContact Support:\n Name: API support\n Email: help@uploadcare.com",
+      "type": "text/plain"
+    }
+  }
+}

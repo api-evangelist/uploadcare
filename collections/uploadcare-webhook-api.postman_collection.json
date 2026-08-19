@@ -1,0 +1,1546 @@
+{
+  "item": [
+    {
+      "id": "0fa71887-fed8-4a49-84d5-845ab304f075",
+      "name": "Webhook",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "0bce6e0c-1bdb-49bc-adb0-88510780ff33",
+          "name": "List of webhooks",
+          "request": {
+            "name": "List of webhooks",
+            "description": {
+              "content": "List of project webhooks.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "webhooks",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "9b0cd9d4-8f12-4f32-bf28-c1dcf87c5cfa",
+              "name": "List of project webhooks.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "webhooks",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Version header.",
+                    "key": "Accept",
+                    "value": "application/vnd.uploadcare-v0.7+json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"id\": 1,\n    \"project\": 13,\n    \"created\": \"2016-04-27T11:49:54.948615Z\",\n    \"updated\": \"2016-04-27T12:04:57.819933Z\",\n    \"event\": \"file.infected\",\n    \"target_url\": \"http://example.com/hooks/receiver\",\n    \"is_active\": true,\n    \"signing_secret\": \"7kMVZivndx0ErgvhRKAr\",\n    \"version\": \"0.7\"\n  },\n  {\n    \"id\": 1,\n    \"project\": 13,\n    \"created\": \"2016-04-27T11:49:54.948615Z\",\n    \"updated\": \"2016-04-27T12:04:57.819933Z\",\n    \"event\": \"file.infected\",\n    \"target_url\": \"http://example.com/hooks/receiver\",\n    \"is_active\": true,\n    \"signing_secret\": \"7kMVZivndx0ErgvhRKAr\",\n    \"version\": \"0.7\"\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5d503e77-1437-44a5-bf84-cc38d3f2d98c",
+              "name": "Simple HTTP Auth or webhook permission errors.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "webhooks",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Version header.",
+                    "key": "Accept",
+                    "value": "application/vnd.uploadcare-v0.7+json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Simple authentication over HTTP is forbidden. Please, use HTTPS or signed requests instead.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5ea36972-1e32-4faf-ae5d-51d3df3792be",
+              "name": "Authorization errors.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "webhooks",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Version header.",
+                    "key": "Accept",
+                    "value": "application/vnd.uploadcare-v0.7+json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Incorrect authentication credentials.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "73c46814-f664-4525-8af8-61fad51b19f5",
+              "name": "Invalid version header `Accept` for this endpoint.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "webhooks",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Version header.",
+                    "key": "Accept",
+                    "value": "application/vnd.uploadcare-v0.7+json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Acceptable",
+              "code": 406,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Incorrect Accept header provided. Make sure to specify API version. Refer to REST API docs for details.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ad1d74f2-afcb-42fc-b76f-99c05a3cceaa",
+              "name": "Request was throttled.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "webhooks",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Version header.",
+                    "key": "Accept",
+                    "value": "application/vnd.uploadcare-v0.7+json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Number of seconds to wait before the next request.",
+                  "key": "Retry-After",
+                  "value": "10"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Request was throttled. Expected available in 10 seconds.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "03e65066-fe0c-462d-8a81-bb33d4f5da26",
+          "name": "Create webhook",
+          "request": {
+            "name": "Create webhook",
+            "description": {
+              "content": "Create and subscribe to a webhook. You can use webhooks to receive notifications about your uploads. For instance, once a file gets uploaded to your project, we can notify you by sending a message to a target URL.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "webhooks",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "disabled": false,
+                  "key": "target_url",
+                  "value": "<uri>",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "event",
+                  "value": "<string>",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "is_active",
+                  "value": "true"
+                },
+                {
+                  "disabled": false,
+                  "key": "signing_secret",
+                  "value": "<password>"
+                },
+                {
+                  "disabled": false,
+                  "key": "version",
+                  "value": "0.7"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "2526fb9f-76ed-407d-8d12-f8cdc94fa6f3",
+              "name": "Webhook successfully created.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "webhooks",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Version header.",
+                    "key": "Accept",
+                    "value": "application/vnd.uploadcare-v0.7+json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "target_url",
+                      "value": "http://example.com/hooks/receiver"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "event",
+                      "value": "file.uploaded"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "is_active",
+                      "value": "false"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "signing_secret",
+                      "value": "7kMVZivndx0ErgvhRKAr"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "version",
+                      "value": "0.7"
+                    }
+                  ]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": 1,\n  \"project\": 13,\n  \"created\": \"2016-04-27T11:49:54.948615Z\",\n  \"updated\": \"2016-04-27T12:04:57.819933Z\",\n  \"event\": \"file.infected\",\n  \"target_url\": \"http://example.com/hooks/receiver\",\n  \"is_active\": true,\n  \"signing_secret\": \"7kMVZivndx0ErgvhRKAr\",\n  \"version\": \"0.7\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8f9c3c6e-404c-4d20-885b-dbb598521ce9",
+              "name": "Simple HTTP Auth or webhook permission or endpoint errors.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "webhooks",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Version header.",
+                    "key": "Accept",
+                    "value": "application/vnd.uploadcare-v0.7+json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "target_url",
+                      "value": "http://example.com/hooks/receiver"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "event",
+                      "value": "file.uploaded"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "is_active",
+                      "value": "false"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "signing_secret",
+                      "value": "7kMVZivndx0ErgvhRKAr"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "version",
+                      "value": "0.7"
+                    }
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Simple authentication over HTTP is forbidden. Please, use HTTPS or signed requests instead.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "81ecd977-23d6-4b40-aa9b-916c012a503b",
+              "name": "Authorization errors.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "webhooks",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Version header.",
+                    "key": "Accept",
+                    "value": "application/vnd.uploadcare-v0.7+json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "target_url",
+                      "value": "http://example.com/hooks/receiver"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "event",
+                      "value": "file.uploaded"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "is_active",
+                      "value": "false"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "signing_secret",
+                      "value": "7kMVZivndx0ErgvhRKAr"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "version",
+                      "value": "0.7"
+                    }
+                  ]
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Incorrect authentication credentials.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "813c77a1-6bdd-4578-bd43-ab9994f98e32",
+              "name": "Invalid version header `Accept` for this endpoint.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "webhooks",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Version header.",
+                    "key": "Accept",
+                    "value": "application/vnd.uploadcare-v0.7+json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "target_url",
+                      "value": "http://example.com/hooks/receiver"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "event",
+                      "value": "file.uploaded"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "is_active",
+                      "value": "false"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "signing_secret",
+                      "value": "7kMVZivndx0ErgvhRKAr"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "version",
+                      "value": "0.7"
+                    }
+                  ]
+                }
+              },
+              "status": "Not Acceptable",
+              "code": 406,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Incorrect Accept header provided. Make sure to specify API version. Refer to REST API docs for details.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f8b249c3-433c-4d96-9493-bb01e651e054",
+              "name": "Request was throttled.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "webhooks",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Version header.",
+                    "key": "Accept",
+                    "value": "application/vnd.uploadcare-v0.7+json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "target_url",
+                      "value": "http://example.com/hooks/receiver"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "event",
+                      "value": "file.uploaded"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "is_active",
+                      "value": "false"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "signing_secret",
+                      "value": "7kMVZivndx0ErgvhRKAr"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "version",
+                      "value": "0.7"
+                    }
+                  ]
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Number of seconds to wait before the next request.",
+                  "key": "Retry-After",
+                  "value": "10"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Request was throttled. Expected available in 10 seconds.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "402fd902-8aa0-4f7f-9340-3752352877b6",
+          "name": "Update webhook",
+          "request": {
+            "name": "Update webhook",
+            "description": {
+              "content": "Update webhook attributes.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "webhooks",
+                ":id",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "id",
+                  "description": "(Required) Webhook ID."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "disabled": false,
+                  "key": "target_url",
+                  "value": "<uri>"
+                },
+                {
+                  "disabled": false,
+                  "key": "event",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "is_active",
+                  "value": "true"
+                },
+                {
+                  "disabled": false,
+                  "key": "signing_secret",
+                  "value": "<password>"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "63bb86c0-ecae-4942-946f-3b52433dfe0b",
+              "name": "Webhook attributes successfully updated.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "webhooks",
+                    ":id",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "id",
+                      "description": "(Required) Webhook ID."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Version header.",
+                    "key": "Accept",
+                    "value": "application/vnd.uploadcare-v0.7+json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "key": "target_url",
+                      "value": "http://example.com/hooks/receiver"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "event",
+                      "value": "file.uploaded"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "is_active",
+                      "value": "false"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "signing_secret",
+                      "value": "7kMVZivndx0ErgvhRKAr"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": 1,\n  \"project\": 13,\n  \"created\": \"2016-04-27T11:49:54.948615Z\",\n  \"updated\": \"2016-04-27T12:04:57.819933Z\",\n  \"event\": \"file.infected\",\n  \"target_url\": \"http://example.com/hooks/receiver\",\n  \"is_active\": true,\n  \"signing_secret\": \"7kMVZivndx0ErgvhRKAr\",\n  \"version\": \"0.7\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "92813ccb-6eb3-4ecb-9a25-b8191103c9d6",
+              "name": "Authorization errors.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "webhooks",
+                    ":id",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "id",
+                      "description": "(Required) Webhook ID."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Version header.",
+                    "key": "Accept",
+                    "value": "application/vnd.uploadcare-v0.7+json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "key": "target_url",
+                      "value": "http://example.com/hooks/receiver"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "event",
+                      "value": "file.uploaded"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "is_active",
+                      "value": "false"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "signing_secret",
+                      "value": "7kMVZivndx0ErgvhRKAr"
+                    }
+                  ]
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Incorrect authentication credentials.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f2fe8076-b90c-4ce4-9144-3855cd1dba47",
+              "name": "Webhook with ID {id} not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "webhooks",
+                    ":id",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "id",
+                      "description": "(Required) Webhook ID."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Version header.",
+                    "key": "Accept",
+                    "value": "application/vnd.uploadcare-v0.7+json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "key": "target_url",
+                      "value": "http://example.com/hooks/receiver"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "event",
+                      "value": "file.uploaded"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "is_active",
+                      "value": "false"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "signing_secret",
+                      "value": "7kMVZivndx0ErgvhRKAr"
+                    }
+                  ]
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Not found.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1ac11c72-1d00-4a0f-ac28-120d6ee43cf3",
+              "name": "Invalid version header `Accept` for this endpoint.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "webhooks",
+                    ":id",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "id",
+                      "description": "(Required) Webhook ID."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Version header.",
+                    "key": "Accept",
+                    "value": "application/vnd.uploadcare-v0.7+json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "key": "target_url",
+                      "value": "http://example.com/hooks/receiver"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "event",
+                      "value": "file.uploaded"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "is_active",
+                      "value": "false"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "signing_secret",
+                      "value": "7kMVZivndx0ErgvhRKAr"
+                    }
+                  ]
+                }
+              },
+              "status": "Not Acceptable",
+              "code": 406,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Incorrect Accept header provided. Make sure to specify API version. Refer to REST API docs for details.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "11f3a2af-da9d-430d-ac5c-2b112016fabe",
+              "name": "Request was throttled.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "webhooks",
+                    ":id",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "id",
+                      "description": "(Required) Webhook ID."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Version header.",
+                    "key": "Accept",
+                    "value": "application/vnd.uploadcare-v0.7+json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "key": "target_url",
+                      "value": "http://example.com/hooks/receiver"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "event",
+                      "value": "file.uploaded"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "is_active",
+                      "value": "false"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "signing_secret",
+                      "value": "7kMVZivndx0ErgvhRKAr"
+                    }
+                  ]
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Number of seconds to wait before the next request.",
+                  "key": "Retry-After",
+                  "value": "10"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Request was throttled. Expected available in 10 seconds.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "1bd2baf1-959e-470c-815d-f39ef253b45d",
+          "name": "Delete webhook",
+          "request": {
+            "name": "Delete webhook",
+            "description": {
+              "content": "Unsubscribe and delete a webhook.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "webhooks",
+                "unsubscribe",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": null,
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "disabled": false,
+                  "key": "target_url",
+                  "value": "<uri>",
+                  "description": "(Required) "
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "eb5a7871-7e91-43e7-b031-1f78ece3db37",
+              "name": "Webhook successfully deleted.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "webhooks",
+                    "unsubscribe",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Version header.",
+                    "key": "Accept",
+                    "value": "application/vnd.uploadcare-v0.7+json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "target_url",
+                      "value": "http://example.com/hooks/receiver"
+                    }
+                  ]
+                }
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "cc74c5e1-d1a3-4968-a12b-5981402aa3a2",
+              "name": "Simple HTTP Auth or webhook permission or endpoint errors.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "webhooks",
+                    "unsubscribe",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Version header.",
+                    "key": "Accept",
+                    "value": "application/vnd.uploadcare-v0.7+json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "target_url",
+                      "value": "http://example.com/hooks/receiver"
+                    }
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Simple authentication over HTTP is forbidden. Please, use HTTPS or signed requests instead.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "fa65d7d9-a79c-4a6a-9332-02e61477c216",
+              "name": "Authorization errors.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "webhooks",
+                    "unsubscribe",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Version header.",
+                    "key": "Accept",
+                    "value": "application/vnd.uploadcare-v0.7+json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "target_url",
+                      "value": "http://example.com/hooks/receiver"
+                    }
+                  ]
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Incorrect authentication credentials.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "862acb6d-d7f5-4fbc-bb96-6d5727e2bcd2",
+              "name": "Invalid version header `Accept` for this endpoint.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "webhooks",
+                    "unsubscribe",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Version header.",
+                    "key": "Accept",
+                    "value": "application/vnd.uploadcare-v0.7+json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "target_url",
+                      "value": "http://example.com/hooks/receiver"
+                    }
+                  ]
+                }
+              },
+              "status": "Not Acceptable",
+              "code": 406,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Incorrect Accept header provided. Make sure to specify API version. Refer to REST API docs for details.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "111b8aa2-f869-458e-9ec7-8634f8dd0000",
+              "name": "Request was throttled.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "webhooks",
+                    "unsubscribe",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Version header.",
+                    "key": "Accept",
+                    "value": "application/vnd.uploadcare-v0.7+json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "target_url",
+                      "value": "http://example.com/hooks/receiver"
+                    }
+                  ]
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Number of seconds to wait before the next request.",
+                  "key": "Retry-After",
+                  "value": "10"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Request was throttled. Expected available in 10 seconds.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://ucarecdn.com",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "aec2525a-5d69-469e-9a69-6500d3ff17d5",
+    "name": "URL API Reference Add-Ons Webhook API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Every uploaded file is immediately available on the Uploadcare CDN.\nThe CDN includes on-the-fly processing features and can work as a proxy.\n\n## API endpoints\nAccess files in Uploadcare CDN at `ucarecdn.com` over HTTP/HTTPS like this:\n```https://ucarecdn.com/:uuid/```\n\nYou can add CDN operations by including directives in the CDN URL:\n```https://ucarecdn.com/:uuid/-/:operation/:params/:filename```\n\n* `:uuid` stands for the unique file identifier, UUID, assigned on upload.\n* `/-/` is a mandatory parsing delimiter to divide operations and other path components.\n* `:operation/:params/` is a CDN operation directive with parameters.\n* `:filename` is an optional filename you can add after a trailing slash /.\n\nYou can stack two and more operations like this:\n```-/:operation/:params/-/:operation/:params/```\n\n\nContact Support:\n Name: API support\n Email: help@uploadcare.com",
+      "type": "text/plain"
+    }
+  }
+}

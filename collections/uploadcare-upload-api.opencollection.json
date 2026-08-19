@@ -1,0 +1,266 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "URL API Reference Add-Ons Upload API",
+    "version": "2022-11-28"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Upload",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Direct uploads",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://ucarecdn.com/base/",
+            "body": {
+              "type": "multipart-form",
+              "data": [
+                {
+                  "name": "UPLOADCARE_PUB_KEY",
+                  "type": "text",
+                  "value": ""
+                },
+                {
+                  "name": "UPLOADCARE_STORE",
+                  "type": "text",
+                  "value": ""
+                },
+                {
+                  "name": "{filename}",
+                  "type": "text",
+                  "value": ""
+                },
+                {
+                  "name": "metadata[{key}]",
+                  "type": "text",
+                  "value": ""
+                },
+                {
+                  "name": "signature",
+                  "type": "text",
+                  "value": ""
+                },
+                {
+                  "name": "expire",
+                  "type": "text",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "docs": "Direct file uploads comply with the [RFC 7578](https://www.rfc-editor.org/rfc/rfc7578) standard.\nIn other words, you can perform a direct upload by making an HTTP POST request with the Content-Type\nheader set to `multipart/form-data`.\n\n**Note**: Direct file uploads support files smaller than 100 megabytes only.\nIf you would like to upload larger files, please use [Multipart Uploads](/docs/api/upload/upload/multipart-file-upload-start) instead.\n\nFile upload example with curl:\n\n```\ncurl -X POST ht"
+        },
+        {
+          "info": {
+            "name": "Start multipart upload",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://ucarecdn.com/multipart/start/",
+            "body": {
+              "type": "multipart-form",
+              "data": [
+                {
+                  "name": "UPLOADCARE_PUB_KEY",
+                  "type": "text",
+                  "value": ""
+                },
+                {
+                  "name": "UPLOADCARE_STORE",
+                  "type": "text",
+                  "value": ""
+                },
+                {
+                  "name": "filename",
+                  "type": "text",
+                  "value": ""
+                },
+                {
+                  "name": "size",
+                  "type": "text",
+                  "value": ""
+                },
+                {
+                  "name": "part_size",
+                  "type": "text",
+                  "value": ""
+                },
+                {
+                  "name": "content_type",
+                  "type": "text",
+                  "value": ""
+                },
+                {
+                  "name": "metadata[{key}]",
+                  "type": "text",
+                  "value": ""
+                },
+                {
+                  "name": "signature",
+                  "type": "text",
+                  "value": ""
+                },
+                {
+                  "name": "expire",
+                  "type": "text",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "docs": "Multipart uploads should be used if you need to upload files larger than 100 megabytes or if you want to\nexplicitly trigger [AWS S3 Transfer Acceleration](https://aws.amazon.com/s3/transfer-acceleration/).\nWhen you use Multipart Uploads your files go straight to AWS S3 bypassing our upload instances.\n\nTo upload large files, 3 requests are sent in sequence:\n1. `/multipart/start/`\n2. `<presigned-url-x>`\n3. `/multipart/complete/`.\n\n**Note**: Multipart uploads support files larger than 10 megabytes "
+        },
+        {
+          "info": {
+            "name": "Upload individual file parts",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://ucarecdn.com/<presigned-url-x>"
+          },
+          "docs": "The second phase is about uploading the file parts to the presigned upload URLs returned from the\n`/multipart/start/` endpoint.\n\nEach uploaded part should be at least 5 MiB (5242880 bytes) in size except for the last one, which can be smaller.\nYou can upload the file parts in parallel provided that the byte order stays unchanged.\n\n**Note**: You MUST define `Content-Type` header for your data.\n"
+        },
+        {
+          "info": {
+            "name": "Complete multipart upload",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://ucarecdn.com/multipart/complete/",
+            "body": {
+              "type": "multipart-form",
+              "data": [
+                {
+                  "name": "UPLOADCARE_PUB_KEY",
+                  "type": "text",
+                  "value": ""
+                },
+                {
+                  "name": "uuid",
+                  "type": "text",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "docs": "Once all the file parts have been uploaded successfully, complete the\nupload session to assemble all the file parts into a single resulting file.\n"
+        },
+        {
+          "info": {
+            "name": "Upload files from URLs",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://ucarecdn.com/from_url/",
+            "body": {
+              "type": "multipart-form",
+              "data": [
+                {
+                  "name": "pub_key",
+                  "type": "text",
+                  "value": ""
+                },
+                {
+                  "name": "source_url",
+                  "type": "text",
+                  "value": ""
+                },
+                {
+                  "name": "store",
+                  "type": "text",
+                  "value": ""
+                },
+                {
+                  "name": "filename",
+                  "type": "text",
+                  "value": ""
+                },
+                {
+                  "name": "check_URL_duplicates",
+                  "type": "text",
+                  "value": ""
+                },
+                {
+                  "name": "save_URL_duplicates",
+                  "type": "text",
+                  "value": ""
+                },
+                {
+                  "name": "metadata[{key}]",
+                  "type": "text",
+                  "value": ""
+                },
+                {
+                  "name": "signature",
+                  "type": "text",
+                  "value": ""
+                },
+                {
+                  "name": "expire",
+                  "type": "text",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "docs": "Uploadcare can fetch a file from a publicly available URL and then automatically upload the\nfetched file to your project.\n\n#### Upload tokens\nRequests to the endpoint return a JSON dictionary with a `token` that can be further used\nto [check the status](/docs/api/upload/upload/from-url-upload-status) of the upload\nrequest.\n\n**Note:** The token is not a file ID and can't be used to address the file directly.\nThe actual file ID should be retrieved by calling the `/from_url/status/` endpoint.\n\n####"
+        },
+        {
+          "info": {
+            "name": "Check the status of a task to fetch/upload a file from a URL",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://ucarecdn.com/from_url/status/",
+            "params": [
+              {
+                "name": "token",
+                "value": "945ebb27-1fd6-46c6-a859-b9893712d650",
+                "type": "query",
+                "description": "Token returned by the `/from_url/` endpoint that identifies a request to fetch/upload a file from a URL."
+              }
+            ]
+          },
+          "docs": "The endpoint notifies about the progress of the task by changing the value of the `status` field:\n  * the field is set to `waiting` initially\n  * once the system starts processing the request, the field is set to `progress`\n  * if the file is fetched and uploaded successfully, the `status` field is set to `success`\n    and the endpoint returns a JSON object holding information about the uploaded file\n  * if the system fails to fetch/upload the file, the `status` field is set to `error` and\n    t"
+        },
+        {
+          "info": {
+            "name": "Get information about an uploaded file",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://ucarecdn.com/info/",
+            "params": [
+              {
+                "name": "pub_key",
+                "value": "YOUR_PUBLIC_KEY",
+                "type": "query"
+              },
+              {
+                "name": "file_id",
+                "value": "67947755-1584-4e3f-902b-d4e2bf76a841",
+                "type": "query",
+                "description": "File's unique ID."
+              }
+            ]
+          },
+          "docs": "Returns a JSON object with information about an uploaded file (file size, MIME type, metadata, etc).\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

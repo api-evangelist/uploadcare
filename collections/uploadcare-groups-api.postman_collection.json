@@ -1,0 +1,443 @@
+{
+  "item": [
+    {
+      "id": "41c6eefc-3d6f-42d3-a79f-4cc04dbc9ae5",
+      "name": "Groups",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "80c76f58-a31f-4ec3-94a9-770dffc26d1b",
+          "name": "Create a file group",
+          "request": {
+            "name": "Create a file group",
+            "description": {
+              "content": "Create a file group from a set of already uploaded files.\n\nThe most common use case for creating a file group is when a user uploads\nmultiple files at once and then wants to display them together.\n\n**Note:** A group itself and files within it MUST belong to the same project.\n\n**Note:** Groups are immutable and the only way to add/remove a file to a group\nis to create a new one.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "group",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "multipart/form-data"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "files[]",
+                  "value": "[\"<string>\",\"<string>\"]",
+                  "type": "text",
+                  "description": "(Required) Set of files you want to add to the group.\nEach element can be a file UUID with or without the applied image\nprocessing operations.\n"
+                },
+                {
+                  "key": "pub_key",
+                  "value": "<string>",
+                  "type": "text",
+                  "description": "(Required) "
+                },
+                {
+                  "key": "signature",
+                  "value": "<string>",
+                  "type": "text",
+                  "description": ""
+                },
+                {
+                  "key": "expire",
+                  "value": "<integer>",
+                  "type": "text",
+                  "description": ""
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "994e47f1-8086-43c1-8728-f893339356c4",
+              "name": "The group was created successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "group",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"datetime_created\": \"2018-09-12T10:03:38.686710Z\",\n  \"datetime_stored\": null,\n  \"files_count\": 1,\n  \"cdn_url\": \"https://ucarecdn.com/0d712319-b970-4602-850c-bae1ced521a6~1/\",\n  \"url\": \"https://api.uploadcare.com/groups/0d712319-b970-4602-850c-bae1ced521a6~1/\",\n  \"files\": [\n    {\n      \"default_effects\": \"resize/x800/\",\n      \"uuid\": \"be3b4d5e-179d-460e-8a5d-69112ac86cbb\",\n      \"file_id\": \"be3b4d5e-179d-460e-8a5d-69112ac86cbb\",\n      \"size\": 2667636,\n      \"total\": 2667636,\n      \"done\": 2667636,\n      \"original_filename\": \"IMG-0412_123.JPG\",\n      \"filename\": \"IMG0412_123.JPG\",\n      \"mime_type\": \"image/jpeg\",\n      \"image_info\": {\n        \"color_mode\": \"RGB\",\n        \"orientation\": 6,\n        \"format\": \"JPEG\",\n        \"height\": 4032,\n        \"width\": 3024,\n        \"sequence\": false,\n        \"geo_location\": {\n          \"latitude\": 55.62013611111111,\n          \"longitude\": 37.66299166666666\n        },\n        \"datetime_original\": \"2018-08-20T08:59:50\",\n        \"dpi\": [\n          72,\n          72\n        ]\n      },\n      \"video_info\": null,\n      \"content_info\": {\n        \"mime\": {\n          \"mime\": \"image/jpeg\",\n          \"type\": \"image\",\n          \"subtype\": \"jpeg\"\n        },\n        \"image\": {\n          \"color_mode\": \"RGB\",\n          \"orientation\": 6,\n          \"format\": \"JPEG\",\n          \"height\": 4032,\n          \"width\": 3024,\n          \"sequence\": false,\n          \"geo_location\": {\n            \"latitude\": 55.62013611111111,\n            \"longitude\": 37.66299166666666\n          },\n          \"datetime_original\": \"2018-08-20T08:59:50\",\n          \"dpi\": [\n            72,\n            72\n          ]\n        }\n      },\n      \"metadata\": {\n        \"subsystem\": \"uploader\",\n        \"pet\": \"cat\"\n      },\n      \"is_image\": true,\n      \"is_stored\": true,\n      \"is_ready\": true\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a95f9f01-fc64-4a0d-8137-19a5ba149904",
+              "name": "Request failed input parameters validation.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "group",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "text/plain"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "The request contains too many HTTP POST fields.",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "a7e9fe82-37a9-44b7-82db-56f3bd48a509",
+              "name": "Request was not allowed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "group",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "text/plain"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "pub_key is required.",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "e55adc46-53e0-4c3b-9a43-c49224c3053f",
+          "name": "Get information about a file group",
+          "request": {
+            "name": "Get information about a file group",
+            "description": {
+              "content": "Returns a JSON object with information about a file group (when the group was created,\nnumber of the files in the group, etc).\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "group",
+                "info",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "pub_key",
+                  "value": "<string>",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "group_id",
+                  "value": "<string>",
+                  "description": "(Required) Group's unique ID. Group IDs look like `UUID~N`, where the `~N` part reflects the number of the files in the group.\n"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "6010b566-0aea-44f6-ac6c-05c46fca723d",
+              "name": "File group information was retrieved successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "group",
+                    "info",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "pub_key",
+                      "value": "YOUR_PUBLIC_KEY"
+                    },
+                    {
+                      "key": "group_id",
+                      "value": "d52d7136-a2e5-4338-9f45-affbf83b857d~2"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"datetime_created\": \"2018-09-12T10:03:38.686710Z\",\n  \"datetime_stored\": null,\n  \"files_count\": 1,\n  \"cdn_url\": \"https://ucarecdn.com/0d712319-b970-4602-850c-bae1ced521a6~1/\",\n  \"url\": \"https://api.uploadcare.com/groups/0d712319-b970-4602-850c-bae1ced521a6~1/\",\n  \"files\": [\n    {\n      \"default_effects\": \"resize/x800/\",\n      \"uuid\": \"be3b4d5e-179d-460e-8a5d-69112ac86cbb\",\n      \"file_id\": \"be3b4d5e-179d-460e-8a5d-69112ac86cbb\",\n      \"size\": 2667636,\n      \"total\": 2667636,\n      \"done\": 2667636,\n      \"original_filename\": \"IMG-0412_123.JPG\",\n      \"filename\": \"IMG0412_123.JPG\",\n      \"mime_type\": \"image/jpeg\",\n      \"image_info\": {\n        \"color_mode\": \"RGB\",\n        \"orientation\": 6,\n        \"format\": \"JPEG\",\n        \"height\": 4032,\n        \"width\": 3024,\n        \"sequence\": false,\n        \"geo_location\": {\n          \"latitude\": 55.62013611111111,\n          \"longitude\": 37.66299166666666\n        },\n        \"datetime_original\": \"2018-08-20T08:59:50\",\n        \"dpi\": [\n          72,\n          72\n        ]\n      },\n      \"video_info\": null,\n      \"content_info\": {\n        \"mime\": {\n          \"mime\": \"image/jpeg\",\n          \"type\": \"image\",\n          \"subtype\": \"jpeg\"\n        },\n        \"image\": {\n          \"color_mode\": \"RGB\",\n          \"orientation\": 6,\n          \"format\": \"JPEG\",\n          \"height\": 4032,\n          \"width\": 3024,\n          \"sequence\": false,\n          \"geo_location\": {\n            \"latitude\": 55.62013611111111,\n            \"longitude\": 37.66299166666666\n          },\n          \"datetime_original\": \"2018-08-20T08:59:50\",\n          \"dpi\": [\n            72,\n            72\n          ]\n        }\n      },\n      \"metadata\": {\n        \"subsystem\": \"uploader\",\n        \"pet\": \"cat\"\n      },\n      \"is_image\": true,\n      \"is_stored\": true,\n      \"is_ready\": true\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "28cb3874-a431-490b-8469-76571c6d0c8a",
+              "name": "Request failed input parameters validation.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "group",
+                    "info",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "pub_key",
+                      "value": "YOUR_PUBLIC_KEY"
+                    },
+                    {
+                      "key": "group_id",
+                      "value": "d52d7136-a2e5-4338-9f45-affbf83b857d~2"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "text/plain"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "Null characters are not allowed.",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "6d00068a-b9d1-41d4-801c-b18f2ba067cf",
+              "name": "Request was not allowed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "group",
+                    "info",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "pub_key",
+                      "value": "YOUR_PUBLIC_KEY"
+                    },
+                    {
+                      "key": "group_id",
+                      "value": "d52d7136-a2e5-4338-9f45-affbf83b857d~2"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "text/plain"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "pub_key is required.",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "8e28dc55-cc72-4c49-95d8-ca6380d34cd7",
+              "name": "Group with specified UUID was not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "group",
+                    "info",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "pub_key",
+                      "value": "YOUR_PUBLIC_KEY"
+                    },
+                    {
+                      "key": "group_id",
+                      "value": "d52d7136-a2e5-4338-9f45-affbf83b857d~2"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "text/plain"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "group_id is invalid.",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://ucarecdn.com",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "87e3acde-e390-4139-9a8e-971740f50910",
+    "name": "URL API Reference Add-Ons Groups API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Every uploaded file is immediately available on the Uploadcare CDN.\nThe CDN includes on-the-fly processing features and can work as a proxy.\n\n## API endpoints\nAccess files in Uploadcare CDN at `ucarecdn.com` over HTTP/HTTPS like this:\n```https://ucarecdn.com/:uuid/```\n\nYou can add CDN operations by including directives in the CDN URL:\n```https://ucarecdn.com/:uuid/-/:operation/:params/:filename```\n\n* `:uuid` stands for the unique file identifier, UUID, assigned on upload.\n* `/-/` is a mandatory parsing delimiter to divide operations and other path components.\n* `:operation/:params/` is a CDN operation directive with parameters.\n* `:filename` is an optional filename you can add after a trailing slash /.\n\nYou can stack two and more operations like this:\n```-/:operation/:params/-/:operation/:params/```\n\n\nContact Support:\n Name: API support\n Email: help@uploadcare.com",
+      "type": "text/plain"
+    }
+  }
+}

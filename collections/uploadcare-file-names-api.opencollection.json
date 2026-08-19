@@ -1,0 +1,43 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "URL API Reference Add-Ons File names API",
+    "version": "2022-11-28"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "File names",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "File with a custom name",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://ucarecdn.com/:uuid/:filename",
+            "params": [
+              {
+                "name": "uuid",
+                "value": "",
+                "type": "path",
+                "description": "Unique file identifier"
+              },
+              {
+                "name": "filename",
+                "value": "",
+                "type": "path",
+                "description": "An optional filename that users will see instead of the original name.\n"
+              }
+            ]
+          },
+          "docs": "You can set an optional filename that users will see instead of\nthe original name.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

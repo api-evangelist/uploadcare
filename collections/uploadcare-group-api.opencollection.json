@@ -1,0 +1,105 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "URL API Reference Add-Ons Group API",
+    "version": "2022-11-28"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Group",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List of groups",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://ucarecdn.com/groups/",
+            "headers": [
+              {
+                "name": "Accept",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "A preferred amount of groups in a list for a single response.\nDefaults to 100, while the maximum is 1000.\n"
+              },
+              {
+                "name": "from",
+                "value": "",
+                "type": "query",
+                "description": "A starting point for filtering the list of groups.\nIf passed, MUST be a date and time value in ISO-8601 format.\n"
+              },
+              {
+                "name": "ordering",
+                "value": "",
+                "type": "query",
+                "description": "Specifies the way groups should be sorted in the returned list.\n`datetime_created` for the ascending order (default),\n`-datetime_created` for the descending one.\n"
+              }
+            ]
+          },
+          "docs": "Get a paginated list of groups."
+        },
+        {
+          "info": {
+            "name": "Group info",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://ucarecdn.com/groups/:uuid/",
+            "headers": [
+              {
+                "name": "Accept",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "uuid",
+                "value": "",
+                "type": "path",
+                "description": "Group UUID."
+              }
+            ]
+          },
+          "docs": "Get a file group by its ID.\n\nGroups are identified in a way similar to individual files. A group ID consists of a UUID\nfollowed by a “~” (tilde) character and a group size: integer number of the files in the group.\n"
+        },
+        {
+          "info": {
+            "name": "Delete group",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://ucarecdn.com/groups/:uuid/",
+            "headers": [
+              {
+                "name": "Accept",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "uuid",
+                "value": "",
+                "type": "path",
+                "description": "Group UUID."
+              }
+            ]
+          },
+          "docs": "Delete a file group by its ID.\n\n**Note**: The operation only removes the group object itself. **All the files that were part of the group are left as is.**\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

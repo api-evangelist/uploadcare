@@ -1,0 +1,202 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "URL API Reference Add-Ons API",
+    "version": "2022-11-28"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Add-Ons",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Execute AWS Rekognition",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://ucarecdn.com/addons/aws_rekognition_detect_labels/execute/",
+            "headers": [
+              {
+                "name": "Accept",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Execute [AWS Rekognition](https://docs.aws.amazon.com/rekognition/latest/dg/labels-detect-labels-image.html) Add-On for a given target to detect labels in an image. **Note:** Detected labels are stored in the file's appdata."
+        },
+        {
+          "info": {
+            "name": "Check AWS Rekognition execution status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://ucarecdn.com/addons/aws_rekognition_detect_labels/execute/status/",
+            "headers": [
+              {
+                "name": "Accept",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "request_id",
+                "value": "",
+                "type": "query",
+                "description": "Request ID returned by the Add-On execution request described above.\n"
+              }
+            ]
+          },
+          "docs": "Check the status of an Add-On execution request that had been started\nusing the [Execute Add-On](#operation/awsRekognitionExecute) operation.\n"
+        },
+        {
+          "info": {
+            "name": "Execute AWS Rekognition Moderation",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://ucarecdn.com/addons/aws_rekognition_detect_moderation_labels/execute/",
+            "headers": [
+              {
+                "name": "Accept",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Execute [AWS Rekognition Moderation](https://docs.aws.amazon.com/rekognition/latest/dg/moderation.html) Add-On for a given target to detect moderation labels in an image. **Note:** Detected moderation labels are stored in the file's appdata."
+        },
+        {
+          "info": {
+            "name": "Check AWS Rekognition Moderation execution status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://ucarecdn.com/addons/aws_rekognition_detect_moderation_labels/execute/status/",
+            "headers": [
+              {
+                "name": "Accept",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "request_id",
+                "value": "",
+                "type": "query",
+                "description": "Request ID returned by the Add-On execution request described above.\n"
+              }
+            ]
+          },
+          "docs": "Check the status of an Add-On execution request that had been started\nusing the [Execute Add-On](#operation/awsRekognitionDetectModerationLabelsExecute) operation.\n"
+        },
+        {
+          "info": {
+            "name": "Execute ClamAV",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://ucarecdn.com/addons/uc_clamav_virus_scan/execute/",
+            "headers": [
+              {
+                "name": "Accept",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Execute [ClamAV](https://www.clamav.net/) virus checking Add-On for a given target."
+        },
+        {
+          "info": {
+            "name": "Check ClamAV execution status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://ucarecdn.com/addons/uc_clamav_virus_scan/execute/status/",
+            "headers": [
+              {
+                "name": "Accept",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "request_id",
+                "value": "",
+                "type": "query",
+                "description": "Request ID returned by the Add-On execution request described above.\n"
+              }
+            ]
+          },
+          "docs": "Check the status of an Add-On execution request that had been started\nusing the [Execute Add-On](#operation/ucClamavVirusScanExecute) operation.\n"
+        },
+        {
+          "info": {
+            "name": "Execute Remove.bg",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://ucarecdn.com/addons/remove_bg/execute/",
+            "headers": [
+              {
+                "name": "Accept",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Execute [remove.bg](https://remove.bg/) background image removal Add-On for a given target."
+        },
+        {
+          "info": {
+            "name": "Check Remove.bg execution status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://ucarecdn.com/addons/remove_bg/execute/status/",
+            "headers": [
+              {
+                "name": "Accept",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "request_id",
+                "value": "",
+                "type": "query",
+                "description": "Request ID returned by the Add-On execution request described above.\n"
+              }
+            ]
+          },
+          "docs": "Check the status of an Add-On execution request that had been started\nusing the [Execute Add-On](#operation/removeBgExecute) operation.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,135 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "URL API Reference Add-Ons Conversion API",
+    "version": "2022-11-28"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Conversion",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Document info",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://ucarecdn.com/convert/document/:uuid/",
+            "headers": [
+              {
+                "name": "Accept",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "uuid",
+                "value": "",
+                "type": "path",
+                "description": "File uuid."
+              }
+            ]
+          },
+          "docs": "The endpoint allows you to determine the document format and possible conversion formats."
+        },
+        {
+          "info": {
+            "name": "Convert document",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://ucarecdn.com/convert/document/",
+            "headers": [
+              {
+                "name": "Accept",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Uploadcare allows you to convert files to different target formats. Check out the [conversion capabilities](https://uploadcare.com/docs/transformations/file-conversion/#document-file-formats) for each supported format."
+        },
+        {
+          "info": {
+            "name": "Document conversion job status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://ucarecdn.com/convert/document/status/:token/",
+            "headers": [
+              {
+                "name": "Accept",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "token",
+                "value": "426339926",
+                "type": "path",
+                "description": "Job token."
+              }
+            ]
+          },
+          "docs": "Once you get a conversion job result, you can acquire a conversion job status via token. Just put it in your request URL as `:token`."
+        },
+        {
+          "info": {
+            "name": "Convert video",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://ucarecdn.com/convert/video/",
+            "headers": [
+              {
+                "name": "Accept",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Uploadcare video processing adjusts video quality, format (mp4, webm, ogg), and size, cuts it, and generates thumbnails. Processed video is instantly available over CDN."
+        },
+        {
+          "info": {
+            "name": "Video conversion job status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://ucarecdn.com/convert/video/status/:token/",
+            "headers": [
+              {
+                "name": "Accept",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "token",
+                "value": "426339926",
+                "type": "path",
+                "description": "Job token."
+              }
+            ]
+          },
+          "docs": "Once you get a processing job result, you can acquire a processing job status via token. Just put it in your request URL as `:token`."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,149 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "URL API Reference Add-Ons Webhook API",
+    "version": "2022-11-28"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Webhook",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List of webhooks",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://ucarecdn.com/webhooks/",
+            "headers": [
+              {
+                "name": "Accept",
+                "value": ""
+              }
+            ]
+          },
+          "docs": "List of project webhooks."
+        },
+        {
+          "info": {
+            "name": "Create webhook",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://ucarecdn.com/webhooks/",
+            "headers": [
+              {
+                "name": "Accept",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "form-urlencoded",
+              "data": [
+                {
+                  "name": "target_url",
+                  "value": ""
+                },
+                {
+                  "name": "event",
+                  "value": ""
+                },
+                {
+                  "name": "is_active",
+                  "value": ""
+                },
+                {
+                  "name": "signing_secret",
+                  "value": ""
+                },
+                {
+                  "name": "version",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "docs": "Create and subscribe to a webhook. You can use webhooks to receive notifications about your uploads. For instance, once a file gets uploaded to your project, we can notify you by sending a message to a target URL."
+        },
+        {
+          "info": {
+            "name": "Update webhook",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://ucarecdn.com/webhooks/:id/",
+            "headers": [
+              {
+                "name": "Accept",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Webhook ID."
+              }
+            ],
+            "body": {
+              "type": "form-urlencoded",
+              "data": [
+                {
+                  "name": "target_url",
+                  "value": ""
+                },
+                {
+                  "name": "event",
+                  "value": ""
+                },
+                {
+                  "name": "is_active",
+                  "value": ""
+                },
+                {
+                  "name": "signing_secret",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "docs": "Update webhook attributes."
+        },
+        {
+          "info": {
+            "name": "Delete webhook",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://ucarecdn.com/webhooks/unsubscribe/",
+            "headers": [
+              {
+                "name": "Accept",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "form-urlencoded",
+              "data": [
+                {
+                  "name": "target_url",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "docs": "Unsubscribe and delete a webhook."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,1433 @@
+{
+  "item": [
+    {
+      "id": "9ca157c9-4908-40b3-ba2f-ad69d2cf8812",
+      "name": "Upload",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "2059d538-fe03-4ea4-a19c-ef82ed8e4a2b",
+          "name": "Direct uploads",
+          "request": {
+            "name": "Direct uploads",
+            "description": {
+              "content": "Direct file uploads comply with the [RFC 7578](https://www.rfc-editor.org/rfc/rfc7578) standard.\nIn other words, you can perform a direct upload by making an HTTP POST request with the Content-Type\nheader set to `multipart/form-data`.\n\n**Note**: Direct file uploads support files smaller than 100 megabytes only.\nIf you would like to upload larger files, please use [Multipart Uploads](/docs/api/upload/upload/multipart-file-upload-start) instead.\n\nFile upload example with curl:\n\n```\ncurl -X POST https://upload.uploadcare.com/base/ \\\n     -F UPLOADCARE_PUB_KEY=\"demopublickey\" \\\n     -F UPLOADCARE_STORE=\"auto\" \\\n     -F \"metadata[subsystem]\"=\"uploader\" \\\n     -F \"metadata[pet]\"=\"cat\" \\\n     -F file=@\"my file.jpeg\"\n```\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "base",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "multipart/form-data"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "{filename}",
+                  "value": "[\"<binary>\",\"<binary>\"]",
+                  "type": "text",
+                  "description": "(Required) File's content"
+                },
+                {
+                  "key": "UPLOADCARE_PUB_KEY",
+                  "value": "<string>",
+                  "type": "text",
+                  "description": "(Required) "
+                },
+                {
+                  "key": "UPLOADCARE_STORE",
+                  "value": "auto",
+                  "type": "text",
+                  "description": ""
+                },
+                {
+                  "key": "metadata[{key}]",
+                  "value": "<string>",
+                  "type": "text",
+                  "description": ""
+                },
+                {
+                  "key": "signature",
+                  "value": "<string>",
+                  "type": "text",
+                  "description": ""
+                },
+                {
+                  "key": "expire",
+                  "value": "<integer>",
+                  "type": "text",
+                  "description": ""
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "818588a6-7374-4939-867a-1017c4e4b53c",
+              "name": "The file was uploaded successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "base",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"my_file.jpg\": \"17be4678-dab7-4bc7-8753-28914a22960a\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ddb7a360-110d-44f0-afe2-94a7fb753e20",
+              "name": "Request failed input parameters validation.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "base",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "text/plain"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "The request contains too many HTTP POST fields.",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "9b28b667-deeb-46c1-82b1-d92730354143",
+              "name": "Request was not allowed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "base",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "text/plain"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "UPLOADCARE_PUB_KEY is required.",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "b4bb263f-e46a-4846-9a58-a2c27ec6ac4f",
+              "name": "The size of the request is too large.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "base",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "text/plain"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Request Entity Too Large",
+              "code": 413,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "The size of the request is too large.",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "fb2797e8-b3bd-46bd-bbe1-e28d1533ccf8",
+              "name": "Request was throttled.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "base",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "text/plain"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Number of seconds to wait before the next request.",
+                  "key": "Retry-After",
+                  "value": "5864"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "Request was throttled.",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "dda9c1f9-e932-4503-8325-849530ef9b6e",
+          "name": "Start multipart upload",
+          "request": {
+            "name": "Start multipart upload",
+            "description": {
+              "content": "Multipart uploads should be used if you need to upload files larger than 100 megabytes or if you want to\nexplicitly trigger [AWS S3 Transfer Acceleration](https://aws.amazon.com/s3/transfer-acceleration/).\nWhen you use Multipart Uploads your files go straight to AWS S3 bypassing our upload instances.\n\nTo upload large files, 3 requests are sent in sequence:\n1. `/multipart/start/`\n2. `<presigned-url-x>`\n3. `/multipart/complete/`.\n\n**Note**: Multipart uploads support files larger than 10 megabytes only.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "multipart",
+                "start",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "multipart/form-data"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "filename",
+                  "value": "<string>",
+                  "type": "text",
+                  "description": "(Required) Original file name of the uploaded file"
+                },
+                {
+                  "key": "content_type",
+                  "value": "<string>",
+                  "type": "text",
+                  "description": "(Required) File's MIME-type."
+                },
+                {
+                  "key": "size",
+                  "value": "<integer>",
+                  "type": "text",
+                  "description": "(Required) Precise file size of the uploaded file (in bytes).\n**Note**: The size should not exceed max file size cap for your project.\n"
+                },
+                {
+                  "key": "UPLOADCARE_PUB_KEY",
+                  "value": "<string>",
+                  "type": "text",
+                  "description": "(Required) "
+                },
+                {
+                  "key": "UPLOADCARE_STORE",
+                  "value": "auto",
+                  "type": "text",
+                  "description": ""
+                },
+                {
+                  "key": "part_size",
+                  "value": "5242880",
+                  "type": "text",
+                  "description": "Multipart Uploads expect that you will split the uploaded file into equally sized\nparts (except for the last part) and then will upload them to AWS S3 (possibly in parallel).\nBy default, we assume that you will upload the files in 5 megabyte chunks,\nso we return a list of presigned AWS S3 URLs accordingly.\nIf you intend to upload large files (for example, larger than a gigabyte),\nwe recommend to bump the part size and to pass the expected chunk size\nto us as a value of the `part_size` parameter (in bytes).\n"
+                },
+                {
+                  "key": "metadata[{key}]",
+                  "value": "<string>",
+                  "type": "text",
+                  "description": ""
+                },
+                {
+                  "key": "signature",
+                  "value": "<string>",
+                  "type": "text",
+                  "description": ""
+                },
+                {
+                  "key": "expire",
+                  "value": "<integer>",
+                  "type": "text",
+                  "description": ""
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "190516e4-614d-4f7a-a448-d3e409c839df",
+              "name": "Multipart upload started successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "multipart",
+                    "start",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"uuid\": \"a195eb81-4ccf-de0f-798f-6ffefc9e15d3\",\n  \"parts\": [\n    \"http://VIv.foWHzhUs7DDurskw,MywfYrAkvw7WxN\",\n    \"http://MKzdLKFglqzGFXDjwdxLhgWSM.eeqpLUPA6oCAnM3Pp4jv-KCZ.uU2l\"\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "baf8030e-ab9c-4707-8c1d-311a3309e297",
+              "name": "Request failed input parameters validation.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "multipart",
+                    "start",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "text/plain"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "The request contains too many HTTP POST fields.",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "304779ab-fd7b-4f3e-92c7-7d2f35e8a0af",
+              "name": "Request was not allowed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "multipart",
+                    "start",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "text/plain"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "UPLOADCARE_PUB_KEY is required.",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "e213828b-ebfd-4d8e-b5f8-1e7fe0198888",
+              "name": "Request was throttled.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "multipart",
+                    "start",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "text/plain"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Number of seconds to wait before the next request.",
+                  "key": "Retry-After",
+                  "value": "5864"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "Request was throttled.",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "7ef30fe7-3bac-4508-824a-55f9d74c623e",
+          "name": "Upload individual file parts",
+          "request": {
+            "name": "Upload individual file parts",
+            "description": {
+              "content": "The second phase is about uploading the file parts to the presigned upload URLs returned from the\n`/multipart/start/` endpoint.\n\nEach uploaded part should be at least 5 MiB (5242880 bytes) in size except for the last one, which can be smaller.\nYou can upload the file parts in parallel provided that the byte order stays unchanged.\n\n**Note**: You MUST define `Content-Type` header for your data.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "<presigned-url-x>"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/octet-stream"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "<object>"
+            }
+          },
+          "response": [
+            {
+              "id": "8bbfd848-d14a-4af8-a1e0-6f63cf1b9da8",
+              "name": "A file part has been uploaded successfully",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "<presigned-url-x>"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "method": "PUT",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "e68e2e23-b8f4-44e2-b20f-1eadc72c465c",
+          "name": "Complete multipart upload",
+          "request": {
+            "name": "Complete multipart upload",
+            "description": {
+              "content": "Once all the file parts have been uploaded successfully, complete the\nupload session to assemble all the file parts into a single resulting file.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "multipart",
+                "complete",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "multipart/form-data"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "UPLOADCARE_PUB_KEY",
+                  "value": "<string>",
+                  "type": "text",
+                  "description": "(Required) "
+                },
+                {
+                  "key": "uuid",
+                  "value": "<uuid>",
+                  "type": "text",
+                  "description": "(Required) File's UUID from the `/multipart/start/` endpoint."
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "a1b5939d-130a-429c-9a46-f92409ac1e81",
+              "name": "The file was uploaded successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "multipart",
+                    "complete",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"uuid\": \"be3b4d5e-179d-460e-8a5d-69112ac86cbb\",\n  \"file_id\": \"be3b4d5e-179d-460e-8a5d-69112ac86cbb\",\n  \"size\": 2667636,\n  \"total\": 2667636,\n  \"done\": 2667636,\n  \"original_filename\": \"IMG-0412_123.JPG\",\n  \"filename\": \"IMG0412_123.JPG\",\n  \"mime_type\": \"image/jpeg\",\n  \"image_info\": {\n    \"color_mode\": \"RGB\",\n    \"orientation\": 6,\n    \"format\": \"JPEG\",\n    \"height\": 4032,\n    \"width\": 3024,\n    \"sequence\": false,\n    \"geo_location\": {\n      \"latitude\": 55.62013611111111,\n      \"longitude\": 37.66299166666666\n    },\n    \"datetime_original\": \"2018-08-20T08:59:50\",\n    \"dpi\": [\n      72,\n      72\n    ]\n  },\n  \"video_info\": null,\n  \"content_info\": {\n    \"mime\": {\n      \"mime\": \"image/jpeg\",\n      \"type\": \"image\",\n      \"subtype\": \"jpeg\"\n    },\n    \"image\": {\n      \"color_mode\": \"RGB\",\n      \"orientation\": 6,\n      \"format\": \"JPEG\",\n      \"height\": 4032,\n      \"width\": 3024,\n      \"sequence\": false,\n      \"geo_location\": {\n        \"latitude\": 55.62013611111111,\n        \"longitude\": 37.66299166666666\n      },\n      \"datetime_original\": \"2018-08-20T08:59:50\",\n      \"dpi\": [\n        72,\n        72\n      ]\n    }\n  },\n  \"metadata\": {\n    \"subsystem\": \"uploader\",\n    \"pet\": \"cat\"\n  },\n  \"is_image\": true,\n  \"is_stored\": true,\n  \"is_ready\": true\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a040feaf-435c-4d4c-9d24-6ce017d18a12",
+              "name": "Request failed input parameters validation.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "multipart",
+                    "complete",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "text/plain"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "The request contains too many HTTP POST fields.",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "798a2bbc-7999-4924-ba42-7d8d261b8cfc",
+              "name": "Request was not allowed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "multipart",
+                    "complete",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "text/plain"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "UPLOADCARE_PUB_KEY is required.",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "16642dee-daca-4f07-8e1e-3934092dd780",
+              "name": "File with specified UUID was not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "multipart",
+                    "complete",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "text/plain"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "File is not found.",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "e76a012b-86f0-435d-a7cc-c2b1a8c09c5c",
+          "name": "Upload files from URLs",
+          "request": {
+            "name": "Upload files from URLs",
+            "description": {
+              "content": "Uploadcare can fetch a file from a publicly available URL and then automatically upload the\nfetched file to your project.\n\n#### Upload tokens\nRequests to the endpoint return a JSON dictionary with a `token` that can be further used\nto [check the status](/docs/api/upload/upload/from-url-upload-status) of the upload\nrequest.\n\n**Note:** The token is not a file ID and can't be used to address the file directly.\nThe actual file ID should be retrieved by calling the `/from_url/status/` endpoint.\n\n#### Duplicates prevention\nBy default, every call to the `/from_url/` endpoint with the same `source_url` results in\na new upload leading to file duplication.\n\nIf you would like Uploadcare to keep track of the requested URLs and avoid the duplicate\nuploads, pass the `save_URL_duplicates` and `check_URL_duplicates` parameters described below.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "from_url",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "multipart/form-data"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "pub_key",
+                  "value": "<string>",
+                  "type": "text",
+                  "description": "(Required) "
+                },
+                {
+                  "key": "source_url",
+                  "value": "<uri>",
+                  "type": "text",
+                  "description": "(Required) Source URL of the file to fetch and upload.\n\n**Note**: The URL should point to a resource publicly available via HTTP/HTTPS.\n"
+                },
+                {
+                  "key": "store",
+                  "value": "auto",
+                  "type": "text",
+                  "description": ""
+                },
+                {
+                  "key": "filename",
+                  "value": "<string>",
+                  "type": "text",
+                  "description": "Sets the file name of the resource fetched from the source URL.\nIf not defined, the file name is obtained from either HTTP\nresponse headers or the `source_url`'s path.\n\n**Note:** The filename will be sanitized to only contain the following symbols:\n`abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789._`.\n"
+                },
+                {
+                  "key": "check_URL_duplicates",
+                  "value": "0",
+                  "type": "text",
+                  "description": "If set to \"1\", enables the `source_url` duplicates prevention.\nSpecifically, if the `source_url` had already been fetched and uploaded previously,\nthis request will return information about the already uploaded file.\n (This can only be one of 0,1)"
+                },
+                {
+                  "key": "save_URL_duplicates",
+                  "value": "<string>",
+                  "type": "text",
+                  "description": "Determines if the requested `source_url` should be kept in the history of\nfetched/uploaded URLs. If the value is not defined explicitly, it is set\nto the value of the `check_URL_duplicates` parameter.\n (This can only be one of 0,1)"
+                },
+                {
+                  "key": "metadata[{key}]",
+                  "value": "<string>",
+                  "type": "text",
+                  "description": ""
+                },
+                {
+                  "key": "signature",
+                  "value": "<string>",
+                  "type": "text",
+                  "description": ""
+                },
+                {
+                  "key": "expire",
+                  "value": "<integer>",
+                  "type": "text",
+                  "description": ""
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "51b2f29e-fd8e-45ba-9560-f9838c6929a2",
+              "name": "Status Token or File Info of an already downloaded file.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "from_url",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"token\",\n  \"token\": \"945ebb27-1fd6-46c6-a859-b9893712d650\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8e8ee735-628b-41f4-9123-31c72392bc88",
+              "name": "Request failed input parameters validation.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "from_url",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "text/plain"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "The request contains too many HTTP POST fields.",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "1c5276e9-841e-4b98-98ea-f64de15aab29",
+              "name": "Request was not allowed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "from_url",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "text/plain"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "pub_key is required.",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "da32a7aa-ceee-439d-978f-0371ab00c860",
+              "name": "Request was throttled.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "from_url",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "text/plain"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Number of seconds to wait before the next request.",
+                  "key": "Retry-After",
+                  "value": "5864"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "Request was throttled.",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "84d462cb-abd3-4dd8-bd42-2e2cd6e965a9",
+          "name": "Check the status of a task to fetch/upload a file from a URL",
+          "request": {
+            "name": "Check the status of a task to fetch/upload a file from a URL",
+            "description": {
+              "content": "The endpoint notifies about the progress of the task by changing the value of the `status` field:\n  * the field is set to `waiting` initially\n  * once the system starts processing the request, the field is set to `progress`\n  * if the file is fetched and uploaded successfully, the `status` field is set to `success`\n    and the endpoint returns a JSON object holding information about the uploaded file\n  * if the system fails to fetch/upload the file, the `status` field is set to `error` and\n    the `error` field is set to the cause of the error.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "from_url",
+                "status",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "token",
+                  "value": "<uuid>",
+                  "description": "(Required) Token returned by the `/from_url/` endpoint that identifies a request to fetch/upload a file from a URL."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "627f189e-5fce-4955-9dd2-fe3af51595b9",
+              "name": "Request was processed successfully.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "from_url",
+                    "status",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "token",
+                      "value": "945ebb27-1fd6-46c6-a859-b9893712d650"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": \"success\",\n  \"uuid\": \"be3b4d5e-179d-460e-8a5d-69112ac86cbb\",\n  \"file_id\": \"be3b4d5e-179d-460e-8a5d-69112ac86cbb\",\n  \"size\": 2667636,\n  \"total\": 2667636,\n  \"done\": 2667636,\n  \"original_filename\": \"IMG-0412_123.JPG\",\n  \"filename\": \"IMG0412_123.JPG\",\n  \"mime_type\": \"image/jpeg\",\n  \"image_info\": {\n    \"color_mode\": \"RGB\",\n    \"orientation\": 6,\n    \"format\": \"JPEG\",\n    \"height\": 4032,\n    \"width\": 3024,\n    \"sequence\": false,\n    \"geo_location\": {\n      \"latitude\": 55.62013611111111,\n      \"longitude\": 37.66299166666666\n    },\n    \"datetime_original\": \"2018-08-20T08:59:50\",\n    \"dpi\": [\n      72,\n      72\n    ]\n  },\n  \"video_info\": null,\n  \"content_info\": {\n    \"mime\": {\n      \"mime\": \"image/jpeg\",\n      \"type\": \"image\",\n      \"subtype\": \"jpeg\"\n    },\n    \"image\": {\n      \"color_mode\": \"RGB\",\n      \"orientation\": 6,\n      \"format\": \"JPEG\",\n      \"height\": 4032,\n      \"width\": 3024,\n      \"sequence\": false,\n      \"geo_location\": {\n        \"latitude\": 55.62013611111111,\n        \"longitude\": 37.66299166666666\n      },\n      \"datetime_original\": \"2018-08-20T08:59:50\",\n      \"dpi\": [\n        72,\n        72\n      ]\n    }\n  },\n  \"metadata\": {\n    \"subsystem\": \"uploader\",\n    \"pet\": \"cat\"\n  },\n  \"is_image\": true,\n  \"is_stored\": true,\n  \"is_ready\": true\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "707e9d12-c4ea-4b4a-8f6b-61b4728f212f",
+              "name": "Request failed input parameters validation.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "from_url",
+                    "status",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "token",
+                      "value": "945ebb27-1fd6-46c6-a859-b9893712d650"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "text/plain"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "token is required.",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "e1976497-63b3-4d92-8545-41256ef3c751",
+          "name": "Get information about an uploaded file",
+          "request": {
+            "name": "Get information about an uploaded file",
+            "description": {
+              "content": "Returns a JSON object with information about an uploaded file (file size, MIME type, metadata, etc).\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "info",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "pub_key",
+                  "value": "<string>",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "file_id",
+                  "value": "<uuid>",
+                  "description": "(Required) File's unique ID."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "dc21ce82-4f05-4639-83a8-369f5cc9f32e",
+              "name": "File information was retrieved successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "info",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "pub_key",
+                      "value": "YOUR_PUBLIC_KEY"
+                    },
+                    {
+                      "key": "file_id",
+                      "value": "67947755-1584-4e3f-902b-d4e2bf76a841"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"uuid\": \"be3b4d5e-179d-460e-8a5d-69112ac86cbb\",\n  \"file_id\": \"be3b4d5e-179d-460e-8a5d-69112ac86cbb\",\n  \"size\": 2667636,\n  \"total\": 2667636,\n  \"done\": 2667636,\n  \"original_filename\": \"IMG-0412_123.JPG\",\n  \"filename\": \"IMG0412_123.JPG\",\n  \"mime_type\": \"image/jpeg\",\n  \"image_info\": {\n    \"color_mode\": \"RGB\",\n    \"orientation\": 6,\n    \"format\": \"JPEG\",\n    \"height\": 4032,\n    \"width\": 3024,\n    \"sequence\": false,\n    \"geo_location\": {\n      \"latitude\": 55.62013611111111,\n      \"longitude\": 37.66299166666666\n    },\n    \"datetime_original\": \"2018-08-20T08:59:50\",\n    \"dpi\": [\n      72,\n      72\n    ]\n  },\n  \"video_info\": null,\n  \"content_info\": {\n    \"mime\": {\n      \"mime\": \"image/jpeg\",\n      \"type\": \"image\",\n      \"subtype\": \"jpeg\"\n    },\n    \"image\": {\n      \"color_mode\": \"RGB\",\n      \"orientation\": 6,\n      \"format\": \"JPEG\",\n      \"height\": 4032,\n      \"width\": 3024,\n      \"sequence\": false,\n      \"geo_location\": {\n        \"latitude\": 55.62013611111111,\n        \"longitude\": 37.66299166666666\n      },\n      \"datetime_original\": \"2018-08-20T08:59:50\",\n      \"dpi\": [\n        72,\n        72\n      ]\n    }\n  },\n  \"metadata\": {\n    \"subsystem\": \"uploader\",\n    \"pet\": \"cat\"\n  },\n  \"is_image\": true,\n  \"is_stored\": true,\n  \"is_ready\": true\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "85b43244-d0fc-4074-8172-c2a1cf10f24e",
+              "name": "Request failed input parameters validation.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "info",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "pub_key",
+                      "value": "YOUR_PUBLIC_KEY"
+                    },
+                    {
+                      "key": "file_id",
+                      "value": "67947755-1584-4e3f-902b-d4e2bf76a841"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "text/plain"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "Null characters are not allowed.",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "86e1d3b6-305a-4114-a5ef-d06656d5d063",
+              "name": "Request was not allowed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "info",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "pub_key",
+                      "value": "YOUR_PUBLIC_KEY"
+                    },
+                    {
+                      "key": "file_id",
+                      "value": "67947755-1584-4e3f-902b-d4e2bf76a841"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "text/plain"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "pub_key is required.",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "ee40f909-7532-4c5a-af5a-d2d5c5a02469",
+              "name": "File with specified UUID was not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "info",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "pub_key",
+                      "value": "YOUR_PUBLIC_KEY"
+                    },
+                    {
+                      "key": "file_id",
+                      "value": "67947755-1584-4e3f-902b-d4e2bf76a841"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "text/plain"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "File is not found.",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://ucarecdn.com",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "c768045f-8b1c-4d67-82d4-e6b431849075",
+    "name": "URL API Reference Add-Ons Upload API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Every uploaded file is immediately available on the Uploadcare CDN.\nThe CDN includes on-the-fly processing features and can work as a proxy.\n\n## API endpoints\nAccess files in Uploadcare CDN at `ucarecdn.com` over HTTP/HTTPS like this:\n```https://ucarecdn.com/:uuid/```\n\nYou can add CDN operations by including directives in the CDN URL:\n```https://ucarecdn.com/:uuid/-/:operation/:params/:filename```\n\n* `:uuid` stands for the unique file identifier, UUID, assigned on upload.\n* `/-/` is a mandatory parsing delimiter to divide operations and other path components.\n* `:operation/:params/` is a CDN operation directive with parameters.\n* `:filename` is an optional filename you can add after a trailing slash /.\n\nYou can stack two and more operations like this:\n```-/:operation/:params/-/:operation/:params/```\n\n\nContact Support:\n Name: API support\n Email: help@uploadcare.com",
+      "type": "text/plain"
+    }
+  }
+}

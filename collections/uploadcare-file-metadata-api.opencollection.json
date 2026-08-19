@@ -1,0 +1,140 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "URL API Reference Add-Ons File metadata API",
+    "version": "2022-11-28"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "File metadata",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get file's metadata",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://ucarecdn.com/files/:uuid/metadata/",
+            "headers": [
+              {
+                "name": "Accept",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "uuid",
+                "value": "",
+                "type": "path",
+                "description": "File UUID."
+              }
+            ]
+          },
+          "docs": "Get file's metadata keys and values."
+        },
+        {
+          "info": {
+            "name": "Get metadata key's value",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://ucarecdn.com/files/:uuid/metadata/:key/",
+            "headers": [
+              {
+                "name": "Accept",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "uuid",
+                "value": "",
+                "type": "path",
+                "description": "File UUID."
+              },
+              {
+                "name": "key",
+                "value": "",
+                "type": "path",
+                "description": "Key of file metadata.\nList of allowed characters for the key:\n  - Latin letters in lower or upper case (a-z,A-Z)\n  - digits (0-9)\n  - underscore `_`\n  - a hyphen `-`\n  - dot `.`\n  - colon `:`\n"
+              }
+            ]
+          },
+          "docs": "Get the value of a single metadata key."
+        },
+        {
+          "info": {
+            "name": "Update metadata key's value",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://ucarecdn.com/files/:uuid/metadata/:key/",
+            "headers": [
+              {
+                "name": "Accept",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "uuid",
+                "value": "",
+                "type": "path",
+                "description": "File UUID."
+              },
+              {
+                "name": "key",
+                "value": "",
+                "type": "path",
+                "description": "Key of file metadata.\nList of allowed characters for the key:\n  - Latin letters in lower or upper case (a-z,A-Z)\n  - digits (0-9)\n  - underscore `_`\n  - a hyphen `-`\n  - dot `.`\n  - colon `:`\n"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update the value of a single metadata key. If the key does not exist, it will be created."
+        },
+        {
+          "info": {
+            "name": "Delete metadata key",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://ucarecdn.com/files/:uuid/metadata/:key/",
+            "headers": [
+              {
+                "name": "Accept",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "uuid",
+                "value": "",
+                "type": "path",
+                "description": "File UUID."
+              },
+              {
+                "name": "key",
+                "value": "",
+                "type": "path",
+                "description": "Key of file metadata.\nList of allowed characters for the key:\n  - Latin letters in lower or upper case (a-z,A-Z)\n  - digits (0-9)\n  - underscore `_`\n  - a hyphen `-`\n  - dot `.`\n  - colon `:`\n"
+              }
+            ]
+          },
+          "docs": "Delete a file's metadata key."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
