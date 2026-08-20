@@ -34,6 +34,16 @@ tags:
 - Video Encoding
 - Malware Scanning
 - Storage
+- Webhook
+tags_raw:
+- File Upload
+- File Management
+- CDN
+- Image Transformation
+- Document Conversion
+- Video Encoding
+- Malware Scanning
+- Storage
 - Webhooks
 apis:
 - aid: uploadcare:upload-api
@@ -66,6 +76,8 @@ apis:
   humanURL: https://uploadcare.com/api-refs/rest-api/v0.7.0/
   baseURL: https://api.uploadcare.com
   tags:
+  - Addons
+  tags_raw:
   - Add-Ons
   properties:
   - type: OpenAPI
@@ -156,6 +168,8 @@ apis:
   humanURL: https://uploadcare.com/api-refs/rest-api/v0.7.0/
   baseURL: https://api.uploadcare.com
   tags:
+  - File Metadata
+  tags_raw:
   - File metadata
   properties:
   - type: OpenAPI
@@ -263,6 +277,8 @@ apis:
   humanURL: https://uploadcare.com/api-refs/rest-api/v0.7.0/
   baseURL: https://api.uploadcare.com
   tags:
+  - Group
+  tags_raw:
   - Groups
   properties:
   - type: OpenAPI
