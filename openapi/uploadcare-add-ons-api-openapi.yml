@@ -1,51 +1,36 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
-  title: URL API Reference Add-Ons API
-  version: '2022-11-28'
-  description: 'Every uploaded file is immediately available on the Uploadcare CDN.
-
-    The CDN includes on-the-fly processing features and can work as a proxy.
+  title: REST API Reference Add Ons API
+  version: '0.7'
+  description: 'REST API provides low-level access to Uploadcare features. You can access files and their metadata, application data, file groups, add-ons, projects, webhooks, document conversion and video encoding.
 
 
-    ## API endpoints
-
-    Access files in Uploadcare CDN at `ucarecdn.com` over HTTP/HTTPS like this:
-
-    ```https://ucarecdn.com/:uuid/```
+    The REST API root is `https://api.uploadcare.com/`. Send data via query strings and POST request bodies, and receive JSON responses. All URLs MUST end with a forward slash `/`.
 
 
-    You can add CDN operations by including directives in the CDN URL:
-
-    ```https://ucarecdn.com/:uuid/-/:operation/:params/:filename```
+    Check out our [API clients](https://uploadcare.com/docs/integrations/) that cover most of the popular programming languages and frameworks.
 
 
-    * `:uuid` stands for the unique file identifier, UUID, assigned on upload.
+    # Authentication
 
-    * `/-/` is a mandatory parsing delimiter to divide operations and other path components.
-
-    * `:operation/:params/` is a CDN operation directive with parameters.
-
-    * `:filename` is an optional filename you can add after a trailing slash /.
-
-
-    You can stack two and more operations like this:
-
-    ```-/:operation/:params/-/:operation/:params/```
+    <!-- ReDoc-Inject: <security-definitions> -->
 
     '
   contact:
     name: API support
     email: help@uploadcare.com
   x-logo:
-    url: https://ucarecdn.com/12e3af14-392d-416f-8542-f210c2eb6ec4/logourlapi.svg
+    url: https://ucarecdn.com/06bc72fb-3a5a-4ee7-a19c-b1d02fb9e711/logorestapi.svg
     backgroundColor: '#fafafa'
-    altText: Uploadcare URL API Reference
+    altText: Uploadcare REST API Reference
   x-meta:
-    title: URL API Reference — Uploadcare
-    description: A reference documentation for the Uploadcare's URL API.
+    title: REST API 0.7 Reference — Uploadcare
+    description: Complete reference documentation for the Uploadcare REST API 0.7. Covers endpoints, requests, their params, and response examples.
 servers:
-- url: https://ucarecdn.com
+- url: https://api.uploadcare.com
   description: Production server
+security:
+- apiKeyAuth: []
 tags:
 - name: Add-Ons
   description: 'An `Add-On` is an application implemented by Uploadcare that accepts uploaded files as an
@@ -991,29 +976,50 @@ paths:
 
           '
 components:
-  schemas:
-    addonExecutionStatus:
-      type: object
-      properties:
-        status:
-          type: string
-          enum:
-          - in_progress
-          - error
-          - done
-          - unknown
-          description: 'Defines the status of an Add-On execution.
-
-            In most cases, once the status changes to `done`, [Application Data](#operation/fileInfo) of the file that had been specified as a `appdata`, will contain the result of the execution.'
-    simpleAuthHTTPForbidden:
-      type: object
-      properties:
-        detail:
-          type: string
-          default: Simple authentication over HTTP is forbidden. Please, use HTTPS or signed requests instead.
-      example:
-        detail: Simple authentication over HTTP is forbidden. Please, use HTTPS or signed requests instead.
   responses:
+    authorizationProblemsResponse:
+      description: Authorization errors.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              detail:
+                type: string
+                enum:
+                - Incorrect authentication credentials.
+                - Public key {public_key} not found.
+                - Secret key not found.
+                - Invalid signature. Please check your Secret key.
+                example: Incorrect authentication credentials.
+    addonExecutionStatusResponse:
+      description: Add-On execution status response.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+                enum:
+                - in_progress
+                - error
+                - done
+                - unknown
+                description: 'Defines the status of an Add-On execution.
+
+                  In most cases, once the status changes to `done`, [Application Data](#operation/fileInfo) of the file that had been specified as a `appdata`, will contain the result of the execution.'
+    invalidAcceptHeader:
+      description: Invalid version header `Accept` for this endpoint.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              detail:
+                type: string
+                example: Incorrect Accept header provided. Make sure to specify API version. Refer to REST API docs for details.
+                default: Incorrect Accept header provided. Make sure to specify API version. Refer to REST API docs for details.
     simpleAuthHTTPForbiddenResponse:
       description: Simple authentication over HTTP is forbidden. Please, use HTTPS or signed requests instead.
       content:
@@ -1032,23 +1038,6 @@ components:
                 format: uuid
                 description: Request ID.
                 example: 8db3c8b4-2dea-4146-bcdb-63387e2b33c1
-    addonExecutionStatusResponse:
-      description: Add-On execution status response.
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              status:
-                type: string
-                enum:
-                - in_progress
-                - error
-                - done
-                - unknown
-                description: 'Defines the status of an Add-On execution.
-
-                  In most cases, once the status changes to `done`, [Application Data](#operation/fileInfo) of the file that had been specified as a `appdata`, will contain the result of the execution.'
     executeAddonConcurrentCallResponse:
       description: Add-On concurrent call attempt.
       content:
@@ -1060,32 +1049,6 @@ components:
                 type: string
                 example: Concurrent call attempted
                 default: Concurrent call attempted
-    invalidAcceptHeader:
-      description: Invalid version header `Accept` for this endpoint.
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              detail:
-                type: string
-                example: Incorrect Accept header provided. Make sure to specify API version. Refer to REST API docs for details.
-                default: Incorrect Accept header provided. Make sure to specify API version. Refer to REST API docs for details.
-    authorizationProblemsResponse:
-      description: Authorization errors.
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              detail:
-                type: string
-                enum:
-                - Incorrect authentication credentials.
-                - Public key {public_key} not found.
-                - Secret key not found.
-                - Invalid signature. Please check your Secret key.
-                example: Incorrect authentication credentials.
     requestWasThrottledError:
       description: Request was throttled.
       headers:
@@ -1108,7 +1071,75 @@ components:
       name: Accept
       description: Version header.
       schema:
-        type: string
-        nullable: true
+        type:
+        - string
+        - 'null'
         example: application/vnd.uploadcare-v0.7+json
       required: true
+  schemas:
+    simpleAuthHTTPForbidden:
+      type: object
+      properties:
+        detail:
+          type: string
+          default: Simple authentication over HTTP is forbidden. Please, use HTTPS or signed requests instead.
+      example:
+        detail: Simple authentication over HTTP is forbidden. Please, use HTTPS or signed requests instead.
+    addonExecutionStatus:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - in_progress
+          - error
+          - done
+          - unknown
+          description: 'Defines the status of an Add-On execution.
+
+            In most cases, once the status changes to `done`, [Application Data](#operation/fileInfo) of the file that had been specified as a `appdata`, will contain the result of the execution.'
+  securitySchemes:
+    apiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: 'Every request made to `https://api.uploadcare.com/` MUST be signed. HTTPS SHOULD be used with any authorization scheme.
+
+
+        Requests MUST contain the `Authorization` header defining `auth-scheme` and `auth-param`: `Authorization: auth-scheme auth-param`.
+
+
+        Every request MUST contain the `Accept` header identifying the REST API version: `Accept: application/vnd.uploadcare-v0.7+json`.
+
+
+        There are two available authorization schemes:
+
+        * For production: `Uploadcare`, a scheme where a `signature`, not your Secret API Key MUST be specified. Signatures SHOULD be generated on backend.
+
+        * For quick tests: `Uploadcare.Simple`, a simple scheme where your [Secret API Key](https://app.uploadcare.com/projects/-/api-keys/) MUST be specified in every request''s `auth-param`.
+
+        '
+    Uploadcare:
+      type: apiKey
+      in: header
+      name: Uploadcare
+      description: "With the `Uploadcare` authentication method:\n* `auth-param` is a `public_key:signature` pair, where your `secret_key` is used to derive `signature` but is _not included in every request_ itself.\n* You MUST also provide the `Date` header in [RFC2822](https://datatracker.ietf.org/doc/html/rfc2822#section-3.3) format with the time zone set to `GMT` (see the example below).\n* The date you provide MUST NOT exceed the 15-minute offset from the server time of the API endpoint.\n\n```http\nAccept: application/vnd.uploadcare-v0.7+json\nDate: Fri, 30 Sep 2016 11:10:54 GMT\nAuthorization: Uploadcare public_key:6ff75027649aadd4dc98c1f784444445d1e6ed82\n```\n\nThe `signature` part of the `Uploadcare` authentication method `auth-param` MUST be constructed from the following components:\n* Request type (`POST`, `GET`, `HEAD`, `OPTIONS`)\n* Hex md5 hash of the request body\n* `Content-Type` header value\n* `Date` header value\n* URI including path and parameters\n\nThe parameters are then concatenated in textual order using LF: every value sits in a separate line. The result is then signed with [HMAC/SHA1](https://en.wikipedia.org/wiki/HMAC) using your project's `secret_key`.\n\nTake a look at the Python example of deriving `signature`; the example request is made to get a list of files:\n\n```py\nimport time\nimport hashlib\nimport hmac\nfrom email import utils\n\n# Specifying the project’s key\nSECRET_KEY = 'YOUR_SECRET_KEY'\n\n# Specifying request type\nverb = 'GET'\n\n# Calculate [md5](https://en.wikipedia.org/wiki/MD5) checksum for the request's HTTP body.\n# Note: Taking into account that in our example, we are sending an HTTP GET request,\n# and the request does not have anything in its HTTP body, we use an empty string as an input to the md5 hash function.\n# If we were to send an HTTP POST request with, for example, JSON in the request's body,\n# we would have to pass the JSON as the input to the md5 hash function.\ncontent_md5 = hashlib.md5(b'').hexdigest()\n\n# Content-Type header\ncontent_type = 'application/json'\n\n# Current time, e.g. 1541423681\ntimestamp = int(time.time())\n# Date header ('Mon, 05 Nov 2018 13:14:41 GMT')\ndate_header = utils.formatdate(timestamp, usegmt=True)\n\n# The request URI\nuri = '/files/?limit=1&stored=true'\n\n# Forming the final string: concatenating\nsign_string = '\\n'.join([verb, content_md5, content_type, date_header, uri])\n\n# Calculating the signature,\n# the result may look like this: \"3cbc4d2cf91f80c1ba162b926f8a975e8bec7995\"\nsignature = hmac.new(SECRET_KEY.encode(), sign_string.encode(), hashlib.sha1).hexdigest()\n```\n\nOnce `signature` is derived, it SHOULD be implemented into the request body:\n\n```bash\ncurl  \\\n    -H 'Content-Type: application/json' \\\n    -H 'Accept: application/vnd.uploadcare-v0.7+json' \\\n    -H 'Date: Mon, 05 Nov 2018 13:14:41 GMT' \\\n    -H 'Authorization: Uploadcare YOUR_PUBLIC_KEY:SIGNATURE' \\\n    'https://api.uploadcare.com/files/?limit=1&stored=true'\n```\n"
+    Uploadcare.Simple:
+      type: apiKey
+      in: header
+      name: Uploadcare.Simple
+      description: 'Note: We DO NOT recommend using this authentication method in production.
+
+
+        With the `Uploadcare.Simple` authentication method, `auth-param` is your `public_key:secret_key` pair. Note that in this scheme, your Uploadcare project `secret_key` is  _included in every request as plain text_.
+
+
+        ```http
+
+        Accept: application/vnd.uploadcare-v0.7+json
+
+        Authorization: Uploadcare.Simple public_key:secret_key
+
+        ```
+
+        '

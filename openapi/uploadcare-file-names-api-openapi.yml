@@ -1,6 +1,6 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
-  title: URL API Reference Add-Ons File names API
+  title: URL API Reference File names API
   version: '2022-11-28'
   description: 'Every uploaded file is immediately available on the Uploadcare CDN.
 
@@ -139,10 +139,10 @@ paths:
           $ref: '#/components/responses/fileNotFoundError'
 components:
   examples:
-    image:
-      externalValue: https://ucarecdn.com/d7fe74ac-65b8-4ade-875f-ccd92759a70f/cat.jpg
     imageNotFound:
       externalValue: https://ucarecdn.com/d7fe74ac-65b8-4ade-875f-ccd92759a700/imageNotFound.jpg
+    image:
+      externalValue: https://ucarecdn.com/d7fe74ac-65b8-4ade-875f-ccd92759a70f/cat.jpg
   responses:
     fileNotFoundError:
       description: Image with "File not found" text.

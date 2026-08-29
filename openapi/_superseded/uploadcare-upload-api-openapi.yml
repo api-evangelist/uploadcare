@@ -1,0 +1,2462 @@
+openapi: 3.2.0
+info:
+  title: URL API Reference Add-Ons Upload API
+  version: '2022-11-28'
+  description: 'Every uploaded file is immediately available on the Uploadcare CDN.
+
+    The CDN includes on-the-fly processing features and can work as a proxy.
+
+
+    ## API endpoints
+
+    Access files in Uploadcare CDN at `ucarecdn.com` over HTTP/HTTPS like this:
+
+    ```https://ucarecdn.com/:uuid/```
+
+
+    You can add CDN operations by including directives in the CDN URL:
+
+    ```https://ucarecdn.com/:uuid/-/:operation/:params/:filename```
+
+
+    * `:uuid` stands for the unique file identifier, UUID, assigned on upload.
+
+    * `/-/` is a mandatory parsing delimiter to divide operations and other path components.
+
+    * `:operation/:params/` is a CDN operation directive with parameters.
+
+    * `:filename` is an optional filename you can add after a trailing slash /.
+
+
+    You can stack two and more operations like this:
+
+    ```-/:operation/:params/-/:operation/:params/```
+
+    '
+  contact:
+    name: API support
+    email: help@uploadcare.com
+  x-logo:
+    url: https://ucarecdn.com/12e3af14-392d-416f-8542-f210c2eb6ec4/logourlapi.svg
+    backgroundColor: '#fafafa'
+    altText: Uploadcare URL API Reference
+  x-meta:
+    title: URL API Reference — Uploadcare
+    description: A reference documentation for the Uploadcare's URL API.
+servers:
+- url: https://ucarecdn.com
+  description: Production server
+tags:
+- name: Upload
+paths:
+  /base/:
+    post:
+      tags:
+      - Upload
+      operationId: baseUpload
+      summary: Direct uploads
+      description: "Direct file uploads comply with the [RFC 7578](https://www.rfc-editor.org/rfc/rfc7578) standard.\nIn other words, you can perform a direct upload by making an HTTP POST request with the Content-Type\nheader set to `multipart/form-data`.\n\n**Note**: Direct file uploads support files smaller than 100 megabytes only.\nIf you would like to upload larger files, please use [Multipart Uploads](/docs/api/upload/upload/multipart-file-upload-start) instead.\n\nFile upload example with curl:\n\n```\ncurl -X POST https://upload.uploadcare.com/base/ \\\n     -F UPLOADCARE_PUB_KEY=\"demopublickey\" \\\n     -F UPLOADCARE_STORE=\"auto\" \\\n     -F \"metadata[subsystem]\"=\"uploader\" \\\n     -F \"metadata[pet]\"=\"cat\" \\\n     -F file=@\"my file.jpeg\"\n```\n"
+      requestBody:
+        $ref: '#/components/requestBodies/baseUploadRequestBody'
+      responses:
+        '200':
+          $ref: '#/components/responses/baseUploadSuccessful'
+        '400':
+          $ref: '#/components/responses/baseUploadInputValidationErrors'
+        '403':
+          $ref: '#/components/responses/commonUploadAccessForbiddenErrors'
+        '413':
+          $ref: '#/components/responses/requestSizeLimitExceededError'
+        '429':
+          $ref: '#/components/responses/requestWasThrottledError'
+      x-codeSamples:
+      - lang: JavaScript
+        label: JS
+        source: "import { base } from '@uploadcare/upload-client'\n\n// fileData must be `Blob` or `File` or `Buffer`\nconst result = await base(\n  fileData,\n  {\n    publicKey: 'YOUR_PUBLIC_KEY',\n    store: 'auto',\n    metadata: {\n      subsystem: 'uploader',\n      pet: 'cat'\n    }\n  }\n)\n"
+      - lang: PHP
+        label: PHP
+        source: "<?php\n$configuration = Uploadcare\\Configuration::create((string) $_ENV['UPLOADCARE_PUBLIC_KEY'], (string) $_ENV['UPLOADCARE_SECRET_KEY']);\n\n$uploader = new Uploadcare\\Uploader\\Uploader($configuration);\n$fileInfo = $uploader->fromPath(__DIR__ . '/squirrel.jpg', null, null, 'auto', [\n    'system' => 'php-uploader',\n    'pet' => 'cat',\n]);\necho \\sprintf(\"URL: %s, ID: %s, Mime type: %s\\n\", $fileInfo->getUrl(), $fileInfo->getUuid(), $fileInfo->getMimeType());\nforeach ($fileInfo->getMetadata() as $key => $value) {\n    echo \\sprintf(\"%s: %s\\n\", $key, $value);\n}\n"
+      - lang: Python
+        label: Python
+        source: "from pyuploadcare import Uploadcare, File\n\nuploadcare = Uploadcare(public_key='YOUR_PUBLIC_KEY', secret_key='YOUR_SECRET_KEY')\nwith open('test1.txt', 'rb') as file_object:\n    ucare_file = uploadcare.upload(file_object)\n"
+      - lang: Ruby
+        label: Ruby
+        source: 'require ''uploadcare''
+
+          Uploadcare.config.public_key = ''YOUR_PUBLIC_KEY''
+
+          Uploadcare.config.secret_key = ''YOUR_SECRET_KEY''
+
+
+          source_file = File.open(''image.png'')
+
+          Uploadcare::Uploader.upload(source_file, store: ''auto'')
+
+          '
+      - lang: Swift
+        label: Swift
+        source: "import Uploadcare\n\nlet uploadcare = Uploadcare(withPublicKey: \"YOUR_PUBLIC_KEY\", secretKey: \"YOUR_SECRET_KEY\")\n\nguard let url = Bundle.main.url(forResource: \"squirrel\", withExtension: \"jpg\"),\n      let data = try? Data(contentsOf: url) else { return }\nlet metadata = [\"subsystem\": \"uploader\", \"pet\": \"cat\"]\n\nlet file = try await uploadcare.uploadFile(data, withName: \"random_file_name.jpg\", store: .auto) { progress in\n  print(\"progress: \\(progress)\")\n}\nprkint(file)\n"
+      - lang: Kotlin
+        label: Kotlin
+        source: 'import com.uploadcare.android.library.api.UploadcareClient
+
+
+          val uploadcare = UploadcareClient(publicKey = "YOUR_PUBLIC_KEY", secretKey = "YOUR_SECRET_KEY")
+
+
+          val uri = "content://com.android.providers.media.documents/document/image%3A1000001178".toUri()
+
+          val file = FileUploader(uploadcare, uri = uri, context = context).upload()
+
+          Log.d("TAG", file.toString())
+
+          '
+  /multipart/start/:
+    post:
+      tags:
+      - Upload
+      operationId: multipartFileUploadStart
+      summary: Start multipart upload
+      description: 'Multipart uploads should be used if you need to upload files larger than 100 megabytes or if you want to
+
+        explicitly trigger [AWS S3 Transfer Acceleration](https://aws.amazon.com/s3/transfer-acceleration/).
+
+        When you use Multipart Uploads your files go straight to AWS S3 bypassing our upload instances.
+
+
+        To upload large files, 3 requests are sent in sequence:
+
+        1. `/multipart/start/`
+
+        2. `<presigned-url-x>`
+
+        3. `/multipart/complete/`.
+
+
+        **Note**: Multipart uploads support files larger than 10 megabytes only.
+
+        '
+      requestBody:
+        $ref: '#/components/requestBodies/multipartUploadStartParameters'
+      responses:
+        '200':
+          $ref: '#/components/responses/multipartUploadStartResponse'
+        '400':
+          $ref: '#/components/responses/multipartUploadStartInputValidationErrors'
+        '403':
+          $ref: '#/components/responses/commonUploadAccessForbiddenErrors'
+        '429':
+          $ref: '#/components/responses/requestWasThrottledError'
+      x-codeSamples:
+      - lang: JavaScript
+        label: JS
+        source: "import { multipartStart } from '@uploadcare/upload-client'\n\nconst result = await multipartStart(\n  27796904,\n  {\n    publicKey: 'YOUR_PUBLIC_KEY',\n    store: 'auto',\n    fileName: 'myfile.mp4',\n    contentType: 'video/mp4',\n    metadata: {\n      subsystem: 'uploader',\n      pet: 'cat'\n    }\n  }\n)\n"
+      - lang: PHP
+        label: PHP
+        source: "// Uploadcare lib provides high level API for multipart uploads that does everything for you\n\n<?php\n$configuration = Uploadcare\\Configuration::create((string) $_ENV['UPLOADCARE_PUBLIC_KEY'], (string) $_ENV['UPLOADCARE_SECRET_KEY']);\n\n$uploader = new Uploadcare\\Uploader\\Uploader($configuration);\n$path = '/path-to-large-file.zip';\n$handle = \\fopen($path, 'rb');\n$response = $uploader->fromResource($handle, null, null, 'auto', [\n    'size' => \\filesize($path), // The \"size\" is the metadata key\n]);\necho \\sprintf('File uploaded. ID is \\'%s\\'', $response->getUuid());\n"
+      - lang: Python
+        label: Python
+        source: "// Uploadcare lib provides high level API for multipart uploads that does everything for you\n\nfrom pyuploadcare import Uploadcare, File\n\nuploadcare = Uploadcare(public_key='YOUR_PUBLIC_KEY', secret_key='YOUR_SECRET_KEY')\nwith open('test1.txt', 'rb') as file_object:\n    ucare_file = uploadcare.multipart_upload(file_object)\n"
+      - lang: Ruby
+        label: Ruby
+        source: '// Uploadcare lib provides high level API for multipart uploads that does everything for you
+
+
+          require ''uploadcare''
+
+          Uploadcare.config.public_key = ''YOUR_PUBLIC_KEY''
+
+          Uploadcare.config.secret_key = ''YOUR_SECRET_KEY''
+
+
+          source_file = File.open(''image.png'')
+
+          Uploadcare::Uploader.upload(source_file, store: ''auto'')
+
+          '
+      - lang: Swift
+        label: Swift
+        source: "// Uploadcare lib provides high level API for multipart uploads that does everything for you\n\nimport Uploadcare\n\nlet uploadcare = Uploadcare(withPublicKey: \"YOUR_PUBLIC_KEY\", secretKey: \"YOUR_SECRET_KEY\")\n\nguard let url = Bundle.main.url(forResource: \"Mona_Lisa_23mb\", withExtension: \"jpg\"),\n      let data = try? Data(contentsOf: url) else { return }\n\nlet metadata = [\"subsystem\": \"uploader\", \"pet\": \"cat\"]\nlet onProgress: (Double)->Void = { (progress) in\n  print(\"progress: \\(progress)\")\n}\n\nlet file = try await uploadcare.uploadAPI.multipartUpload(data, withName: \"Mona_Lisa_big.jpg\", store: .auto, metadata: metadata, onProgress)\nprint(file)\n"
+      - lang: Kotlin
+        label: Kotlin
+        source: '// Uploadcare lib provides high level API for multipart uploads that does everything for you
+
+
+          import com.uploadcare.android.library.api.UploadcareClient
+
+
+          val uploadcare = UploadcareClient(publicKey = "YOUR_PUBLIC_KEY", secretKey = "YOUR_SECRET_KEY")
+
+
+          val uri = "content://com.android.providers.media.documents/document/image%3A1000001178".toUri()
+
+          val file = FileUploader(uploadcare, uri = uri, context = context).upload()
+
+          Log.d("TAG", file.toString())
+
+          '
+  /<presigned-url-x>:
+    put:
+      tags:
+      - Upload
+      operationId: multipartFileUploadPart
+      summary: Upload individual file parts
+      description: 'The second phase is about uploading the file parts to the presigned upload URLs returned from the
+
+        `/multipart/start/` endpoint.
+
+
+        Each uploaded part should be at least 5 MiB (5242880 bytes) in size except for the last one, which can be smaller.
+
+        You can upload the file parts in parallel provided that the byte order stays unchanged.
+
+
+        **Note**: You MUST define `Content-Type` header for your data.
+
+        '
+      requestBody:
+        $ref: '#/components/requestBodies/multipartUploadPartParameters'
+      responses:
+        2XX:
+          description: A file part has been uploaded successfully
+      x-codeSamples:
+      - lang: JavaScript
+        label: JS
+        source: "import { multipartUpload } from '@uploadcare/upload-client'\n\n// partData is a chunk of the uploaded file's content\n// must be `Blob` or `File` or `Buffer`\nconst result = await multipartUpload(\n  partData,\n  '<presigned-url-x>'\n)\n"
+      - lang: PHP
+        label: PHP
+        source: "// Uploadcare lib provides high level API for multipart uploads that does everything for you\n\n<?php\n$configuration = Uploadcare\\Configuration::create((string) $_ENV['UPLOADCARE_PUBLIC_KEY'], (string) $_ENV['UPLOADCARE_SECRET_KEY']);\n\n$uploader = new Uploadcare\\Uploader\\Uploader($configuration);\n$path = '/path-to-large-file.zip';\n$handle = \\fopen($path, 'rb');\n$response = $uploader->fromResource($handle, null, null, 'auto', [\n    'size' => \\filesize($path), // The \"size\" is the metadata key\n]);\necho \\sprintf('File uploaded. ID is \\'%s\\'', $response->getUuid());\n"
+      - lang: Python
+        label: Python
+        source: "// Uploadcare lib provides high level API for multipart uploads that does everything for you\n\nfrom pyuploadcare import Uploadcare, File\n\nuploadcare = Uploadcare(public_key='YOUR_PUBLIC_KEY', secret_key='YOUR_SECRET_KEY')\nwith open('test1.txt', 'rb') as file_object:\n    ucare_file = uploadcare.multipart_upload(file_object)\n"
+      - lang: Ruby
+        label: Ruby
+        source: '// Uploadcare lib provides high level API for multipart uploads that does everything for you
+
+
+          require ''uploadcare''
+
+          Uploadcare.config.public_key = ''YOUR_PUBLIC_KEY''
+
+          Uploadcare.config.secret_key = ''YOUR_SECRET_KEY''
+
+
+          source_file = File.open(''image.png'')
+
+          Uploadcare::Uploader.upload(source_file, store: ''auto'')
+
+          '
+      - lang: Swift
+        label: Swift
+        source: "// Uploadcare lib provides high level API for multipart uploads that does everything for you\n\nimport Uploadcare\n\nlet uploadcare = Uploadcare(withPublicKey: \"YOUR_PUBLIC_KEY\", secretKey: \"YOUR_SECRET_KEY\")\n\nguard let url = Bundle.main.url(forResource: \"Mona_Lisa_23mb\", withExtension: \"jpg\"),\n      let data = try? Data(contentsOf: url) else { return }\n\nlet metadata = [\"subsystem\": \"uploader\", \"pet\": \"cat\"]\nlet onProgress: (Double)->Void = { (progress) in\n  print(\"progress: \\(progress)\")\n}\n\nlet file = try await uploadcare.uploadAPI.multipartUpload(data, withName: \"Mona_Lisa_big.jpg\", store: .auto, metadata: metadata, onProgress)\nprint(file)\n"
+      - lang: Kotlin
+        label: Kotlin
+        source: '// Uploadcare lib provides high level API for multipart uploads that does everything for you
+
+
+          import com.uploadcare.android.library.api.UploadcareClient
+
+
+          val uploadcare = UploadcareClient(publicKey = "YOUR_PUBLIC_KEY", secretKey = "YOUR_SECRET_KEY")
+
+
+          val uri = "content://com.android.providers.media.documents/document/image%3A1000001178".toUri()
+
+          val file = FileUploader(uploadcare, uri = uri, context = context).upload()
+
+          Log.d("TAG", file.toString())
+
+          '
+  /multipart/complete/:
+    post:
+      tags:
+      - Upload
+      operationId: multipartFileUploadComplete
+      summary: Complete multipart upload
+      description: 'Once all the file parts have been uploaded successfully, complete the
+
+        upload session to assemble all the file parts into a single resulting file.
+
+        '
+      requestBody:
+        $ref: '#/components/requestBodies/multipartUploadCompleteParameters'
+      responses:
+        '200':
+          description: The file was uploaded successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/fileUploadInfo'
+        '400':
+          $ref: '#/components/responses/multipartUploadCompleteInputValidationErrors'
+        '403':
+          $ref: '#/components/responses/multipartUploadCompleteAccessForbiddenErrors'
+        '404':
+          $ref: '#/components/responses/multipartUploadCompleteFileNotFoundError'
+      x-codeSamples:
+      - lang: JavaScript
+        label: JS
+        source: "import { multipartComplete } from '@uploadcare/upload-client'\n\nconst result = await multipartComplete(\n  '67947755-1584-4e3f-902b-d4e2bf76a841',\n  {\n    publicKey: 'YOUR_PUBLIC_KEY'\n  }\n)\n"
+      - lang: PHP
+        label: PHP
+        source: "// Uploadcare lib provides high level API for multipart uploads that does everything for you\n\n<?php\n$configuration = Uploadcare\\Configuration::create((string) $_ENV['UPLOADCARE_PUBLIC_KEY'], (string) $_ENV['UPLOADCARE_SECRET_KEY']);\n\n$uploader = new Uploadcare\\Uploader\\Uploader($configuration);\n$path = '/path-to-large-file.zip';\n$handle = \\fopen($path, 'rb');\n$response = $uploader->fromResource($handle, null, null, 'auto', [\n    'size' => \\filesize($path), // The \"size\" is the metadata key\n]);\necho \\sprintf('File uploaded. ID is \\'%s\\'', $response->getUuid());\n"
+      - lang: Python
+        label: Python
+        source: "// Uploadcare lib provides high level API for multipart uploads that does everything for you\n\nfrom pyuploadcare import Uploadcare, File\n\nuploadcare = Uploadcare(public_key='YOUR_PUBLIC_KEY', secret_key='YOUR_SECRET_KEY')\nwith open('test1.txt', 'rb') as file_object:\n    ucare_file = uploadcare.multipart_upload(file_object)\n"
+      - lang: Ruby
+        label: Ruby
+        source: '// Uploadcare lib provides high level API for multipart uploads that does everything for you
+
+
+          require ''uploadcare''
+
+          Uploadcare.config.public_key = ''YOUR_PUBLIC_KEY''
+
+          Uploadcare.config.secret_key = ''YOUR_SECRET_KEY''
+
+
+          source_file = File.open(''image.png'')
+
+          Uploadcare::Uploader.upload(source_file, store: ''auto'')
+
+          '
+      - lang: Swift
+        label: Swift
+        source: "// Uploadcare lib provides high level API for multipart uploads that does everything for you\n\nimport Uploadcare\n\nlet uploadcare = Uploadcare(withPublicKey: \"YOUR_PUBLIC_KEY\", secretKey: \"YOUR_SECRET_KEY\")\n\nguard let url = Bundle.main.url(forResource: \"Mona_Lisa_23mb\", withExtension: \"jpg\"),\n      let data = try? Data(contentsOf: url) else { return }\n\nlet metadata = [\"subsystem\": \"uploader\", \"pet\": \"cat\"]\nlet onProgress: (Double)->Void = { (progress) in\n  print(\"progress: \\(progress)\")\n}\n\nlet file = try await uploadcare.uploadAPI.multipartUpload(data, withName: \"Mona_Lisa_big.jpg\", store: .auto, metadata: metadata, onProgress)\nprint(file)\n"
+      - lang: Kotlin
+        label: Kotlin
+        source: '// Uploadcare lib provides high level API for multipart uploads that does everything for you
+
+
+          import com.uploadcare.android.library.api.UploadcareClient
+
+
+          val uploadcare = UploadcareClient(publicKey = "YOUR_PUBLIC_KEY", secretKey = "YOUR_SECRET_KEY")
+
+
+          val uri = "content://com.android.providers.media.documents/document/image%3A1000001178".toUri()
+
+          val file = FileUploader(uploadcare, uri = uri, context = context).upload()
+
+          Log.d("TAG", file.toString())
+
+          '
+  /from_url/:
+    post:
+      tags:
+      - Upload
+      operationId: fromURLUpload
+      summary: Upload files from URLs
+      description: 'Uploadcare can fetch a file from a publicly available URL and then automatically upload the
+
+        fetched file to your project.
+
+
+        #### Upload tokens
+
+        Requests to the endpoint return a JSON dictionary with a `token` that can be further used
+
+        to [check the status](/docs/api/upload/upload/from-url-upload-status) of the upload
+
+        request.
+
+
+        **Note:** The token is not a file ID and can''t be used to address the file directly.
+
+        The actual file ID should be retrieved by calling the `/from_url/status/` endpoint.
+
+
+        #### Duplicates prevention
+
+        By default, every call to the `/from_url/` endpoint with the same `source_url` results in
+
+        a new upload leading to file duplication.
+
+
+        If you would like Uploadcare to keep track of the requested URLs and avoid the duplicate
+
+        uploads, pass the `save_URL_duplicates` and `check_URL_duplicates` parameters described below.
+
+        '
+      requestBody:
+        $ref: '#/components/requestBodies/fromURLUploadRequestBody'
+      responses:
+        '200':
+          $ref: '#/components/responses/fromURLUploadResponseSuccessful'
+        '400':
+          $ref: '#/components/responses/fromURLUploadInputValidationErrors'
+        '403':
+          $ref: '#/components/responses/fromURLUploadAccessForbiddenErrors'
+        '429':
+          $ref: '#/components/responses/requestWasThrottledError'
+      x-codeSamples:
+      - lang: JavaScript
+        label: JS
+        source: "import { fromUrl } from '@uploadcare/upload-client'\n\nconst result = await fromUrl(\n  'https://source.unsplash.com/featured',\n  {\n    publicKey: 'YOUR_PUBLIC_KEY',\n    metadata: {\n      subsystem: 'uploader',\n      pet: 'cat'\n    }\n  }\n)\n"
+      - lang: PHP
+        label: PHP
+        source: "<?php\n$configuration = Uploadcare\\Configuration::create((string) $_ENV['UPLOADCARE_PUBLIC_KEY'], (string) $_ENV['UPLOADCARE_SECRET_KEY']);\n\n$uploader = new Uploadcare\\Uploader\\Uploader($configuration);\n$url = 'https://source.unsplash.com/featured';\n$token = $uploader->fromUrl($url, null, null, 'auto', [\n    'action' => 'upload from URL', // The \"Action\" is the metadata key\n    'checkDuplicates' => true,\n    'storeDuplicates' => false,\n]);\necho \\sprintf('Upload from URL \\'%s\\' has been started. Token is %s', $url, $token);\n"
+      - lang: Python
+        label: Python
+        source: "from pyuploadcare import Uploadcare\n\nuploadcare = Uploadcare(public_key='YOUR_PUBLIC_KEY', secret_key='YOUR_SECRET_KEY')\nucare_file = uploadcare.upload_from_url_sync(\n    \"https://source.unsplash.com/featured\",\n    check_duplicates=True,\n    save_duplicates=False\n)\n"
+      - lang: Ruby
+        label: Ruby
+        source: 'require ''uploadcare''
+
+          Uploadcare.config.public_key = ''YOUR_PUBLIC_KEY''
+
+          Uploadcare.config.secret_key = ''YOUR_SECRET_KEY''
+
+
+          source_url = ''https://source.unsplash.com/featured''
+
+          Uploadcare::Uploader.upload(source_url, store: ''auto'')
+
+          '
+      - lang: Swift
+        label: Swift
+        source: "import Uploadcare\n\nlet uploadcare = Uploadcare(withPublicKey: \"YOUR_PUBLIC_KEY\", secretKey: \"YOUR_SECRET_KEY\")\n\nlet url = URL(string: \"https://source.unsplash.com/featured\")!\nlet task = UploadFromURLTask(sourceUrl: url)\n  .store(.auto)\n  .setMetadata(\"uploader\", forKey: \"subsystem\")\n  .setMetadata(\"cat\", forKey: \"pet\")\n\nlet file = try await uploadcare.uploadAPI.uploadAndWaitForCompletion(task: task)\nprint(file)\n"
+      - lang: Kotlin
+        label: Kotlin
+        source: "import com.uploadcare.android.library.api.UploadcareClient\n\nval uploadcare = UploadcareClient(publicKey = \"YOUR_PUBLIC_KEY\", secretKey = \"YOUR_SECRET_KEY\")\n\nval uploader = UrlUploader(\n    client = uploadcare,\n    sourceUrl = \"https://source.unsplash.com/featured\"\n)\nval file = uploader.upload()\nLog.d(\"TAG\", file.toString())\n"
+  /from_url/status/:
+    get:
+      tags:
+      - Upload
+      operationId: fromURLUploadStatus
+      summary: Check the status of a task to fetch/upload a file from a URL
+      description: "The endpoint notifies about the progress of the task by changing the value of the `status` field:\n  * the field is set to `waiting` initially\n  * once the system starts processing the request, the field is set to `progress`\n  * if the file is fetched and uploaded successfully, the `status` field is set to `success`\n    and the endpoint returns a JSON object holding information about the uploaded file\n  * if the system fails to fetch/upload the file, the `status` field is set to `error` and\n    the `error` field is set to the cause of the error.\n"
+      parameters:
+      - in: query
+        name: token
+        required: true
+        description: Token returned by the `/from_url/` endpoint that identifies a request to fetch/upload a file from a URL.
+        schema:
+          type: string
+          format: uuid
+        example: 945ebb27-1fd6-46c6-a859-b9893712d650
+      responses:
+        '200':
+          $ref: '#/components/responses/fromURLUploadStatusSuccessful'
+        '400':
+          $ref: '#/components/responses/fromURLUploadStatusInputValidationErrors'
+      x-codeSamples:
+      - lang: JavaScript
+        label: JS
+        source: "import { fromUrlStatus } from '@uploadcare/upload-client'\n\nconst result = await fromUrlStatus(\n  '945ebb27-1fd6-46c6-a859-b9893712d650',\n  {\n    publicKey: 'YOUR_PUBLIC_KEY'\n  }\n)\n"
+      - lang: PHP
+        label: PHP
+        source: '<?php
+
+          $configuration = Uploadcare\Configuration::create((string) $_ENV[''UPLOADCARE_PUBLIC_KEY''], (string) $_ENV[''UPLOADCARE_SECRET_KEY'']);
+
+
+          $uploader = new Uploadcare\Uploader\Uploader($configuration);
+
+          $status = $uploader->checkStatus(''945ebb27-1fd6-46c6-a859-b9893712d650'');
+
+          echo \sprintf(''Upload status is %s'', $status);
+
+          '
+      - lang: Python
+        label: Python
+        source: 'from pyuploadcare import Uploadcare, File
+
+
+          uploadcare = Uploadcare(public_key=''YOUR_PUBLIC_KEY'', secret_key=''YOUR_SECRET_KEY'')
+
+          file = uploadcare.file_from_url(''945ebb27-1fd6-46c6-a859-b9893712d650'')
+
+          print(file.info)
+
+          '
+      - lang: Ruby
+        label: Ruby
+        source: 'require ''uploadcare''
+
+          Uploadcare.config.public_key = ''YOUR_PUBLIC_KEY''
+
+          Uploadcare.config.secret_key = ''YOUR_SECRET_KEY''
+
+
+          token = ''945ebb27-1fd6-46c6-a859-b9893712d650''
+
+          puts Uploadcare::Uploader.get_upload_from_url_status(token)
+
+          '
+      - lang: Swift
+        label: Swift
+        source: 'import Uploadcare
+
+
+          let uploadcare = Uploadcare(withPublicKey: "YOUR_PUBLIC_KEY", secretKey: "YOUR_SECRET_KEY")
+
+
+          let status = try await uploadcare.uploadAPI.uploadStatus(forToken: "945ebb27-1fd6-46c6-a859-b9893712d650")
+
+          print(status)
+
+          '
+      - lang: Kotlin
+        label: Kotlin
+        source: 'import com.uploadcare.android.library.api.UploadcareClient
+
+
+          val uploadcare = UploadcareClient(publicKey = "YOUR_PUBLIC_KEY", secretKey = "YOUR_SECRET_KEY")
+
+
+          val status = uploadcare.getFromUrlStatus(token = "945ebb27-1fd6-46c6-a859-b9893712d650")
+
+          Log.d("TAG", status.toString())
+
+          '
+  /info/:
+    get:
+      tags:
+      - Upload
+      operationId: fileUploadInfo
+      summary: Get information about an uploaded file
+      description: 'Returns a JSON object with information about an uploaded file (file size, MIME type, metadata, etc).
+
+        '
+      parameters:
+      - in: query
+        name: pub_key
+        required: true
+        schema:
+          $ref: '#/components/schemas/projectPublicKeyType'
+        example: YOUR_PUBLIC_KEY
+      - in: query
+        name: file_id
+        required: true
+        description: File's unique ID.
+        schema:
+          type: string
+          format: uuid
+        example: 67947755-1584-4e3f-902b-d4e2bf76a841
+      responses:
+        '200':
+          $ref: '#/components/responses/fileUploadInfoSuccessful'
+        '400':
+          $ref: '#/components/responses/fileUploadInfoInputValidationErrors'
+        '403':
+          $ref: '#/components/responses/fileUploadInfoAccessForbiddenErrors'
+        '404':
+          $ref: '#/components/responses/fileUploadInfoNotFoundErrors'
+      x-codeSamples:
+      - lang: JavaScript
+        label: JS
+        source: "import { info } from '@uploadcare/upload-client'\n\nconst result = await info(\n  'be3b4d5e-179d-460e-8a5d-69112ac86cbb',\n  {\n    publicKey: 'YOUR_PUBLIC_KEY'\n  }\n)\n"
+      - lang: PHP
+        label: PHP
+        source: '<?php
+
+          $configuration = Uploadcare\Configuration::create((string) $_ENV[''UPLOADCARE_PUBLIC_KEY''], (string) $_ENV[''UPLOADCARE_SECRET_KEY'']);
+
+
+          $fileInfo = (new Uploadcare\Api($configuration))->file()->fileInfo(string $uuid);
+
+          echo \sprintf(''URL: %s, ID: %s, Mime type: %s'', $fileInfo->getUrl(), $fileInfo->getUuid(), $fileInfo->getMimeType());
+
+          '
+      - lang: Python
+        label: Python
+        source: 'from pyuploadcare import Uploadcare, File
+
+
+          uploadcare = Uploadcare(public_key=''YOUR_PUBLIC_KEY'', secret_key=''YOUR_SECRET_KEY'')
+
+          file = uploadcare.file(''740e1b8c-1ad8-4324-b7ec-112c79d8eac2'')
+
+          print(file.info)
+
+          '
+      - lang: Ruby
+        label: Ruby
+        source: 'require ''uploadcare''
+
+          Uploadcare.config.public_key = ''YOUR_PUBLIC_KEY''
+
+          Uploadcare.config.secret_key = ''YOUR_SECRET_KEY''
+
+
+          uuid = ''740e1b8c-1ad8-4324-b7ec-112c79d8eac2''
+
+          info = Uploadcare::File.info(uuid)
+
+          puts info.inspect
+
+          '
+      - lang: Swift
+        label: Swift
+        source: 'import Uploadcare
+
+
+          let uploadcare = Uploadcare(withPublicKey: "YOUR_PUBLIC_KEY", secretKey: "YOUR_SECRET_KEY")
+
+
+          let file = try await uploadcare.uploadAPI.fileInfo(withFileId: "740e1b8c-1ad8-4324-b7ec-112c79d8eac2")
+
+          print(file)
+
+          '
+      - lang: Kotlin
+        label: Kotlin
+        source: 'import com.uploadcare.android.library.api.UploadcareClient
+
+
+          val uploadcare = UploadcareClient(publicKey = "YOUR_PUBLIC_KEY", secretKey = "YOUR_SECRET_KEY")
+
+
+          val file = uploadcare.getUploadedFile(fileId = "740e1b8c-1ad8-4324-b7ec-112c79d8eac2")
+
+          Log.d("TAG", file.toString())
+
+          '
+components:
+  schemas:
+    autoStoreDisabledError:
+      type: string
+      default: Autostore is disabled.
+      example: '#/components/examples/autoStoreDisabledError/value'
+    fileIdInvalidError:
+      type: string
+      default: file_id is invalid.
+      example: '#/components/examples/fileIdInvalidError/value'
+    signatureType:
+      type: string
+      description: '`signature` must be sent along with your upload request if you would like to use signed uploads.
+
+        The signature should be generated on your backend.
+
+        **Note**: the process requires knowledge of your Uploadcare Project''s Secret key.
+
+        See [signed uploads](https://uploadcare.com/docs/security/secure-uploads/) for details.
+
+        '
+      example: 04b29480233f4def5c875875b6bdc3b1
+    fileMetadataKeysNumberTooBigError:
+      type: string
+      default: A file can not have more than <NUMBER> metadata keys.
+      example: '#/components/examples/fileMetadataKeysNumberTooBigError/value'
+    sourceURLRequiredError:
+      type: string
+      default: source_url is required.
+      example: '#/components/examples/sourceURLRequiredError/value'
+    multipartFileCompletionFailedError:
+      type: string
+      default: Can not complete upload. Wrong parts size?
+      example: '#/components/examples/multipartFileCompletionFailedError/value'
+    uploadFailedError:
+      type: string
+      default: Upload failed.
+      example: '#/components/examples/uploadFailedError/value'
+    signatureInvalidError:
+      type: string
+      default: Invalid signature.
+      example: '#/components/examples/signatureInvalidError/value'
+    uploadcarePublicKeyRequiredError:
+      type: string
+      default: UPLOADCARE_PUB_KEY is required.
+      example: '#/components/examples/uploadcarePublicKeyRequiredError/value'
+    storeType:
+      type: string
+      description: "Determines if an uploaded file should be marked as temporary or permanent.\n\nThe parameter can have the following values:\n- `0` - do not mark an uploaded file as stored and remove it after 24 hours\n- `1` - mark the uploaded file as stored\n- `auto` - delegate the choice of the file-storing behavior to a project-wide setting called\n  [auto-store](https://app.uploadcare.com/projects/-/settings/#storage).\n\nThe default value depends on the user registration date.\n\nFor all users registered after February 12, 2024 (UTC 13:30), the default value is `auto`.\nFile-storing behavior depends entirely on what is set in the\n[storage settings](https://app.uploadcare.com/projects/-/settings/#storage) in the Dashboard.\n\nFor users registered before February 12, 2024, the default value is `0`.\nTo ensure that file storage in the project matches the settings in the Dashboard,\nchange the value to `auto`.\n"
+      enum:
+      - '0'
+      - '1'
+      - auto
+      default: auto
+      example: '1'
+    postRequestParserFailedError:
+      type: string
+      default: HTTP POST request parsing failed.
+      example: '#/components/examples/postRequestParserFailedError/value'
+    fileUploadInfo:
+      type: object
+      description: Information about an uploaded file.
+      required:
+      - uuid
+      - file_id
+      - size
+      - total
+      - done
+      - original_filename
+      - filename
+      - mime_type
+      - image_info
+      - video_info
+      - content_info
+      - metadata
+      - is_image
+      - is_stored
+      - is_ready
+      properties:
+        uuid:
+          type: string
+          format: uuid
+          description: File's unique ID.
+          example: 575ed4e8-f4e8-4c14-a58b-1527b6d9ee46
+        file_id:
+          type: string
+          format: uuid
+          description: Same as `uuid`
+          example: 575ed4e8-f4e8-4c14-a58b-1527b6d9ee46
+        size:
+          type: integer
+          description: File's size in bytes.
+          example: 145212
+        total:
+          type: integer
+          description: Same as `size`.
+          example: 145212
+        done:
+          type: integer
+          description: Same as `size`.
+          example: 145212
+        original_filename:
+          type: string
+          description: Original file of the uploaded file.
+          example: test-image_1.jpg
+        filename:
+          type: string
+          description: Sanitized `original_filename`.
+          example: testimage_1.jpg
+        mime_type:
+          type: string
+          description: File's MIME-type.
+          example: image/jpeg
+        image_info:
+          $ref: '#/components/schemas/imageInfo'
+        video_info:
+          $ref: '#/components/schemas/legacyVideoInfo'
+        content_info:
+          $ref: '#/components/schemas/contentInfo'
+        metadata:
+          $ref: '#/components/schemas/metadata'
+        is_image:
+          type: boolean
+          description: True if the uploaded file is an image of a supported file format.
+          example: true
+        is_stored:
+          type: boolean
+          description: True if the file has been marked as stored.
+          example: true
+        is_ready:
+          type: boolean
+          description: True if the file is ready to be fetched from Uploadcare's CDN.
+          example: true
+        s3_bucket:
+          type:
+          - string
+          - 'null'
+          description: Name of an AWS S3 bucket where the file is stored. Only available if you associate a Foreign Storage Bucket with your project.
+          example: custom-s3-bucket-name
+      example:
+        uuid: be3b4d5e-179d-460e-8a5d-69112ac86cbb
+        file_id: be3b4d5e-179d-460e-8a5d-69112ac86cbb
+        size: 2667636
+        total: 2667636
+        done: 2667636
+        original_filename: IMG-0412_123.JPG
+        filename: IMG0412_123.JPG
+        mime_type: image/jpeg
+        image_info:
+          color_mode: RGB
+          orientation: 6
+          format: JPEG
+          height: 4032
+          width: 3024
+          sequence: false
+          geo_location:
+            latitude: 55.62013611111111
+            longitude: 37.66299166666666
+          datetime_original: '2018-08-20T08:59:50'
+          dpi:
+          - 72
+          - 72
+        video_info: null
+        content_info:
+          mime:
+            mime: image/jpeg
+            type: image
+            subtype: jpeg
+          image:
+            color_mode: RGB
+            orientation: 6
+            format: JPEG
+            height: 4032
+            width: 3024
+            sequence: false
+            geo_location:
+              latitude: 55.62013611111111
+              longitude: 37.66299166666666
+            datetime_original: '2018-08-20T08:59:50'
+            dpi:
+            - 72
+            - 72
+        metadata:
+          subsystem: uploader
+          pet: cat
+        is_image: true
+        is_stored: true
+        is_ready: true
+    multipartFileAlreadyUploadedError:
+      type: string
+      default: File is already uploaded.
+      example: '#/components/examples/multipartFileAlreadyUploadedError/value'
+    fileMetadataKeyForbiddenError:
+      type: string
+      default: File's metadata key `<KEY>` contains symbols not allowed by the metadata key format.
+      example: '#/components/examples/fileMetadataKeyForbiddenError/value'
+    metadata:
+      type:
+      - object
+      - 'null'
+      description: Arbitrary metadata associated with a file.
+    videoInfo:
+      type: object
+      description: Video metadata.
+      required:
+      - duration
+      - format
+      - bitrate
+      - audio
+      - video
+      properties:
+        duration:
+          type:
+          - integer
+          - 'null'
+          description: Video file's duration in milliseconds.
+          example: 261827
+        format:
+          type: string
+          description: Video file's format.
+          example: mp4
+        bitrate:
+          type:
+          - integer
+          - 'null'
+          description: Video file's bitrate.
+          example: 393
+        audio:
+          type: array
+          items:
+            type: object
+            description: Audio stream's metadata.
+            required:
+            - bitrate
+            - codec
+            - sample_rate
+            - channels
+            properties:
+              bitrate:
+                type:
+                - integer
+                - 'null'
+                description: Audio stream's bitrate.
+                example: 78
+              codec:
+                type:
+                - string
+                - 'null'
+                description: Audio stream's codec.
+                example: aac
+              sample_rate:
+                type:
+                - integer
+                - 'null'
+                description: Audio stream's sample rate.
+                example: 44100
+              channels:
+                type:
+                - integer
+                - 'null'
+                description: Audio stream's number of channels.
+                example: 2
+        video:
+          type: array
+          items:
+            type: object
+            description: Video stream's metadata.
+            required:
+            - height
+            - width
+            - frame_rate
+            - bitrate
+            - codec
+            properties:
+              height:
+                type: integer
+                description: Video stream's image height.
+                example: 360
+              width:
+                type: integer
+                description: Video stream's image width.
+                example: 640
+              frame_rate:
+                type: number
+                description: Video stream's frame rate.
+                example: 30
+              bitrate:
+                type:
+                - integer
+                - 'null'
+                description: Video stream's bitrate.
+                example: 315
+              codec:
+                type:
+                - string
+                - 'null'
+                description: Video stream's codec.
+                example: h264
+    urlHostPrivateIPForbiddenError:
+      type: string
+      default: Only public IPs are allowed.
+      example: '#/components/examples/urlHostPrivateIPForbiddenError/value'
+    fileUploadInfoSuccessStatus:
+      title: Success
+      allOf:
+      - type: object
+        properties:
+          status:
+            type: string
+            enum:
+            - success
+            default: success
+            description: The file has been fetched/uploaded successfully.
+      - $ref: '#/components/schemas/fileUploadInfo'
+      example:
+        status: success
+        uuid: be3b4d5e-179d-460e-8a5d-69112ac86cbb
+        file_id: be3b4d5e-179d-460e-8a5d-69112ac86cbb
+        size: 2667636
+        total: 2667636
+        done: 2667636
+        original_filename: IMG-0412_123.JPG
+        filename: IMG0412_123.JPG
+        mime_type: image/jpeg
+        image_info:
+          color_mode: RGB
+          orientation: 6
+          format: JPEG
+          height: 4032
+          width: 3024
+          sequence: false
+          geo_location:
+            latitude: 55.62013611111111
+            longitude: 37.66299166666666
+          datetime_original: '2018-08-20T08:59:50'
+          dpi:
+          - 72
+          - 72
+        video_info: null
+        content_info:
+          mime:
+            mime: image/jpeg
+            type: image
+            subtype: jpeg
+          image:
+            color_mode: RGB
+            orientation: 6
+            format: JPEG
+            height: 4032
+            width: 3024
+            sequence: false
+            geo_location:
+              latitude: 55.62013611111111
+              longitude: 37.66299166666666
+            datetime_original: '2018-08-20T08:59:50'
+            dpi:
+            - 72
+            - 72
+        metadata:
+          subsystem: uploader
+          pet: cat
+        is_image: true
+        is_stored: true
+        is_ready: true
+    signatureExpirationInvalidError:
+      type: string
+      default: '`expire` must be a UNIX timestamp.'
+      example: '#/components/examples/signatureExpirationInvalidError/value'
+    imageInfo:
+      type: object
+      description: Image metadata.
+      required:
+      - color_mode
+      - orientation
+      - format
+      - height
+      - width
+      - geo_location
+      - datetime_original
+      - dpi
+      - sequence
+      properties:
+        color_mode:
+          type: string
+          description: Image color mode.
+          enum:
+          - RGB
+          - RGBA
+          - RGBa
+          - RGBX
+          - L
+          - LA
+          - La
+          - P
+          - PA
+          - CMYK
+          - YCbCr
+          - HSV
+          - LAB
+          example: RGBA
+        orientation:
+          type:
+          - integer
+          - 'null'
+          description: Image orientation from EXIF.
+          minimum: 0
+          maximum: 8
+          example: 6
+        format:
+          type: string
+          description: Image format.
+          example: JPEG
+        sequence:
+          type: boolean
+          description: Set to true if a file contains a sequence of images (GIF for example).
+          example: false
+        height:
+          type: integer
+          description: Image height in pixels.
+          example: 2352
+        width:
+          type: integer
+          description: Image width in pixels.
+          example: 2935
+        geo_location:
+          description: Geo-location of image from EXIF.
+          type:
+          - object
+          - 'null'
+          required:
+          - latitude
+          - longitude
+          properties:
+            latitude:
+              type: number
+              description: Location latitude.
+              example: -1.1884555555555556
+            longitude:
+              type: number
+              description: Location longitude.
+              example: 52.66996666666667
+        datetime_original:
+          type:
+          - string
+          - 'null'
+          description: Image date and time from EXIF. Please be aware that this data is not always formatted and displayed exactly as it appears in the EXIF.
+          format: date-time
+          example: '2018-09-13T16:23:40'
+        dpi:
+          type:
+          - array
+          - 'null'
+          description: Image DPI for two dimensions.
+          items:
+            type: number
+            example: 72
+          minItems: 2
+          maxItems: 2
+          example:
+          - 72
+          - 72
+    projectPublicKeyRemovedError:
+      type: string
+      default: Project <PUB-KEY> is marked as removed.
+      example: '#/components/examples/projectPublicKeyRemovedError/value'
+    fileMetadataKeyDuplicatedError:
+      type: string
+      default: File's metadata key `<KEY>` has a duplicate.
+      example: '#/components/examples/fileMetadataKeyDuplicatedError/value'
+    fileMetadataValueEmptyError:
+      type: string
+      default: Value of the file metadata key `<KEY>` can not be empty.
+      example: '#/components/examples/fileMetadataValueEmptyError/value'
+    urlHostRequiredError:
+      type: string
+      default: No URL host supplied.
+      example: '#/components/examples/urlHostRequiredError/value'
+    fileMetadataValueForbiddenError:
+      type: string
+      default: Value of file metadata key `<KEY>` contains symbols not allowed by the metadata value format.
+      example: '#/components/examples/fileMetadataValueForbiddenError/value'
+    uploadcarePublicKeyInvalidError:
+      type: string
+      default: UPLOADCARE_PUB_KEY is invalid.
+      example: '#/components/examples/uploadcarePublicKeyInvalidError/value'
+    fileMetadataValueLengthTooBigError:
+      type: string
+      default: Value of file metadata's key `<KEY>` can not be more than <LENGTH> symbols in length.
+      example: '#/components/examples/fileMetadataValueLengthTooBigError/value'
+    multipartSizeInvalidError:
+      type: string
+      default: size should be integer.
+      example: '#/components/examples/multipartSizeInvalidError/value'
+    urlParsingFailedError:
+      type: string
+      default: Failed to parse URL.
+      example: '#/components/examples/urlParsingFailedError/value'
+    publicKeyRequiredError:
+      type: string
+      default: pub_key is required.
+      example: '#/components/examples/publicKeyRequiredError/value'
+    urlHostMalformedError:
+      type: string
+      default: URL host is malformed.
+      example: '#/components/examples/urlHostMalformedError/value'
+    tokenRequiredError:
+      type: string
+      default: token is required.
+      example: '#/components/examples/tokenRequiredError/value'
+    multipartUploadSizeTooSmallError:
+      type: string
+      default: File size mismatch. Not all parts uploaded?
+      example: '#/components/examples/multipartUploadSizeTooSmallError/value'
+    fileIdRequiredError:
+      type: string
+      default: file_id is required.
+      example: '#/components/examples/fileIdRequiredError/value'
+    projectPublicKeyType:
+      type: string
+      description: Public key identifying an Uploadcare project your uploads will go to.
+      example: caa9d29da887ee88ffe6
+    uuidInvalidError:
+      type: string
+      default: uuid is invalid.
+      example: '#/components/examples/uuidInvalidError/value'
+    multipartPartSizeTooBigError:
+      type: string
+      default: Multipart Upload Part Size can not be more than <SIZE> bytes.
+      example: '#/components/examples/multipartPartSizeTooBigError/value'
+    hostnameNotFoundError:
+      type: string
+      default: Host does not exist.
+      example: '#/components/examples/hostnameNotFoundError/value'
+    fileUploadInfoFromURL:
+      allOf:
+      - type: object
+        properties:
+          type:
+            type: string
+            enum:
+            - file_info
+            example: file_info
+      - $ref: '#/components/schemas/fileUploadInfo'
+    fileTypeForbiddenError:
+      type: string
+      default: Uploading of these file types is not allowed.
+      example: '#/components/examples/fileTypeForbiddenError/value'
+    multipartPartSizeTooSmallError:
+      type: string
+      default: Multipart Upload Part Size can not be less than <SIZE> bytes.
+      example: '#/components/examples/multipartPartSizeTooSmallError/value'
+    accountUnpaidError:
+      type: string
+      default: Account has been blocked for non payment.
+      example: '#/components/examples/accountUnpaidError/value'
+    multipartFileIdRequiredError:
+      type: string
+      default: uuid is required.
+      example: '#/components/examples/multipartFileIdRequiredError/value'
+    accountBlockedError:
+      type: string
+      default: Account has been blocked.
+      example: '#/components/examples/accountBlockedError/value'
+    signatureExpirationRequiredError:
+      type: string
+      default: '`expire` is required.'
+      example: '#/components/examples/signatureExpirationRequiredError/value'
+    multipartUploadSizeTooLargeError:
+      type: string
+      default: Uploaded size is more than expected.
+      example: '#/components/examples/multipartUploadSizeTooLargeError/value'
+    fileUploadInfoWaitingStatus:
+      title: Waiting
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - waiting
+          default: waiting
+          description: 'The system is preparing to handle the request.
+
+            '
+    multipartPartSizeInvalidError:
+      type: string
+      default: Multipart Upload Part Size should be an integer.
+      example: '#/components/examples/multipartPartSizeInvalidError/value'
+    legacyVideoInfo:
+      type:
+      - object
+      - 'null'
+      description: Video metadata.
+      properties:
+        duration:
+          type: integer
+          description: Video file's duration in milliseconds.
+          example: 261827
+        format:
+          type: string
+          description: Video file's format.
+          example: mp4
+        bitrate:
+          type: integer
+          description: Video file's bitrate.
+          example: 393
+        audio:
+          type:
+          - object
+          - 'null'
+          description: Audio stream's metadata.
+          properties:
+            bitrate:
+              type:
+              - number
+              - 'null'
+              description: Audio stream's bitrate.
+              example: 78
+            codec:
+              type:
+              - string
+              - 'null'
+              description: Audio stream's codec.
+              example: aac
+            sample_rate:
+              type:
+              - integer
+              - 'null'
+              description: Audio stream's sample rate.
+              example: 44100
+            channels:
+              type:
+              - integer
+              - 'null'
+              description: Audio stream's number of channels.
+              example: 2
+        video:
+          type: object
+          description: Video stream's metadata.
+          properties:
+            height:
+              type: integer
+              description: Video stream's image height.
+              example: 360
+            width:
+              type: integer
+              description: Video stream's image width.
+              example: 640
+            frame_rate:
+              type: number
+              description: Video stream's frame rate.
+              example: 30
+            bitrate:
+              type: integer
+              description: Video stream's bitrate.
+              example: 315
+            codec:
+              type: string
+              description: Video stream codec.
+              example: h264
+    signatureRequiredError:
+      type: string
+      default: '`signature` is required.'
+      example: '#/components/examples/signatureRequiredError/value'
+    fromURLUploadResponseSchema:
+      type: object
+      description: '`/from_url/` upload response.'
+      properties:
+        type:
+          type: string
+          enum:
+          - token
+          example: token
+        token:
+          type: string
+          format: uuid
+          description: Token to identify a `/from_url/` request.
+          example: 945ebb27-1fd6-46c6-a859-b9893712d650
+    signatureExpirationError:
+      type: string
+      default: Expired signature.
+      example: '#/components/examples/signatureExpirationError/value'
+    urlSchemeRequiredError:
+      type: string
+      default: No URL scheme supplied.
+      example: '#/components/examples/urlSchemeRequiredError/value'
+    nullCharactersForbiddenError:
+      type: string
+      default: Null characters are not allowed.
+      example: '#/components/examples/nullCharactersForbiddenError/value'
+    fileUploadInfoUnknownStatus:
+      title: Unknown
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - unknown
+          default: unknown
+          description: 'The system does not have information about the task.
+
+
+            Note: Uploadcare stores information about the `/from_url/` tasks for a limited
+
+            period of time only. The endpoint can return the status `unknown` for the tasks
+
+            that are tool old (or that have not been created at all).
+
+            '
+    fileNotFoundError:
+      type: string
+      default: File is not found.
+      example: '#/components/examples/fileNotFoundError/value'
+    fileInfectedError:
+      type: string
+      default: The file is infected by <VIRUS-NAME> virus.
+      example: '#/components/examples/fileInfectedError/value'
+    fileMetadataKeyLengthTooBigError:
+      type: string
+      default: Length of file metadata key `<KEY>` can not be more than <LENGTH> symbols.
+      example: '#/components/examples/fileMetadataKeyLengthTooBigError/value'
+    contentInfo:
+      type:
+      - object
+      - 'null'
+      description: Information about file content.
+      properties:
+        mime:
+          type: object
+          description: MIME type.
+          required:
+          - mime
+          - type
+          - subtype
+          properties:
+            mime:
+              type: string
+              description: Full MIME type.
+              example: image/jpeg
+            type:
+              type: string
+              description: Type of MIME type.
+              example: image
+            subtype:
+              type: string
+              description: Subtype of MIME type.
+              example: jpeg
+        image:
+          $ref: '#/components/schemas/imageInfo'
+        video:
+          $ref: '#/components/schemas/videoInfo'
+    urlBlacklistedError:
+      type: string
+      default: Source is blacklisted.
+      example: '#/components/examples/urlBlacklistedError/value'
+    SVGValidationFailedError:
+      type: string
+      default: 'SVG validation failed: <REASON>.'
+      example: '#/components/examples/SVGValidationFailedError/value'
+    filesRequiredError:
+      type: string
+      default: Request does not contain files.
+      example: '#/components/examples/filesRequiredError/value'
+    publicKeyInvalidError:
+      type: string
+      default: pub_key is invalid.
+      example: '#/components/examples/publicKeyInvalidError/value'
+    requestFiledsNumberLimitExceededError:
+      type: string
+      default: The request contains too many HTTP POST fields.
+      example: '#/components/examples/requestFiledsNumberLimitExceededError/value'
+    metadataValue:
+      type: string
+      description: 'Arbitrary metadata associated with the file.
+
+        See [docs](https://uploadcare.com/docs/file-metadata/) and [REST API v0.7](/docs/api/rest/file-metadata/) for more information.
+
+        '
+      minLength: 1
+      maxLength: 512
+      example: '#/components/examples/metadataValue/value'
+    multipartFileSizeLimitExceededError:
+      type: string
+      default: File size exceeds project limit.
+      example: '#/components/examples/multipartFileSizeLimitExceededError/value'
+    expireType:
+      type: integer
+      description: '`expire` must be sent along with your upload request if you would like to use signed uploads.
+
+        The parameter defines the time during which your signature is valid. It''s a UNIX timestamp.
+
+        See [signed uploads](https://uploadcare.com/docs/security/secure-uploads/) for details.
+
+        '
+      example: 1454902434
+    fileMetadataKeyEmptyError:
+      type: string
+      default: File's metadata key can not be empty.
+      example: '#/components/examples/fileMetadataKeyEmptyError/value'
+    urlSchemeInvalidError:
+      type: string
+      default: Invalid URL scheme.
+      example: '#/components/examples/urlSchemeInvalidError/value'
+    fileUploadInfoErrorStatus:
+      title: Error
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - error
+          default: error
+          description: 'The system failed to fetch and/or upload the file.
+
+            '
+        error:
+          type: string
+          description: 'Human readable description of the issue with the fetch/upload task.
+
+            '
+          example: 'HTTP client error: 404.'
+        error_code:
+          type: string
+          description: 'Machine readable error code.
+
+
+            Note: See the [Errors > FromURL upload errors](#tag/Errors) section of this
+
+            page for a full list of all possible error codes.
+
+            '
+          example: DownloadFileHTTPClientError
+    multipartFileSizeTooSmallError:
+      type: string
+      default: File size can not be less than <SIZE> bytes. Please use direct upload instead of multipart.
+      example: '#/components/examples/multipartFileSizeTooSmallError/value'
+    requestParamRequiredError:
+      type: string
+      default: <PARAMETER-NAME> is required.
+      example: '#/components/examples/requestParamRequiredError/value'
+    accountLimitsExceededError:
+      type: string
+      default: Account has reached its limits.
+      example: '#/components/examples/accountLimitsExceededError/value'
+    SVGMaliciousContentError:
+      type: string
+      default: 'SVG contains malicious content: <REASON>.'
+      example: '#/components/examples/SVGMaliciousContentError/value'
+    fileUploadInfoProgressStatus:
+      title: Progress
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - progress
+          default: progress
+          description: 'The system is fetching/uploading the file.
+
+            '
+        total:
+          type:
+          - number
+          - 'null'
+          description: 'The expected size of the fetched file (in bytes).
+
+
+            **Note:** the value can be missing if the server we are fetching the file from
+
+            does not provide the information or if the server is returning the file in, for
+
+            example, [compressed form](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Encoding).
+
+            '
+          example: 732434
+        done:
+          type: number
+          description: 'How many bytes of the file have been fetched so far.
+
+            '
+          example: 134427
+    fileSizeLimitExceededError:
+      type: string
+      default: File is too large.
+      example: '#/components/examples/fileSizeLimitExceededError/value'
+  examples:
+    urlSchemeInvalidError:
+      value: Invalid URL scheme.
+    urlBlacklistedError:
+      value: Source is blacklisted.
+    requestParamRequiredError:
+      value: filename is required.
+    uploadFailedError:
+      value: Upload failed.
+    publicKeyRequiredError:
+      value: pub_key is required.
+    urlHostPrivateIPForbiddenError:
+      value: Only public IPs are allowed.
+    accountBlockedError:
+      value: Account has been blocked.
+    filesRequiredError:
+      value: Request does not contain files.
+    multipartPartSizeInvalidError:
+      value: Multipart Upload Part Size should be an integer.
+    nullCharactersForbiddenError:
+      value: Null characters are not allowed.
+    fileIdInvalidError:
+      value: file_id is invalid.
+    multipartPartSizeTooSmallError:
+      value: Multipart Upload Part Size can not be less than 5242880 bytes.
+    signatureRequiredError:
+      value: '`signature` is required.'
+    SVGValidationFailedError:
+      value: 'SVG validation failed: Failed to parse the document.'
+    urlParsingFailedError:
+      value: Failed to parse URL.
+    signatureExpirationError:
+      value: Expired signature.
+    multipartUploadSizeTooLargeError:
+      value: Uploaded size is more than expected.
+    fileMetadataKeyEmptyError:
+      value: File's metadata key can not be empty.
+    multipartFileSizeTooSmallError:
+      value: File size can not be less than 10485760 bytes. Please use direct upload instead of multipart.
+    projectPublicKeyRemovedError:
+      value: Project 39e3eb895fdada95e7a9 is marked as removed.
+    accountLimitsExceededError:
+      value: Account has reached its limits.
+    accountUnpaidError:
+      value: Account has been blocked for non payment.
+    multipartFileCompletionFailedError:
+      value: Can not complete upload. Wrong parts size?
+    fileInfectedError:
+      value: The file is infected by Win.Test.EICAR_HDB-1 virus.
+    uuidInvalidError:
+      value: uuid is invalid.
+    sourceURLRequiredError:
+      value: source_url is required.
+    multipartFileIdRequiredError:
+      value: uuid is required.
+    fileUploadInfoWithStatus:
+      value:
+        status: success
+        uuid: be3b4d5e-179d-460e-8a5d-69112ac86cbb
+        file_id: be3b4d5e-179d-460e-8a5d-69112ac86cbb
+        size: 2667636
+        total: 2667636
+        done: 2667636
+        original_filename: IMG-0412_123.JPG
+        filename: IMG0412_123.JPG
+        mime_type: image/jpeg
+        image_info:
+          color_mode: RGB
+          orientation: 6
+          format: JPEG
+          height: 4032
+          width: 3024
+          sequence: false
+          geo_location:
+            latitude: 55.62013611111111
+            longitude: 37.66299166666666
+          datetime_original: '2018-08-20T08:59:50'
+          dpi:
+          - 72
+          - 72
+        video_info: null
+        content_info:
+          mime:
+            mime: image/jpeg
+            type: image
+            subtype: jpeg
+          image:
+            color_mode: RGB
+            orientation: 6
+            format: JPEG
+            height: 4032
+            width: 3024
+            sequence: false
+            geo_location:
+              latitude: 55.62013611111111
+              longitude: 37.66299166666666
+            datetime_original: '2018-08-20T08:59:50'
+            dpi:
+            - 72
+            - 72
+        metadata:
+          subsystem: uploader
+          pet: cat
+        is_image: true
+        is_stored: true
+        is_ready: true
+    postRequestParserFailedError:
+      value: HTTP POST request parsing failed.
+    uploadcarePublicKeyInvalidError:
+      value: UPLOADCARE_PUB_KEY is invalid.
+    fileUploadInfoWithType:
+      value:
+        type: file_info
+        uuid: be3b4d5e-179d-460e-8a5d-69112ac86cbb
+        file_id: be3b4d5e-179d-460e-8a5d-69112ac86cbb
+        size: 2667636
+        total: 2667636
+        done: 2667636
+        original_filename: IMG-0412_123.JPG
+        filename: IMG0412_123.JPG
+        mime_type: image/jpeg
+        image_info:
+          color_mode: RGB
+          orientation: 6
+          format: JPEG
+          height: 4032
+          width: 3024
+          sequence: false
+          geo_location:
+            latitude: 55.62013611111111
+            longitude: 37.66299166666666
+          datetime_original: '2018-08-20T08:59:50'
+          dpi:
+          - 72
+          - 72
+        video_info: null
+        content_info:
+          mime:
+            mime: image/jpeg
+            type: image
+            subtype: jpeg
+          image:
+            color_mode: RGB
+            orientation: 6
+            format: JPEG
+            height: 4032
+            width: 3024
+            sequence: false
+            geo_location:
+              latitude: 55.62013611111111
+              longitude: 37.66299166666666
+            datetime_original: '2018-08-20T08:59:50'
+            dpi:
+            - 72
+            - 72
+        metadata:
+          subsystem: uploader
+          pet: cat
+        is_image: true
+        is_stored: true
+        is_ready: true
+    multipartUploadSizeTooSmallError:
+      value: File size mismatch. Not all parts uploaded?
+    hostnameNotFoundError:
+      value: Host does not exist.
+    fileIdRequiredError:
+      value: file_id is required.
+    fileMetadataValueForbiddenError:
+      value: Value of file metadata key `subsystem` contains symbols not allowed by the metadata value format.
+    urlSchemeRequiredError:
+      value: No URL scheme supplied.
+    multipartFileAlreadyUploadedError:
+      value: File is already uploaded.
+    autoStoreDisabledError:
+      value: Autostore is disabled.
+    urlHostRequiredError:
+      value: No URL host supplied.
+    signatureExpirationRequiredError:
+      value: '`expire` is required.'
+    uploadcarePublicKeyRequiredError:
+      value: UPLOADCARE_PUB_KEY is required.
+    multipartSizeInvalidError:
+      value: size should be integer.
+    fileNotFoundError:
+      value: File is not found.
+    urlHostMalformedError:
+      value: URL host is malformed.
+    fileMetadataKeyLengthTooBigError:
+      value: Length of file metadata key `aaa...` can not be more than 64 symbols.
+    signatureInvalidError:
+      value: Invalid signature.
+    SVGMaliciousContentError:
+      value: 'SVG contains malicious content: <script> tags are not allowed.'
+    fileSizeLimitExceededError:
+      value: File is too large.
+    multipartFileSizeLimitExceededError:
+      value: File size exceeds project limit.
+    tokenRequiredError:
+      value: token is required.
+    fileMetadataKeyForbiddenError:
+      value: File's metadata key `subsystem` contains symbols not allowed by the metadata key format.
+    requestFiledsNumberLimitExceededError:
+      value: The request contains too many HTTP POST fields.
+    fileMetadataValueEmptyError:
+      value: Value of the file metadata key `subsystem` can not be empty.
+    multipartPartSizeTooBigError:
+      value: Multipart Upload Part Size can not be more than 5368709120 bytes.
+    fileMetadataKeyDuplicatedError:
+      value: File's metadata key `subsystem` has a duplicate.
+    fileTypeForbiddenError:
+      value: Uploading of these file types is not allowed.
+    fileMetadataKeysNumberTooBigError:
+      value: A file can not have more than 50 metadata keys.
+    signatureExpirationInvalidError:
+      value: '`expire` must be a UNIX timestamp.'
+    fileMetadataValueLengthTooBigError:
+      value: Value of file metadata's key `subsystem` can not be more than 512 symbols in length.
+    publicKeyInvalidError:
+      value: pub_key is invalid.
+  responses:
+    fromURLUploadInputValidationErrors:
+      description: Request failed input parameters validation.
+      content:
+        text/plain:
+          schema:
+            anyOf:
+            - $ref: '#/components/schemas/requestFiledsNumberLimitExceededError'
+            - $ref: '#/components/schemas/postRequestParserFailedError'
+            - $ref: '#/components/schemas/nullCharactersForbiddenError'
+            - $ref: '#/components/schemas/fileMetadataKeyDuplicatedError'
+            - $ref: '#/components/schemas/fileMetadataKeyEmptyError'
+            - $ref: '#/components/schemas/fileMetadataKeyForbiddenError'
+            - $ref: '#/components/schemas/fileMetadataKeyLengthTooBigError'
+            - $ref: '#/components/schemas/fileMetadataValueEmptyError'
+            - $ref: '#/components/schemas/fileMetadataValueForbiddenError'
+            - $ref: '#/components/schemas/fileMetadataValueLengthTooBigError'
+            - $ref: '#/components/schemas/fileMetadataKeysNumberTooBigError'
+            - $ref: '#/components/schemas/signatureRequiredError'
+            - $ref: '#/components/schemas/signatureExpirationRequiredError'
+            - $ref: '#/components/schemas/signatureExpirationInvalidError'
+            - $ref: '#/components/schemas/sourceURLRequiredError'
+            - $ref: '#/components/schemas/urlParsingFailedError'
+            - $ref: '#/components/schemas/urlSchemeRequiredError'
+            - $ref: '#/components/schemas/urlSchemeInvalidError'
+            - $ref: '#/components/schemas/urlHostRequiredError'
+            - $ref: '#/components/schemas/urlBlacklistedError'
+            - $ref: '#/components/schemas/hostnameNotFoundError'
+            - $ref: '#/components/schemas/urlHostMalformedError'
+            - $ref: '#/components/schemas/urlHostPrivateIPForbiddenError'
+          examples:
+            request-fields-number-limit-exceeded:
+              $ref: '#/components/examples/requestFiledsNumberLimitExceededError'
+            post-request-parser-failed:
+              $ref: '#/components/examples/postRequestParserFailedError'
+            null-characters-forbidden:
+              $ref: '#/components/examples/nullCharactersForbiddenError'
+            file-metadata-key-duplicate:
+              $ref: '#/components/examples/fileMetadataKeyDuplicatedError'
+            file-metadata-key-empty:
+              $ref: '#/components/examples/fileMetadataKeyEmptyError'
+            file-metadata-key-forbidden:
+              $ref: '#/components/examples/fileMetadataKeyForbiddenError'
+            file-metadata-key-length-too-big:
+              $ref: '#/components/examples/fileMetadataKeyLengthTooBigError'
+            file-metadata-value-empty:
+              $ref: '#/components/examples/fileMetadataValueEmptyError'
+            file-metadata-value-forbidden:
+              $ref: '#/components/examples/fileMetadataValueForbiddenError'
+            file-metadata-value-length-too-big:
+              $ref: '#/components/examples/fileMetadataValueLengthTooBigError'
+            file-metadata-keys-number-too-big:
+              $ref: '#/components/examples/fileMetadataKeysNumberTooBigError'
+            signature-required:
+              $ref: '#/components/examples/signatureRequiredError'
+            signature-expiration-required:
+              $ref: '#/components/examples/signatureExpirationRequiredError'
+            signature-expiration-invalid:
+              $ref: '#/components/examples/signatureExpirationInvalidError'
+            source-url-required:
+              $ref: '#/components/examples/sourceURLRequiredError'
+            url-parsing-failed:
+              $ref: '#/components/examples/urlParsingFailedError'
+            url-scheme-required:
+              $ref: '#/components/examples/urlSchemeRequiredError'
+            url-scheme-invalid:
+              $ref: '#/components/examples/urlSchemeInvalidError'
+            url-host-required:
+              $ref: '#/components/examples/urlHostRequiredError'
+            url-blacklisted:
+              $ref: '#/components/examples/urlBlacklistedError'
+            hostname-not-found:
+              $ref: '#/components/examples/hostnameNotFoundError'
+            url-host-malformed:
+              $ref: '#/components/examples/urlHostMalformedError'
+            url-host-private-ip-forbidden:
+              $ref: '#/components/examples/urlHostPrivateIPForbiddenError'
+    commonUploadAccessForbiddenErrors:
+      description: Request was not allowed.
+      content:
+        text/plain:
+          schema:
+            anyOf:
+            - $ref: '#/components/schemas/uploadcarePublicKeyRequiredError'
+            - $ref: '#/components/schemas/uploadcarePublicKeyInvalidError'
+            - $ref: '#/components/schemas/autoStoreDisabledError'
+            - $ref: '#/components/schemas/projectPublicKeyRemovedError'
+            - $ref: '#/components/schemas/accountBlockedError'
+            - $ref: '#/components/schemas/accountUnpaidError'
+            - $ref: '#/components/schemas/uploadFailedError'
+            - $ref: '#/components/schemas/accountLimitsExceededError'
+            - $ref: '#/components/schemas/signatureExpirationError'
+            - $ref: '#/components/schemas/signatureInvalidError'
+          examples:
+            public-key-is-required:
+              $ref: '#/components/examples/uploadcarePublicKeyRequiredError'
+            public-key-is-invalid:
+              $ref: '#/components/examples/uploadcarePublicKeyInvalidError'
+            auto-store-is-disabled:
+              $ref: '#/components/examples/autoStoreDisabledError'
+            project-public-key-removed:
+              $ref: '#/components/examples/projectPublicKeyRemovedError'
+            account-blocked:
+              $ref: '#/components/examples/accountBlockedError'
+            account-unpaid:
+              $ref: '#/components/examples/accountUnpaidError'
+            upload-failed:
+              $ref: '#/components/examples/uploadFailedError'
+            account-limits-exceeded:
+              $ref: '#/components/examples/accountLimitsExceededError'
+            signature-expiration:
+              $ref: '#/components/examples/signatureExpirationError'
+            signature-invalid:
+              $ref: '#/components/examples/signatureInvalidError'
+    multipartUploadCompleteAccessForbiddenErrors:
+      description: Request was not allowed.
+      content:
+        text/plain:
+          schema:
+            anyOf:
+            - $ref: '#/components/schemas/uploadcarePublicKeyRequiredError'
+            - $ref: '#/components/schemas/uploadcarePublicKeyInvalidError'
+          examples:
+            public-key-is-required:
+              $ref: '#/components/examples/uploadcarePublicKeyRequiredError'
+            public-key-is-invalid:
+              $ref: '#/components/examples/uploadcarePublicKeyInvalidError'
+    multipartUploadStartResponse:
+      description: Multipart upload started successfully.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              uuid:
+                type: string
+                description: File's UUID.
+                format: uuid
+              parts:
+                type: array
+                items:
+                  type: string
+                  description: Upload file parts here.
+                  format: uri
+            required:
+            - uuid
+            - parts
+            example:
+              uuid: 67947755-1584-4e3f-902b-d4e2bf76a841
+              parts:
+              - <presigned-url-1>
+              - <presigned-url-2>
+              - <presigned-url-3>
+              - <presigned-url-4>
+              - <presigned-url-5>
+    requestWasThrottledError:
+      description: Request was throttled.
+      headers:
+        Retry-After:
+          description: Number of seconds to wait before the next request.
+          schema:
+            type: integer
+      content:
+        text/plain:
+          schema:
+            type: string
+            default: Request was throttled.
+          example: Request was throttled.
+    multipartUploadStartInputValidationErrors:
+      description: Request failed input parameters validation.
+      content:
+        text/plain:
+          schema:
+            anyOf:
+            - $ref: '#/components/schemas/requestFiledsNumberLimitExceededError'
+            - $ref: '#/components/schemas/postRequestParserFailedError'
+            - $ref: '#/components/schemas/nullCharactersForbiddenError'
+            - $ref: '#/components/schemas/fileMetadataKeyDuplicatedError'
+            - $ref: '#/components/schemas/fileMetadataKeyEmptyError'
+            - $ref: '#/components/schemas/fileMetadataKeyForbiddenError'
+            - $ref: '#/components/schemas/fileMetadataKeyLengthTooBigError'
+            - $ref: '#/components/schemas/fileMetadataValueEmptyError'
+            - $ref: '#/components/schemas/fileMetadataValueForbiddenError'
+            - $ref: '#/components/schemas/fileMetadataValueLengthTooBigError'
+            - $ref: '#/components/schemas/fileMetadataKeysNumberTooBigError'
+            - $ref: '#/components/schemas/signatureRequiredError'
+            - $ref: '#/components/schemas/signatureExpirationRequiredError'
+            - $ref: '#/components/schemas/signatureExpirationInvalidError'
+            - $ref: '#/components/schemas/requestParamRequiredError'
+            - $ref: '#/components/schemas/multipartSizeInvalidError'
+            - $ref: '#/components/schemas/multipartFileSizeLimitExceededError'
+            - $ref: '#/components/schemas/multipartFileSizeTooSmallError'
+            - $ref: '#/components/schemas/multipartPartSizeInvalidError'
+            - $ref: '#/components/schemas/multipartPartSizeTooSmallError'
+            - $ref: '#/components/schemas/multipartPartSizeTooBigError'
+          examples:
+            request-fields-number-limit-exceeded:
+              $ref: '#/components/examples/requestFiledsNumberLimitExceededError'
+            post-request-parser-failed:
+              $ref: '#/components/examples/postRequestParserFailedError'
+            null-characters-forbidden:
+              $ref: '#/components/examples/nullCharactersForbiddenError'
+            file-metadata-key-duplicate:
+              $ref: '#/components/examples/fileMetadataKeyDuplicatedError'
+            file-metadata-key-empty:
+              $ref: '#/components/examples/fileMetadataKeyEmptyError'
+            file-metadata-key-forbidden:
+              $ref: '#/components/examples/fileMetadataKeyForbiddenError'
+            file-metadata-key-length-too-big:
+              $ref: '#/components/examples/fileMetadataKeyLengthTooBigError'
+            file-metadata-value-empty:
+              $ref: '#/components/examples/fileMetadataValueEmptyError'
+            file-metadata-value-forbidden:
+              $ref: '#/components/examples/fileMetadataValueForbiddenError'
+            file-metadata-value-length-too-big:
+              $ref: '#/components/examples/fileMetadataValueLengthTooBigError'
+            file-metadata-keys-number-too-big:
+              $ref: '#/components/examples/fileMetadataKeysNumberTooBigError'
+            signature-required:
+              $ref: '#/components/examples/signatureRequiredError'
+            signature-expiration-required:
+              $ref: '#/components/examples/signatureExpirationRequiredError'
+            signature-expiration-invalid:
+              $ref: '#/components/examples/signatureExpirationInvalidError'
+            request-param-required:
+              $ref: '#/components/examples/requestParamRequiredError'
+            multipart-size-invalid:
+              $ref: '#/components/examples/multipartSizeInvalidError'
+            multipart-file-size-limit-exceeded:
+              $ref: '#/components/examples/multipartFileSizeLimitExceededError'
+            multipart-file-size-too-small:
+              $ref: '#/components/examples/multipartFileSizeTooSmallError'
+            multipart-part-size-invalid:
+              $ref: '#/components/examples/multipartPartSizeInvalidError'
+            multipart-part-size-too-small:
+              $ref: '#/components/examples/multipartPartSizeTooSmallError'
+            multipart-part-size-too-big:
+              $ref: '#/components/examples/multipartPartSizeTooBigError'
+    fromURLUploadStatusInputValidationErrors:
+      description: Request failed input parameters validation.
+      content:
+        text/plain:
+          schema:
+            $ref: '#/components/schemas/tokenRequiredError'
+          examples:
+            token-required:
+              $ref: '#/components/examples/tokenRequiredError'
+    fromURLUploadResponseSuccessful:
+      description: Status Token or File Info of an already downloaded file.
+      content:
+        application/json:
+          schema:
+            anyOf:
+            - $ref: '#/components/schemas/fromURLUploadResponseSchema'
+            - $ref: '#/components/schemas/fileUploadInfoFromURL'
+          examples:
+            Type Token:
+              value:
+                type: token
+                token: 945ebb27-1fd6-46c6-a859-b9893712d650
+            type-file-info:
+              $ref: '#/components/examples/fileUploadInfoWithType'
+    multipartUploadCompleteFileNotFoundError:
+      description: File with specified UUID was not found.
+      content:
+        text/plain:
+          schema:
+            $ref: '#/components/schemas/fileNotFoundError'
+          examples:
+            file-not-found:
+              $ref: '#/components/examples/fileNotFoundError'
+    fileUploadInfoNotFoundErrors:
+      description: File with specified UUID was not found.
+      content:
+        text/plain:
+          schema:
+            $ref: '#/components/schemas/fileNotFoundError'
+          examples:
+            file-not-found:
+              $ref: '#/components/examples/fileNotFoundError'
+    multipartUploadCompleteInputValidationErrors:
+      description: Request failed input parameters validation.
+      content:
+        text/plain:
+          schema:
+            anyOf:
+            - $ref: '#/components/schemas/requestFiledsNumberLimitExceededError'
+            - $ref: '#/components/schemas/postRequestParserFailedError'
+            - $ref: '#/components/schemas/nullCharactersForbiddenError'
+            - $ref: '#/components/schemas/multipartFileIdRequiredError'
+            - $ref: '#/components/schemas/uuidInvalidError'
+            - $ref: '#/components/schemas/multipartFileAlreadyUploadedError'
+            - $ref: '#/components/schemas/multipartUploadSizeTooLargeError'
+            - $ref: '#/components/schemas/multipartUploadSizeTooSmallError'
+            - $ref: '#/components/schemas/multipartFileCompletionFailedError'
+            - $ref: '#/components/schemas/fileTypeForbiddenError'
+            - $ref: '#/components/schemas/fileInfectedError'
+            - $ref: '#/components/schemas/SVGValidationFailedError'
+            - $ref: '#/components/schemas/SVGMaliciousContentError'
+          examples:
+            request-fields-number-limit-exceeded:
+              $ref: '#/components/examples/requestFiledsNumberLimitExceededError'
+            post-request-parser-failed:
+              $ref: '#/components/examples/postRequestParserFailedError'
+            null-characters-forbidden:
+              $ref: '#/components/examples/nullCharactersForbiddenError'
+            multipart-file-id-required:
+              $ref: '#/components/examples/multipartFileIdRequiredError'
+            uuid-invalid:
+              $ref: '#/components/examples/uuidInvalidError'
+            multipart-file-already-uploaded:
+              $ref: '#/components/examples/multipartFileAlreadyUploadedError'
+            multipart-upload-size-too-large:
+              $ref: '#/components/examples/multipartUploadSizeTooLargeError'
+            multipart-upload-size-too-small:
+              $ref: '#/components/examples/multipartUploadSizeTooSmallError'
+            multipart-file-completion-failed:
+              $ref: '#/components/examples/multipartFileCompletionFailedError'
+            file-type-forbidden:
+              $ref: '#/components/examples/fileTypeForbiddenError'
+            file-infected:
+              $ref: '#/components/examples/fileInfectedError'
+            invalid-svg:
+              $ref: '#/components/examples/SVGValidationFailedError'
+            malicious-svg:
+              $ref: '#/components/examples/SVGMaliciousContentError'
+    fileUploadInfoSuccessful:
+      description: File information was retrieved successfully.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/fileUploadInfo'
+    fromURLUploadAccessForbiddenErrors:
+      description: Request was not allowed.
+      content:
+        text/plain:
+          schema:
+            anyOf:
+            - $ref: '#/components/schemas/publicKeyRequiredError'
+            - $ref: '#/components/schemas/publicKeyInvalidError'
+            - $ref: '#/components/schemas/autoStoreDisabledError'
+            - $ref: '#/components/schemas/projectPublicKeyRemovedError'
+            - $ref: '#/components/schemas/accountBlockedError'
+            - $ref: '#/components/schemas/accountUnpaidError'
+            - $ref: '#/components/schemas/uploadFailedError'
+            - $ref: '#/components/schemas/accountLimitsExceededError'
+            - $ref: '#/components/schemas/signatureExpirationError'
+            - $ref: '#/components/schemas/signatureInvalidError'
+          examples:
+            public-key-is-required:
+              $ref: '#/components/examples/publicKeyRequiredError'
+            public-key-is-invalid:
+              $ref: '#/components/examples/publicKeyInvalidError'
+            auto-store-is-disabled:
+              $ref: '#/components/examples/autoStoreDisabledError'
+            project-public-key-removed:
+              $ref: '#/components/examples/projectPublicKeyRemovedError'
+            account-blocked:
+              $ref: '#/components/examples/accountBlockedError'
+            account-unpaid:
+              $ref: '#/components/examples/accountUnpaidError'
+            upload-failed:
+              $ref: '#/components/examples/uploadFailedError'
+            account-limits-exceeded:
+              $ref: '#/components/examples/accountLimitsExceededError'
+            signature-expiration:
+              $ref: '#/components/examples/signatureExpirationError'
+            signature-invalid:
+              $ref: '#/components/examples/signatureInvalidError'
+    baseUploadSuccessful:
+      description: The file was uploaded successfully.
+      content:
+        application/json:
+          schema:
+            type: object
+            description: 'JSON object where the key is the file name of the uploaded file and
+
+              the value is the unique ID of the file on our systems.
+
+              '
+            properties:
+              filename:
+                type: string
+                format: uuid
+            example:
+              my_file.jpg: 17be4678-dab7-4bc7-8753-28914a22960a
+    fileUploadInfoAccessForbiddenErrors:
+      description: Request was not allowed.
+      content:
+        text/plain:
+          schema:
+            anyOf:
+            - $ref: '#/components/schemas/publicKeyRequiredError'
+            - $ref: '#/components/schemas/publicKeyInvalidError'
+          examples:
+            public-key-is-required:
+              $ref: '#/components/examples/publicKeyRequiredError'
+            public-key-is-invalid:
+              $ref: '#/components/examples/publicKeyInvalidError'
+    baseUploadInputValidationErrors:
+      description: Request failed input parameters validation.
+      content:
+        text/plain:
+          schema:
+            anyOf:
+            - $ref: '#/components/schemas/requestFiledsNumberLimitExceededError'
+            - $ref: '#/components/schemas/postRequestParserFailedError'
+            - $ref: '#/components/schemas/nullCharactersForbiddenError'
+            - $ref: '#/components/schemas/fileMetadataKeyDuplicatedError'
+            - $ref: '#/components/schemas/fileMetadataKeyEmptyError'
+            - $ref: '#/components/schemas/fileMetadataKeyForbiddenError'
+            - $ref: '#/components/schemas/fileMetadataKeyLengthTooBigError'
+            - $ref: '#/components/schemas/fileMetadataValueEmptyError'
+            - $ref: '#/components/schemas/fileMetadataValueForbiddenError'
+            - $ref: '#/components/schemas/fileMetadataValueLengthTooBigError'
+            - $ref: '#/components/schemas/fileMetadataKeysNumberTooBigError'
+            - $ref: '#/components/schemas/signatureRequiredError'
+            - $ref: '#/components/schemas/signatureExpirationRequiredError'
+            - $ref: '#/components/schemas/signatureExpirationInvalidError'
+            - $ref: '#/components/schemas/filesRequiredError'
+            - $ref: '#/components/schemas/fileSizeLimitExceededError'
+            - $ref: '#/components/schemas/fileTypeForbiddenError'
+            - $ref: '#/components/schemas/fileInfectedError'
+            - $ref: '#/components/schemas/SVGValidationFailedError'
+            - $ref: '#/components/schemas/SVGMaliciousContentError'
+          examples:
+            request-fields-number-limit-exceeded:
+              $ref: '#/components/examples/requestFiledsNumberLimitExceededError'
+            post-request-parser-failed:
+              $ref: '#/components/examples/postRequestParserFailedError'
+            null-characters-forbidden:
+              $ref: '#/components/examples/nullCharactersForbiddenError'
+            file-metadata-key-duplicate:
+              $ref: '#/components/examples/fileMetadataKeyDuplicatedError'
+            file-metadata-key-empty:
+              $ref: '#/components/examples/fileMetadataKeyEmptyError'
+            file-metadata-key-forbidden:
+              $ref: '#/components/examples/fileMetadataKeyForbiddenError'
+            file-metadata-key-length-too-big:
+              $ref: '#/components/examples/fileMetadataKeyLengthTooBigError'
+            file-metadata-value-empty:
+              $ref: '#/components/examples/fileMetadataValueEmptyError'
+            file-metadata-value-forbidden:
+              $ref: '#/components/examples/fileMetadataValueForbiddenError'
+            file-metadata-value-length-too-big:
+              $ref: '#/components/examples/fileMetadataValueLengthTooBigError'
+            file-metadata-keys-number-too-big:
+              $ref: '#/components/examples/fileMetadataKeysNumberTooBigError'
+            signature-required:
+              $ref: '#/components/examples/signatureRequiredError'
+            signature-expiration-required:
+              $ref: '#/components/examples/signatureExpirationRequiredError'
+            signature-expiration-invalid:
+              $ref: '#/components/examples/signatureExpirationInvalidError'
+            files-required:
+              $ref: '#/components/examples/filesRequiredError'
+            file-size-limit-exceeded:
+              $ref: '#/components/examples/fileSizeLimitExceededError'
+            file-type-forbidden:
+              $ref: '#/components/examples/fileTypeForbiddenError'
+            file-infected:
+              $ref: '#/components/examples/fileInfectedError'
+            invalid-svg:
+              $ref: '#/components/examples/SVGValidationFailedError'
+            malicious-svg:
+              $ref: '#/components/examples/SVGMaliciousContentError'
+    fileUploadInfoInputValidationErrors:
+      description: Request failed input parameters validation.
+      content:
+        text/plain:
+          schema:
+            anyOf:
+            - $ref: '#/components/schemas/nullCharactersForbiddenError'
+            - $ref: '#/components/schemas/fileIdRequiredError'
+            - $ref: '#/components/schemas/fileIdInvalidError'
+          examples:
+            null-characters-forbidden:
+              $ref: '#/components/examples/nullCharactersForbiddenError'
+            file-id-required:
+              $ref: '#/components/examples/fileIdRequiredError'
+            file-id-invalid:
+              $ref: '#/components/examples/fileIdInvalidError'
+    requestSizeLimitExceededError:
+      description: The size of the request is too large.
+      content:
+        text/plain:
+          schema:
+            type: string
+            default: The size of the request is too large.
+          example: The size of the request is too large.
+    fromURLUploadStatusSuccessful:
+      description: 'Request was processed successfully.
+
+        '
+      content:
+        application/json:
+          schema:
+            anyOf:
+            - $ref: '#/components/schemas/fileUploadInfoSuccessStatus'
+            - $ref: '#/components/schemas/fileUploadInfoWaitingStatus'
+            - $ref: '#/components/schemas/fileUploadInfoProgressStatus'
+            - $ref: '#/components/schemas/fileUploadInfoErrorStatus'
+            - $ref: '#/components/schemas/fileUploadInfoUnknownStatus'
+          examples:
+            Success:
+              $ref: '#/components/examples/fileUploadInfoWithStatus'
+            Waiting:
+              value:
+                status: waiting
+            Progress:
+              value:
+                status: progress
+                total: 732434
+                done: 134427
+            Error:
+              value:
+                status: error
+                error: 'HTTP client error: 404.'
+                error_code: DownloadFileHTTPClientError
+            Unknown:
+              value:
+                status: unknown
+  requestBodies:
+    baseUploadRequestBody:
+      required: true
+      content:
+        multipart/form-data:
+          schema:
+            type: object
+            properties:
+              UPLOADCARE_PUB_KEY:
+                $ref: '#/components/schemas/projectPublicKeyType'
+              UPLOADCARE_STORE:
+                $ref: '#/components/schemas/storeType'
+              '{filename}':
+                description: File's content
+                type: array
+                items:
+                  type: string
+                  format: binary
+              metadata[{key}]:
+                $ref: '#/components/schemas/metadataValue'
+              signature:
+                $ref: '#/components/schemas/signatureType'
+              expire:
+                $ref: '#/components/schemas/expireType'
+            required:
+            - '{filename}'
+            - UPLOADCARE_PUB_KEY
+          examples:
+            One File:
+              value:
+                UPLOADCARE_PUB_KEY: YOUR_PUBLIC_KEY
+                UPLOADCARE_STORE: auto
+                my_file.jpg: '@my_file.jpg'
+                metadata[subsystem]: uploader
+                metadata[pet]: cat
+            Two Files:
+              value:
+                UPLOADCARE_PUB_KEY: YOUR_PUBLIC_KEY
+                UPLOADCARE_STORE: auto
+                my_file.jpg: '@my_file.jpg'
+                another_file.jpg: '@another_file.jpg'
+                metadata[subsystem]: uploader
+    multipartUploadPartParameters:
+      content:
+        application/octet-stream:
+          schema:
+            type: object
+            description: 'Part of the uploaded file.
+
+
+              Don''t include `https://upload.uploadcare.com/` in this request:
+
+
+              ```
+
+              curl -X PUT "<presigned-url-x>" -H "Content-Type: application/octet-stream" --data <data-part>
+
+              ```
+
+              '
+    multipartUploadStartParameters:
+      content:
+        multipart/form-data:
+          schema:
+            type: object
+            description: Multipart upload parameters to start multipart uploading.
+            properties:
+              UPLOADCARE_PUB_KEY:
+                $ref: '#/components/schemas/projectPublicKeyType'
+              UPLOADCARE_STORE:
+                $ref: '#/components/schemas/storeType'
+              filename:
+                type: string
+                description: Original file name of the uploaded file
+                example: myfile.mp4
+              size:
+                type: integer
+                description: 'Precise file size of the uploaded file (in bytes).
+
+                  **Note**: The size should not exceed max file size cap for your project.
+
+                  '
+                example: 27796904
+              part_size:
+                type: integer
+                description: 'Multipart Uploads expect that you will split the uploaded file into equally sized
+
+                  parts (except for the last part) and then will upload them to AWS S3 (possibly in parallel).
+
+                  By default, we assume that you will upload the files in 5 megabyte chunks,
+
+                  so we return a list of presigned AWS S3 URLs accordingly.
+
+                  If you intend to upload large files (for example, larger than a gigabyte),
+
+                  we recommend to bump the part size and to pass the expected chunk size
+
+                  to us as a value of the `part_size` parameter (in bytes).
+
+                  '
+                minimum: 5242880
+                maximum: 5368709120
+                default: 5242880
+                example: 10485760
+              content_type:
+                type: string
+                description: File's MIME-type.
+                example: video/mp4
+              metadata[{key}]:
+                $ref: '#/components/schemas/metadataValue'
+              signature:
+                $ref: '#/components/schemas/signatureType'
+              expire:
+                $ref: '#/components/schemas/expireType'
+            required:
+            - filename
+            - content_type
+            - size
+            - UPLOADCARE_PUB_KEY
+          example:
+            UPLOADCARE_PUB_KEY: YOUR_PUBLIC_KEY
+            UPLOADCARE_STORE: auto
+            filename: myfile.mp4
+            size: 27796904
+            content_type: video/mp4
+            metadata[subsystem]: uploader
+            metadata[pet]: cat
+    fromURLUploadRequestBody:
+      content:
+        multipart/form-data:
+          schema:
+            type: object
+            properties:
+              pub_key:
+                $ref: '#/components/schemas/projectPublicKeyType'
+              source_url:
+                type: string
+                format: uri
+                description: 'Source URL of the file to fetch and upload.
+
+
+                  **Note**: The URL should point to a resource publicly available via HTTP/HTTPS.
+
+                  '
+                example: https://source.unsplash.com/featured
+              store:
+                $ref: '#/components/schemas/storeType'
+              filename:
+                type: string
+                description: 'Sets the file name of the resource fetched from the source URL.
+
+                  If not defined, the file name is obtained from either HTTP
+
+                  response headers or the `source_url`''s path.
+
+
+                  **Note:** The filename will be sanitized to only contain the following symbols:
+
+                  `abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789._`.
+
+                  '
+                example: googlelogo_color_272x92dp.png
+              check_URL_duplicates:
+                type: string
+                enum:
+                - '0'
+                - '1'
+                default: '0'
+                description: 'If set to "1", enables the `source_url` duplicates prevention.
+
+                  Specifically, if the `source_url` had already been fetched and uploaded previously,
+
+                  this request will return information about the already uploaded file.
+
+                  '
+                example: '1'
+              save_URL_duplicates:
+                type: string
+                enum:
+                - '0'
+                - '1'
+                description: 'Determines if the requested `source_url` should be kept in the history of
+
+                  fetched/uploaded URLs. If the value is not defined explicitly, it is set
+
+                  to the value of the `check_URL_duplicates` parameter.
+
+                  '
+                example: '1'
+              metadata[{key}]:
+                $ref: '#/components/schemas/metadataValue'
+              signature:
+                $ref: '#/components/schemas/signatureType'
+              expire:
+                $ref: '#/components/schemas/expireType'
+            required:
+            - pub_key
+            - source_url
+          example:
+            pub_key: YOUR_PUBLIC_KEY
+            source_url: https://source.unsplash.com/featured
+            metadata[subsystem]: uploader
+            metadata[pet]: cat
+    multipartUploadCompleteParameters:
+      content:
+        multipart/form-data:
+          schema:
+            type: object
+            properties:
+              UPLOADCARE_PUB_KEY:
+                $ref: '#/components/schemas/projectPublicKeyType'
+              uuid:
+                type: string
+                description: File's UUID from the `/multipart/start/` endpoint.
+                format: uuid
+                example: 67947755-1584-4e3f-902b-d4e2bf76a841
+            required:
+            - UPLOADCARE_PUB_KEY
+            - uuid
+          example:
+            UPLOADCARE_PUB_KEY: YOUR_PUBLIC_KEY
+            uuid: 67947755-1584-4e3f-902b-d4e2bf76a841

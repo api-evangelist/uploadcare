@@ -1,6 +1,6 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
-  title: URL API Reference Add-Ons File information API
+  title: URL API Reference File information API
   version: '2022-11-28'
   description: 'Every uploaded file is immediately available on the Uploadcare CDN.
 
@@ -84,6 +84,9 @@ paths:
         '404':
           $ref: '#/components/responses/fileNotFoundError'
 components:
+  examples:
+    imageNotFound:
+      externalValue: https://ucarecdn.com/d7fe74ac-65b8-4ade-875f-ccd92759a700/imageNotFound.jpg
   parameters:
     uuid:
       in: path
@@ -93,9 +96,6 @@ components:
       schema:
         type: string
         example: d7fe74ac-65b8-4ade-875f-ccd92759a70f
-  examples:
-    imageNotFound:
-      externalValue: https://ucarecdn.com/d7fe74ac-65b8-4ade-875f-ccd92759a700/imageNotFound.jpg
   responses:
     fileNotFoundError:
       description: Image with "File not found" text.
@@ -123,8 +123,9 @@ components:
           readOnly: true
         dpi:
           description: Image DPI for two dimensions.
-          type: array
-          nullable: true
+          type:
+          - array
+          - 'null'
           items:
             type: number
             example: 72
@@ -174,16 +175,18 @@ components:
           readOnly: true
         orientation:
           description: Image orientation from EXIF.
-          type: integer
-          nullable: true
+          type:
+          - integer
+          - 'null'
           minimum: 0
           maximum: 8
           example: 6
           readOnly: true
         geo_location:
           description: Geo-location of image from EXIF.
-          type: object
-          nullable: true
+          type:
+          - object
+          - 'null'
           required:
           - latitude
           - longitude
@@ -199,8 +202,9 @@ components:
           readOnly: true
         datetime_original:
           description: Image date and time from EXIF. Please be aware that this data is not always formatted and displayed exactly as it appears in the EXIF.
-          type: string
-          nullable: true
+          type:
+          - string
+          - 'null'
           format: date-time
           example: '2018-09-13T16:23:40'
           readOnly: true
@@ -212,8 +216,9 @@ components:
             Learn more about [Perceptual hash](/docs/cdn-operations/#operation-json-phash).
 
             '
-          type: string
-          nullable: true
+          type:
+          - string
+          - 'null'
           example: 940f5fd09aa48ddc
           readOnly: true
         blurhash:
@@ -226,8 +231,9 @@ components:
             Learn more about [Blurhash](/docs/cdn-operations/#operation-json-blurhash).
 
             '
-          type: string
-          nullable: true
+          type:
+          - string
+          - 'null'
           example: WXOfGPL~?vkpNGxv-CwdInXSt7V@?^%gRPkCofV@I;X9s:i{tRoy
           readOnly: true
       example:

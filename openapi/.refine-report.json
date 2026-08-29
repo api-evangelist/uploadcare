@@ -1,34 +1,39 @@
 {
   "provider": "uploadcare",
   "sources": [
-    "uploadcare-add-ons-api-openapi.yml",
-    "uploadcare-conversion-api-openapi.yml",
-    "uploadcare-file-api-openapi.yml",
-    "uploadcare-file-information-api-openapi.yml",
-    "uploadcare-file-metadata-api-openapi.yml",
-    "uploadcare-file-names-api-openapi.yml",
-    "uploadcare-group-api-openapi.yml",
-    "uploadcare-groups-api-openapi.yml",
-    "uploadcare-project-api-openapi.yml",
-    "uploadcare-upload-api-openapi.yml",
-    "uploadcare-webhook-api-openapi.yml"
+    "_original/uploadcare-cdn-api-openapi.yml",
+    "_original/uploadcare-rest-api-openapi.yml"
   ],
   "outputs": [
+    "uploadcare-file-information-api-openapi.yml",
+    "uploadcare-file-names-api-openapi.yml",
     "uploadcare-add-ons-api-openapi.yml",
     "uploadcare-conversion-api-openapi.yml",
     "uploadcare-file-api-openapi.yml",
-    "uploadcare-file-information-api-openapi.yml",
     "uploadcare-file-metadata-api-openapi.yml",
-    "uploadcare-file-names-api-openapi.yml",
     "uploadcare-group-api-openapi.yml",
-    "uploadcare-groups-api-openapi.yml",
     "uploadcare-project-api-openapi.yml",
-    "uploadcare-upload-api-openapi.yml",
     "uploadcare-webhook-api-openapi.yml"
   ],
   "archived": [],
   "errors": [],
   "warnings": [],
-  "notes": [],
-  "skipped": []
+  "notes": [
+    "sourced from openapi/_original/ (2 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "uploadcare-cdn-api-openapi.yml: upgraded openapi 3.0.0 -> OpenAPI 3.2.0",
+    "uploadcare-rest-api-openapi.yml: upgraded openapi 3.0.0 -> OpenAPI 3.2.0"
+  ],
+  "skipped": [
+    "uploadcare-add-ons-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "uploadcare-conversion-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "uploadcare-file-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "uploadcare-file-information-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "uploadcare-file-metadata-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "uploadcare-file-names-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "uploadcare-group-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "uploadcare-groups-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "uploadcare-project-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "uploadcare-upload-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "uploadcare-webhook-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
 }
