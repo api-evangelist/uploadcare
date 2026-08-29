@@ -7,6 +7,18 @@ description: Uploadcare is a file uploading and processing platform that provide
   CDN API, handle multipart uploads for large files, configure webhooks, and leverage
   add-ons for extended processing capabilities.
 type: Index
+deliveryModel:
+  model: saas
+  open_source: false
+  commercial: true
+  callable_host: true
+  label: Hosted service · you call their endpoint
+  confidence: high
+  source:
+  - openapi
+  - pricing
+  generated: '2026-08-28'
+  method: derived
 accessModel:
   pricing: freemium
   onboarding: self-serve
@@ -46,27 +58,6 @@ tags_raw:
 - Storage
 - Webhooks
 apis:
-- aid: uploadcare:upload-api
-  name: Uploadcare Upload API
-  description: >-
-    Upload API for direct binary file uploads, multipart uploads for large files (up to 5 TB), URL-based
-    uploads, UUID-based uploads, and file group creation. Supports direct uploads from browser or server
-    without routing files through your own infrastructure.
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-  humanURL: https://uploadcare.com/api-refs/upload-api/
-  baseURL: https://upload.uploadcare.com
-  tags:
-  - Upload
-  - Multipart
-  - Large Files
-  - File Groups
-  properties:
-  - type: Documentation
-    url: https://uploadcare.com/docs/api/upload/
-  - type: OpenAPI
-    url: https://uploadcare.com/api-refs/upload-api/
-  - type: OpenAPI
-    url: openapi/uploadcare-upload-api-openapi.yml
 - aid: uploadcare:uploadcare-add-ons-api
   name: Uploadcare Add-Ons API
   description: >-
@@ -265,24 +256,6 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/uploadcare-group-api-openapi.yml
-  - type: Documentation
-    url: https://uploadcare.com/docs/rest_api/
-  - type: GraphQL
-    url: graphql/uploadcare-graphql.md
-  - type: Documentation
-    url: https://uploadcare.com/docs/api_reference/cdn/
-- aid: uploadcare:uploadcare-groups-api
-  name: Uploadcare Groups API
-  description: The Groups API from Uploadcare — 2 operation(s) for groups.
-  humanURL: https://uploadcare.com/api-refs/rest-api/v0.7.0/
-  baseURL: https://api.uploadcare.com
-  tags:
-  - Group
-  tags_raw:
-  - Groups
-  properties:
-  - type: OpenAPI
-    url: openapi/uploadcare-groups-api-openapi.yml
   - type: Documentation
     url: https://uploadcare.com/docs/rest_api/
   - type: GraphQL
