@@ -67,7 +67,7 @@ apis:
   humanURL: https://uploadcare.com/api-refs/rest-api/v0.7.0/
   baseURL: https://api.uploadcare.com
   tags:
-  - Addons
+  - Add-Ons
   tags_raw:
   - Add-Ons
   properties:
@@ -159,7 +159,7 @@ apis:
   humanURL: https://uploadcare.com/api-refs/rest-api/v0.7.0/
   baseURL: https://api.uploadcare.com
   tags:
-  - File Metadata
+  - File metadata
   tags_raw:
   - File metadata
   properties:
@@ -339,8 +339,6 @@ common:
   url: json-ld/uploadcare-context.jsonld
 - type: BlogRSS
   url: https://uploadcare.com/blog/rss.xml
-- type: Blog
-  url: blogs/blogs.json
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
