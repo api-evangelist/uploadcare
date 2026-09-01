@@ -67,7 +67,7 @@ apis:
   humanURL: https://uploadcare.com/api-refs/rest-api/v0.7.0/
   baseURL: https://api.uploadcare.com
   tags:
-  - Add-Ons
+  - Addons
   tags_raw:
   - Add-Ons
   properties:
@@ -159,7 +159,7 @@ apis:
   humanURL: https://uploadcare.com/api-refs/rest-api/v0.7.0/
   baseURL: https://api.uploadcare.com
   tags:
-  - File metadata
+  - File Metadata
   tags_raw:
   - File metadata
   properties:
