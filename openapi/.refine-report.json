@@ -21,7 +21,8 @@
   "notes": [
     "sourced from openapi/_original/ (2 archived document(s)); previously refined output at the top level was skipped rather than re-split",
     "uploadcare-cdn-api-openapi.yml: upgraded openapi 3.0.0 -> OpenAPI 3.2.0",
-    "uploadcare-rest-api-openapi.yml: upgraded openapi 3.0.0 -> OpenAPI 3.2.0"
+    "uploadcare-rest-api-openapi.yml: upgraded openapi 3.0.0 -> OpenAPI 3.2.0",
+    "apis.yml register: already-registered"
   ],
   "skipped": [
     "uploadcare-add-ons-api-openapi.yml: previously refined output, superseded by openapi/_original/",
@@ -31,9 +32,7 @@
     "uploadcare-file-metadata-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "uploadcare-file-names-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "uploadcare-group-api-openapi.yml: previously refined output, superseded by openapi/_original/",
-    "uploadcare-groups-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "uploadcare-project-api-openapi.yml: previously refined output, superseded by openapi/_original/",
-    "uploadcare-upload-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "uploadcare-webhook-api-openapi.yml: previously refined output, superseded by openapi/_original/"
   ]
 }

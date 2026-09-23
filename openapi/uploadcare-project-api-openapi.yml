@@ -8,14 +8,12 @@ info:
     The REST API root is `https://api.uploadcare.com/`. Send data via query strings and POST request bodies, and receive JSON responses. All URLs MUST end with a forward slash `/`.
 
 
-    Check out our [API clients](https://uploadcare.com/docs/integrations/) that cover most of the popular programming languages and frameworks.
+    Check out our API clients that cover most of the popular programming languages and frameworks.
 
 
     # Authentication
 
-    <!-- ReDoc-Inject: <security-definitions> -->
-
-    '
+    -->'
   contact:
     name: API support
     email: help@uploadcare.com
@@ -116,21 +114,12 @@ paths:
           '
 components:
   responses:
-    authorizationProblemsResponse:
-      description: Authorization errors.
+    simpleAuthHTTPForbiddenResponse:
+      description: Simple authentication over HTTP is forbidden. Please, use HTTPS or signed requests instead.
       content:
         application/json:
           schema:
-            type: object
-            properties:
-              detail:
-                type: string
-                enum:
-                - Incorrect authentication credentials.
-                - Public key {public_key} not found.
-                - Secret key not found.
-                - Invalid signature. Please check your Secret key.
-                example: Incorrect authentication credentials.
+            $ref: '#/components/schemas/simpleAuthHTTPForbidden'
     invalidAcceptHeader:
       description: Invalid version header `Accept` for this endpoint.
       content:
@@ -142,12 +131,6 @@ components:
                 type: string
                 example: Incorrect Accept header provided. Make sure to specify API version. Refer to REST API docs for details.
                 default: Incorrect Accept header provided. Make sure to specify API version. Refer to REST API docs for details.
-    simpleAuthHTTPForbiddenResponse:
-      description: Simple authentication over HTTP is forbidden. Please, use HTTPS or signed requests instead.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/simpleAuthHTTPForbidden'
     requestWasThrottledError:
       description: Request was throttled.
       headers:
@@ -164,6 +147,21 @@ components:
               detail:
                 type: string
                 example: Request was throttled. Expected available in 10 seconds.
+    authorizationProblemsResponse:
+      description: Authorization errors.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              detail:
+                type: string
+                enum:
+                - Incorrect authentication credentials.
+                - Public key {public_key} not found.
+                - Secret key not found.
+                - Invalid signature. Please check your Secret key.
+                example: Incorrect authentication credentials.
   parameters:
     acceptHeader:
       in: header
@@ -176,14 +174,6 @@ components:
         example: application/vnd.uploadcare-v0.7+json
       required: true
   schemas:
-    simpleAuthHTTPForbidden:
-      type: object
-      properties:
-        detail:
-          type: string
-          default: Simple authentication over HTTP is forbidden. Please, use HTTPS or signed requests instead.
-      example:
-        detail: Simple authentication over HTTP is forbidden. Please, use HTTPS or signed requests instead.
     project:
       type: object
       properties:
@@ -215,6 +205,14 @@ components:
         name: demo
         pub_key: YOUR_PUBLIC_KEY
         autostore_enabled: true
+    simpleAuthHTTPForbidden:
+      type: object
+      properties:
+        detail:
+          type: string
+          default: Simple authentication over HTTP is forbidden. Please, use HTTPS or signed requests instead.
+      example:
+        detail: Simple authentication over HTTP is forbidden. Please, use HTTPS or signed requests instead.
   securitySchemes:
     apiKeyAuth:
       type: apiKey

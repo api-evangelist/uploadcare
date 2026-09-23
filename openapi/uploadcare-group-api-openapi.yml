@@ -8,14 +8,12 @@ info:
     The REST API root is `https://api.uploadcare.com/`. Send data via query strings and POST request bodies, and receive JSON responses. All URLs MUST end with a forward slash `/`.
 
 
-    Check out our [API clients](https://uploadcare.com/docs/integrations/) that cover most of the popular programming languages and frameworks.
+    Check out our API clients that cover most of the popular programming languages and frameworks.
 
 
     # Authentication
 
-    <!-- ReDoc-Inject: <security-definitions> -->
-
-    '
+    -->'
   contact:
     name: API support
     email: help@uploadcare.com
@@ -148,9 +146,7 @@ paths:
 
         Groups are identified in a way similar to individual files. A group ID consists of a UUID
 
-        followed by a “~” (tilde) character and a group size: integer number of the files in the group.
-
-        '
+        followed by a “~” (tilde) character and a group size: integer number of the files in the group.'
       operationId: groupInfo
       tags:
       - Group
@@ -254,9 +250,7 @@ paths:
       description: 'Delete a file group by its ID.
 
 
-        **Note**: The operation only removes the group object itself. **All the files that were part of the group are left as is.**
-
-        '
+        **Note**: The operation only removes the group object itself. **All the files that were part of the group are left as is.**'
       operationId: deleteGroup
       tags:
       - Group
@@ -347,133 +341,6 @@ paths:
           '
 components:
   schemas:
-    groupWithFiles:
-      allOf:
-      - $ref: '#/components/schemas/group'
-      - type: object
-        properties:
-          files:
-            type:
-            - array
-            - 'null'
-            description: 'The list of files in the group. An array may contain null values if a file has been removed.
-
-              '
-            allOf:
-            - $ref: '#/components/schemas/file'
-            - type: object
-              properties:
-                default_effects:
-                  type: string
-                  format: uri
-                  description: The field contains a set of processing operations applied to the file when the group was created. This set is applied by default when the file is reffered via a group CDN URL and `/nth/N/` operator.
-                  example: resize/x800/
-        example:
-          id: dd43982b-5447-44b2-86f6-1c3b52afa0ff~1
-          datetime_created: '2018-11-27T14:14:37.583654Z'
-          files_count: 1
-          cdn_url: https://ucarecdn.com/dd43982b-5447-44b2-86f6-1c3b52afa0ff~1/
-          url: https://api.uploadcare.com/groups/dd43982b-5447-44b2-86f6-1c3b52afa0ff~1/
-          files:
-          - datetime_removed: null
-            datetime_stored: '2018-11-26T12:49:10.477888Z'
-            datetime_uploaded: '2018-11-26T12:49:09.945335Z'
-            variations: null
-            is_image: true
-            is_ready: true
-            mime_type: image/jpeg
-            original_file_url: https://ucarecdn.com/22240276-2f06-41f8-9411-755c8ce926ed/pineapple.jpg
-            original_filename: pineapple.jpg
-            size: 642
-            url: https://api.uploadcare.com/files/22240276-2f06-41f8-9411-755c8ce926ed/
-            uuid: 22240276-2f06-41f8-9411-755c8ce926ed
-            content_info:
-              mime:
-                mime: image/jpeg
-                type: image
-                subtype: jpeg
-              image:
-                format: JPEG
-                width: 500
-                height: 500
-                sequence: false
-                color_mode: RGB
-                orientation: 6
-                geo_location:
-                  latitude: 55.62013611111111
-                  longitude: 37.66299166666666
-                datetime_original: '2018-08-20T08:59:50'
-                dpi:
-                - 72
-                - 72
-            metadata:
-              subsystem: uploader
-              pet: cat
-            default_effects: resize/x800/
-    applicationDataObject:
-      type:
-      - object
-      - 'null'
-      description: Dictionary of application names and data associated with these applications.
-      properties:
-        aws_rekognition_detect_labels:
-          $ref: '#/components/schemas/awsRekognitionDetectLabels_v2016_06_27'
-        aws_rekognition_detect_moderation_labels:
-          $ref: '#/components/schemas/awsRekognitionDetectModerationLabels_v2016_06_27'
-        remove_bg:
-          $ref: '#/components/schemas/removeBg_v1_0'
-        uc_clamav_virus_scan:
-          $ref: '#/components/schemas/ucClamavVirusScan'
-    metadata:
-      type:
-      - object
-      - 'null'
-      description: Arbitrary metadata associated with a file.
-    awsRekognitionDetectModerationLabels_v2016_06_27:
-      allOf:
-      - $ref: '#/components/schemas/applicationData'
-      - type: object
-        properties:
-          version:
-            type: string
-            enum:
-            - '2016-06-27'
-          data:
-            type: object
-            description: Dictionary with a result of an aws rekognition detect moderation labels execution result.
-            properties:
-              ModerationModelVersion:
-                type: string
-              ModerationLabels:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    Confidence:
-                      type: number
-                    Name:
-                      type: string
-                    ParentName:
-                      type: string
-                  required:
-                  - Name
-                  - ParentName
-                  - Confidence
-            required:
-            - ModerationLabels
-            - ModerationModelVersion
-            example:
-              value:
-                aws_rekognition_detect_moderation_labels:
-                  data:
-                    ModerationModelVersion: '6.0'
-                    ModerationLabels:
-                    - Confidence: 93.41645812988281
-                      Name: Weapons
-                      ParentName: Violence
-                  version: '2016-06-27'
-                  datetime_created: '2023-02-21T11:25:31.259763Z'
-                  datetime_updated: '2023-02-21T11:27:33.359763Z'
     ucClamavVirusScan:
       allOf:
       - $ref: '#/components/schemas/applicationData'
@@ -505,339 +372,6 @@ components:
               version: 0.104.2
               datetime_created: '2021-09-21T11:24:33.159663Z'
               datetime_updated: '2021-09-21T11:24:33.159663Z'
-    applicationData:
-      type: object
-      properties:
-        version:
-          type: string
-          description: An application version.
-        datetime_created:
-          type: string
-          format: date-time
-          description: Date and time when an application data was created.
-        datetime_updated:
-          type: string
-          format: date-time
-          description: Date and time when an application data was updated.
-        data:
-          type: object
-          description: Dictionary with a result of an application execution result.
-      required:
-      - version
-      - datetime_created
-      - datetime_updated
-      - data
-    removeBg_v1_0:
-      allOf:
-      - $ref: '#/components/schemas/applicationData'
-      - type: object
-        properties:
-          version:
-            type: string
-            enum:
-            - '1.0'
-          data:
-            type: object
-            description: Dictionary with a result of an remove.bg information about an image.
-            properties:
-              foreground_type:
-                type: string
-                description: foreground classification type (present if type_level was set)
-        example:
-          value:
-            remove_bg:
-              data:
-                foreground_type: person
-              version: '1.0'
-              datetime_created: '2021-07-25T12:24:33.159663Z'
-              datetime_updated: '2021-07-25T12:24:33.159663Z'
-    imageInfo:
-      type: object
-      description: Image metadata.
-      required:
-      - color_mode
-      - orientation
-      - format
-      - height
-      - width
-      - geo_location
-      - datetime_original
-      - dpi
-      - sequence
-      properties:
-        color_mode:
-          type: string
-          description: Image color mode.
-          enum:
-          - RGB
-          - RGBA
-          - RGBa
-          - RGBX
-          - L
-          - LA
-          - La
-          - P
-          - PA
-          - CMYK
-          - YCbCr
-          - HSV
-          - LAB
-          example: RGBA
-        orientation:
-          type:
-          - integer
-          - 'null'
-          description: Image orientation from EXIF.
-          minimum: 0
-          maximum: 8
-          example: 6
-        format:
-          type: string
-          description: Image format.
-          example: JPEG
-        sequence:
-          type: boolean
-          description: Set to true if a file contains a sequence of images (GIF for example).
-          example: false
-        height:
-          type: integer
-          description: Image height in pixels.
-          example: 2352
-        width:
-          type: integer
-          description: Image width in pixels.
-          example: 2935
-        geo_location:
-          description: Geo-location of image from EXIF.
-          type:
-          - object
-          - 'null'
-          required:
-          - latitude
-          - longitude
-          properties:
-            latitude:
-              type: number
-              description: Location latitude.
-              example: -1.1884555555555556
-            longitude:
-              type: number
-              description: Location longitude.
-              example: 52.66996666666667
-        datetime_original:
-          type:
-          - string
-          - 'null'
-          description: Image date and time from EXIF. Please be aware that this data is not always formatted and displayed exactly as it appears in the EXIF.
-          format: date-time
-          example: '2018-09-13T16:23:40'
-        dpi:
-          type:
-          - array
-          - 'null'
-          description: Image DPI for two dimensions.
-          items:
-            type: number
-            example: 72
-          minItems: 2
-          maxItems: 2
-          example:
-          - 72
-          - 72
-    videoInfo:
-      type: object
-      description: Video metadata.
-      required:
-      - duration
-      - format
-      - bitrate
-      - audio
-      - video
-      properties:
-        duration:
-          type:
-          - integer
-          - 'null'
-          description: Video file's duration in milliseconds.
-          example: 261827
-        format:
-          type: string
-          description: Video file's format.
-          example: mp4
-        bitrate:
-          type:
-          - integer
-          - 'null'
-          description: Video file's bitrate.
-          example: 393
-        audio:
-          type: array
-          items:
-            type: object
-            description: Audio stream's metadata.
-            required:
-            - bitrate
-            - codec
-            - sample_rate
-            - channels
-            properties:
-              bitrate:
-                type:
-                - integer
-                - 'null'
-                description: Audio stream's bitrate.
-                example: 78
-              codec:
-                type:
-                - string
-                - 'null'
-                description: Audio stream's codec.
-                example: aac
-              sample_rate:
-                type:
-                - integer
-                - 'null'
-                description: Audio stream's sample rate.
-                example: 44100
-              channels:
-                type:
-                - integer
-                - 'null'
-                description: Audio stream's number of channels.
-                example: 2
-        video:
-          type: array
-          items:
-            type: object
-            description: Video stream's metadata.
-            required:
-            - height
-            - width
-            - frame_rate
-            - bitrate
-            - codec
-            properties:
-              height:
-                type: integer
-                description: Video stream's image height.
-                example: 360
-              width:
-                type: integer
-                description: Video stream's image width.
-                example: 640
-              frame_rate:
-                type: number
-                description: Video stream's frame rate.
-                example: 30
-              bitrate:
-                type:
-                - integer
-                - 'null'
-                description: Video stream's bitrate.
-                example: 315
-              codec:
-                type:
-                - string
-                - 'null'
-                description: Video stream's codec.
-                example: h264
-    awsRekognitionDetectLabels_v2016_06_27:
-      allOf:
-      - $ref: '#/components/schemas/applicationData'
-      - type: object
-        properties:
-          version:
-            type: string
-            enum:
-            - '2016-06-27'
-          data:
-            type: object
-            description: Dictionary with a result of an aws rekognition detect labels execution result.
-            properties:
-              LabelModelVersion:
-                type: string
-              Labels:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    Confidence:
-                      type: number
-                    Instances:
-                      type: array
-                      items:
-                        type: object
-                        properties:
-                          BoundingBox:
-                            type: object
-                            properties:
-                              Height:
-                                type: number
-                              Left:
-                                type: number
-                              Top:
-                                type: number
-                              Width:
-                                type: number
-                          Confidence:
-                            type: number
-                    Name:
-                      type: string
-                    Parents:
-                      type: array
-                      items:
-                        type: object
-                        properties:
-                          Name:
-                            type: string
-                  required:
-                  - Name
-                  - Parents
-                  - Instances
-                  - Confidence
-            required:
-            - Labels
-            - LabelModelVersion
-            example:
-              value:
-                aws_rekognition_detect_labels:
-                  data:
-                    LabelModelVersion: '2.0'
-                    Labels:
-                    - Confidence: 93.41645812988281
-                      Instances: []
-                      Name: Home Decor
-                      Parents: []
-                    - Confidence: 70.75951385498047
-                      Instances: []
-                      Name: Linen
-                      Parents:
-                      - Name: Home Decor
-                    - Confidence: 64.7123794555664
-                      Instances: []
-                      Name: Sunlight
-                      Parents: []
-                    - Confidence: 56.264793395996094
-                      Instances: []
-                      Name: Flare
-                      Parents:
-                      - Name: Light
-                    - Confidence: 50.47153854370117
-                      Instances: []
-                      Name: Tree
-                      Parents:
-                      - Name: Plant
-                  version: '2016-06-27'
-                  datetime_created: '2021-09-21T11:25:31.259763Z'
-                  datetime_updated: '2021-09-21T11:27:33.359763Z'
-    simpleAuthHTTPForbidden:
-      type: object
-      properties:
-        detail:
-          type: string
-          default: Simple authentication over HTTP is forbidden. Please, use HTTPS or signed requests instead.
-      example:
-        detail: Simple authentication over HTTP is forbidden. Please, use HTTPS or signed requests instead.
     contentInfo:
       type:
       - object
@@ -1039,6 +573,99 @@ components:
             version: 0.104.2
             datetime_created: '2021-09-21T11:24:33.159663Z'
             datetime_updated: '2021-09-21T11:24:33.159663Z'
+    groupWithFiles:
+      allOf:
+      - $ref: '#/components/schemas/group'
+      - type: object
+        properties:
+          files:
+            type:
+            - array
+            - 'null'
+            description: 'The list of files in the group. An array may contain null values if a file has been removed.
+
+              '
+            allOf:
+            - $ref: '#/components/schemas/file'
+            - type: object
+              properties:
+                default_effects:
+                  type: string
+                  format: uri
+                  description: The field contains a set of processing operations applied to the file when the group was created. This set is applied by default when the file is reffered via a group CDN URL and `/nth/N/` operator.
+                  example: resize/x800/
+        example:
+          id: dd43982b-5447-44b2-86f6-1c3b52afa0ff~1
+          datetime_created: '2018-11-27T14:14:37.583654Z'
+          files_count: 1
+          cdn_url: https://ucarecdn.com/dd43982b-5447-44b2-86f6-1c3b52afa0ff~1/
+          url: https://api.uploadcare.com/groups/dd43982b-5447-44b2-86f6-1c3b52afa0ff~1/
+          files:
+          - datetime_removed: null
+            datetime_stored: '2018-11-26T12:49:10.477888Z'
+            datetime_uploaded: '2018-11-26T12:49:09.945335Z'
+            variations: null
+            is_image: true
+            is_ready: true
+            mime_type: image/jpeg
+            original_file_url: https://ucarecdn.com/22240276-2f06-41f8-9411-755c8ce926ed/pineapple.jpg
+            original_filename: pineapple.jpg
+            size: 642
+            url: https://api.uploadcare.com/files/22240276-2f06-41f8-9411-755c8ce926ed/
+            uuid: 22240276-2f06-41f8-9411-755c8ce926ed
+            content_info:
+              mime:
+                mime: image/jpeg
+                type: image
+                subtype: jpeg
+              image:
+                format: JPEG
+                width: 500
+                height: 500
+                sequence: false
+                color_mode: RGB
+                orientation: 6
+                geo_location:
+                  latitude: 55.62013611111111
+                  longitude: 37.66299166666666
+                datetime_original: '2018-08-20T08:59:50'
+                dpi:
+                - 72
+                - 72
+            metadata:
+              subsystem: uploader
+              pet: cat
+            default_effects: resize/x800/
+    applicationData:
+      type: object
+      properties:
+        version:
+          type: string
+          description: An application version.
+        datetime_created:
+          type: string
+          format: date-time
+          description: Date and time when an application data was created.
+        datetime_updated:
+          type: string
+          format: date-time
+          description: Date and time when an application data was updated.
+        data:
+          type: object
+          description: Dictionary with a result of an application execution result.
+      required:
+      - version
+      - datetime_created
+      - datetime_updated
+      - data
+    simpleAuthHTTPForbidden:
+      type: object
+      properties:
+        detail:
+          type: string
+          default: Simple authentication over HTTP is forbidden. Please, use HTTPS or signed requests instead.
+      example:
+        detail: Simple authentication over HTTP is forbidden. Please, use HTTPS or signed requests instead.
     group:
       type: object
       properties:
@@ -1067,7 +694,416 @@ components:
         files_count: 1
         cdn_url: https://ucarecdn.com/dd43982b-5447-44b2-86f6-1c3b52afa0ff~1/
         url: https://api.uploadcare.com/groups/dd43982b-5447-44b2-86f6-1c3b52afa0ff~1/
+    videoInfo:
+      type: object
+      description: Video metadata.
+      required:
+      - duration
+      - format
+      - bitrate
+      - audio
+      - video
+      properties:
+        duration:
+          type:
+          - integer
+          - 'null'
+          description: Video file's duration in milliseconds.
+          example: 261827
+        format:
+          type: string
+          description: Video file's format.
+          example: mp4
+        bitrate:
+          type:
+          - integer
+          - 'null'
+          description: Video file's bitrate.
+          example: 393
+        audio:
+          type: array
+          items:
+            type: object
+            description: Audio stream's metadata.
+            required:
+            - bitrate
+            - codec
+            - sample_rate
+            - channels
+            properties:
+              bitrate:
+                type:
+                - integer
+                - 'null'
+                description: Audio stream's bitrate.
+                example: 78
+              codec:
+                type:
+                - string
+                - 'null'
+                description: Audio stream's codec.
+                example: aac
+              sample_rate:
+                type:
+                - integer
+                - 'null'
+                description: Audio stream's sample rate.
+                example: 44100
+              channels:
+                type:
+                - integer
+                - 'null'
+                description: Audio stream's number of channels.
+                example: 2
+        video:
+          type: array
+          items:
+            type: object
+            description: Video stream's metadata.
+            required:
+            - height
+            - width
+            - frame_rate
+            - bitrate
+            - codec
+            properties:
+              height:
+                type: integer
+                description: Video stream's image height.
+                example: 360
+              width:
+                type: integer
+                description: Video stream's image width.
+                example: 640
+              frame_rate:
+                type: number
+                description: Video stream's frame rate.
+                example: 30
+              bitrate:
+                type:
+                - integer
+                - 'null'
+                description: Video stream's bitrate.
+                example: 315
+              codec:
+                type:
+                - string
+                - 'null'
+                description: Video stream's codec.
+                example: h264
+    applicationDataObject:
+      type:
+      - object
+      - 'null'
+      description: Dictionary of application names and data associated with these applications.
+      properties:
+        aws_rekognition_detect_labels:
+          $ref: '#/components/schemas/awsRekognitionDetectLabels_v2016_06_27'
+        aws_rekognition_detect_moderation_labels:
+          $ref: '#/components/schemas/awsRekognitionDetectModerationLabels_v2016_06_27'
+        remove_bg:
+          $ref: '#/components/schemas/removeBg_v1_0'
+        uc_clamav_virus_scan:
+          $ref: '#/components/schemas/ucClamavVirusScan'
+    imageInfo:
+      type: object
+      description: Image metadata.
+      required:
+      - color_mode
+      - orientation
+      - format
+      - height
+      - width
+      - geo_location
+      - datetime_original
+      - dpi
+      - sequence
+      properties:
+        color_mode:
+          type: string
+          description: Image color mode.
+          enum:
+          - RGB
+          - RGBA
+          - RGBa
+          - RGBX
+          - L
+          - LA
+          - La
+          - P
+          - PA
+          - CMYK
+          - YCbCr
+          - HSV
+          - LAB
+          example: RGBA
+        orientation:
+          type:
+          - integer
+          - 'null'
+          description: Image orientation from EXIF.
+          minimum: 0
+          maximum: 8
+          example: 6
+        format:
+          type: string
+          description: Image format.
+          example: JPEG
+        sequence:
+          type: boolean
+          description: Set to true if a file contains a sequence of images (GIF for example).
+          example: false
+        height:
+          type: integer
+          description: Image height in pixels.
+          example: 2352
+        width:
+          type: integer
+          description: Image width in pixels.
+          example: 2935
+        geo_location:
+          description: Geo-location of image from EXIF.
+          type:
+          - object
+          - 'null'
+          required:
+          - latitude
+          - longitude
+          properties:
+            latitude:
+              type: number
+              description: Location latitude.
+              example: -1.1884555555555556
+            longitude:
+              type: number
+              description: Location longitude.
+              example: 52.66996666666667
+        datetime_original:
+          type:
+          - string
+          - 'null'
+          description: Image date and time from EXIF. Please be aware that this data is not always formatted and displayed exactly as it appears in the EXIF.
+          format: date-time
+          example: '2018-09-13T16:23:40'
+        dpi:
+          type:
+          - array
+          - 'null'
+          description: Image DPI for two dimensions.
+          items:
+            type: number
+            example: 72
+          minItems: 2
+          maxItems: 2
+          example:
+          - 72
+          - 72
+    metadata:
+      type:
+      - object
+      - 'null'
+      description: Arbitrary metadata associated with a file.
+    awsRekognitionDetectLabels_v2016_06_27:
+      allOf:
+      - $ref: '#/components/schemas/applicationData'
+      - type: object
+        properties:
+          version:
+            type: string
+            enum:
+            - '2016-06-27'
+          data:
+            type: object
+            description: Dictionary with a result of an aws rekognition detect labels execution result.
+            properties:
+              LabelModelVersion:
+                type: string
+              Labels:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    Confidence:
+                      type: number
+                    Instances:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          BoundingBox:
+                            type: object
+                            properties:
+                              Height:
+                                type: number
+                              Left:
+                                type: number
+                              Top:
+                                type: number
+                              Width:
+                                type: number
+                          Confidence:
+                            type: number
+                    Name:
+                      type: string
+                    Parents:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          Name:
+                            type: string
+                  required:
+                  - Name
+                  - Parents
+                  - Instances
+                  - Confidence
+            required:
+            - Labels
+            - LabelModelVersion
+            example:
+              value:
+                aws_rekognition_detect_labels:
+                  data:
+                    LabelModelVersion: '2.0'
+                    Labels:
+                    - Confidence: 93.41645812988281
+                      Instances: []
+                      Name: Home Decor
+                      Parents: []
+                    - Confidence: 70.75951385498047
+                      Instances: []
+                      Name: Linen
+                      Parents:
+                      - Name: Home Decor
+                    - Confidence: 64.7123794555664
+                      Instances: []
+                      Name: Sunlight
+                      Parents: []
+                    - Confidence: 56.264793395996094
+                      Instances: []
+                      Name: Flare
+                      Parents:
+                      - Name: Light
+                    - Confidence: 50.47153854370117
+                      Instances: []
+                      Name: Tree
+                      Parents:
+                      - Name: Plant
+                  version: '2016-06-27'
+                  datetime_created: '2021-09-21T11:25:31.259763Z'
+                  datetime_updated: '2021-09-21T11:27:33.359763Z'
+    removeBg_v1_0:
+      allOf:
+      - $ref: '#/components/schemas/applicationData'
+      - type: object
+        properties:
+          version:
+            type: string
+            enum:
+            - '1.0'
+          data:
+            type: object
+            description: Dictionary with a result of an remove.bg information about an image.
+            properties:
+              foreground_type:
+                type: string
+                description: foreground classification type (present if type_level was set)
+        example:
+          value:
+            remove_bg:
+              data:
+                foreground_type: person
+              version: '1.0'
+              datetime_created: '2021-07-25T12:24:33.159663Z'
+              datetime_updated: '2021-07-25T12:24:33.159663Z'
+    awsRekognitionDetectModerationLabels_v2016_06_27:
+      allOf:
+      - $ref: '#/components/schemas/applicationData'
+      - type: object
+        properties:
+          version:
+            type: string
+            enum:
+            - '2016-06-27'
+          data:
+            type: object
+            description: Dictionary with a result of an aws rekognition detect moderation labels execution result.
+            properties:
+              ModerationModelVersion:
+                type: string
+              ModerationLabels:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    Confidence:
+                      type: number
+                    Name:
+                      type: string
+                    ParentName:
+                      type: string
+                  required:
+                  - Name
+                  - ParentName
+                  - Confidence
+            required:
+            - ModerationLabels
+            - ModerationModelVersion
+            example:
+              value:
+                aws_rekognition_detect_moderation_labels:
+                  data:
+                    ModerationModelVersion: '6.0'
+                    ModerationLabels:
+                    - Confidence: 93.41645812988281
+                      Name: Weapons
+                      ParentName: Violence
+                  version: '2016-06-27'
+                  datetime_created: '2023-02-21T11:25:31.259763Z'
+                  datetime_updated: '2023-02-21T11:27:33.359763Z'
   responses:
+    authorizationProblemsResponse:
+      description: Authorization errors.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              detail:
+                type: string
+                enum:
+                - Incorrect authentication credentials.
+                - Public key {public_key} not found.
+                - Secret key not found.
+                - Invalid signature. Please check your Secret key.
+                example: Incorrect authentication credentials.
+    invalidAcceptHeader:
+      description: Invalid version header `Accept` for this endpoint.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              detail:
+                type: string
+                example: Incorrect Accept header provided. Make sure to specify API version. Refer to REST API docs for details.
+                default: Incorrect Accept header provided. Make sure to specify API version. Refer to REST API docs for details.
+    requestWasThrottledError:
+      description: Request was throttled.
+      headers:
+        Retry-After:
+          description: Number of seconds to wait before the next request.
+          schema:
+            type: integer
+            example: 10
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              detail:
+                type: string
+                example: Request was throttled. Expected available in 10 seconds.
     paginatedGroupsResponse:
       description: A list of groups, paginated.
       content:
@@ -1105,54 +1141,6 @@ components:
           examples:
             List:
               $ref: '#/components/examples/group_list'
-    authorizationProblemsResponse:
-      description: Authorization errors.
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              detail:
-                type: string
-                enum:
-                - Incorrect authentication credentials.
-                - Public key {public_key} not found.
-                - Secret key not found.
-                - Invalid signature. Please check your Secret key.
-                example: Incorrect authentication credentials.
-    invalidAcceptHeader:
-      description: Invalid version header `Accept` for this endpoint.
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              detail:
-                type: string
-                example: Incorrect Accept header provided. Make sure to specify API version. Refer to REST API docs for details.
-                default: Incorrect Accept header provided. Make sure to specify API version. Refer to REST API docs for details.
-    simpleAuthHTTPForbiddenResponse:
-      description: Simple authentication over HTTP is forbidden. Please, use HTTPS or signed requests instead.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/simpleAuthHTTPForbidden'
-    requestWasThrottledError:
-      description: Request was throttled.
-      headers:
-        Retry-After:
-          description: Number of seconds to wait before the next request.
-          schema:
-            type: integer
-            example: 10
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              detail:
-                type: string
-                example: Request was throttled. Expected available in 10 seconds.
     groupNotFound:
       description: Group with `uuid` not found.
       content:
@@ -1164,6 +1152,12 @@ components:
                 type: string
                 description: Group not found.
                 example: Not found.
+    simpleAuthHTTPForbiddenResponse:
+      description: Simple authentication over HTTP is forbidden. Please, use HTTPS or signed requests instead.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/simpleAuthHTTPForbidden'
   examples:
     group_list:
       value:

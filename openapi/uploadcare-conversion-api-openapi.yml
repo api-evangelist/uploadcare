@@ -8,14 +8,12 @@ info:
     The REST API root is `https://api.uploadcare.com/`. Send data via query strings and POST request bodies, and receive JSON responses. All URLs MUST end with a forward slash `/`.
 
 
-    Check out our [API clients](https://uploadcare.com/docs/integrations/) that cover most of the popular programming languages and frameworks.
+    Check out our API clients that cover most of the popular programming languages and frameworks.
 
 
     # Authentication
 
-    <!-- ReDoc-Inject: <security-definitions> -->
-
-    '
+    -->'
   contact:
     name: API support
     email: help@uploadcare.com
@@ -154,7 +152,7 @@ paths:
       tags:
       - Conversion
       summary: Convert document
-      description: Uploadcare allows you to convert files to different target formats. Check out the [conversion capabilities](https://uploadcare.com/docs/transformations/file-conversion/#document-file-formats) for each supported format.
+      description: Uploadcare allows you to convert files to different target formats. Check out the conversion capabilities for each supported format.
       operationId: documentConvert
       parameters:
       - $ref: '#/components/parameters/acceptHeader'
@@ -555,22 +553,14 @@ paths:
           '
 components:
   schemas:
-    cantUseVideoConversionError:
+    simpleAuthHTTPForbidden:
       type: object
       properties:
         detail:
           type: string
-          default: Video conversion feature is not available for this project.
+          default: Simple authentication over HTTP is forbidden. Please, use HTTPS or signed requests instead.
       example:
-        detail: Video conversion feature is not available for this project.
-    jsonObjectParseError:
-      type: object
-      properties:
-        detail:
-          type: string
-          description: Expected JSON object.
-      example:
-        detail: Expected JSON object.
+        detail: Simple authentication over HTTP is forbidden. Please, use HTTPS or signed requests instead.
     documentJobSubmitParameters:
       type: object
       properties:
@@ -619,22 +609,14 @@ components:
         - 8ddbbb48-0927-4df7-afac-c6031668b01b/document/
         store: 1
         save_in_group: '1'
-    cantUseDocsConversionError:
+    jsonObjectParseError:
       type: object
       properties:
         detail:
           type: string
-          default: Document conversion feature is not available for this project.
+          description: Expected JSON object.
       example:
-        detail: Document conversion feature is not available for this project.
-    simpleAuthHTTPForbidden:
-      type: object
-      properties:
-        detail:
-          type: string
-          default: Simple authentication over HTTP is forbidden. Please, use HTTPS or signed requests instead.
-      example:
-        detail: Simple authentication over HTTP is forbidden. Please, use HTTPS or signed requests instead.
+        detail: Expected JSON object.
     videoJobSubmitParameters:
       type: object
       properties:
@@ -664,20 +646,51 @@ components:
         - d52d7136-a2e5-4338-9f45-affbf83b857d/video/-/format/ogg/-/quality/best/
         - 28843a09-dd3d-4b8a-ad4f-8aa5f8f60ff2
         store: '1'
-  examples:
     cantUseDocsConversionError:
-      value:
+      type: object
+      properties:
+        detail:
+          type: string
+          default: Document conversion feature is not available for this project.
+      example:
         detail: Document conversion feature is not available for this project.
-    jsonObjectParseError:
-      value:
-        detail: Expected JSON object.
-    simpleAuthHTTPForbidden:
-      value:
-        detail: Simple authentication over HTTP is forbidden. Please, use HTTPS or signed requests instead.
+    cantUseVideoConversionError:
+      type: object
+      properties:
+        detail:
+          type: string
+          default: Video conversion feature is not available for this project.
+      example:
+        detail: Video conversion feature is not available for this project.
+  examples:
     cantUseVideoConversionError:
       value:
         detail: Video conversion feature is not available for this project.
+    simpleAuthHTTPForbidden:
+      value:
+        detail: Simple authentication over HTTP is forbidden. Please, use HTTPS or signed requests instead.
+    jsonObjectParseError:
+      value:
+        detail: Expected JSON object.
+    cantUseDocsConversionError:
+      value:
+        detail: Document conversion feature is not available for this project.
   responses:
+    authorizationProblemsResponse:
+      description: Authorization errors.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              detail:
+                type: string
+                enum:
+                - Incorrect authentication credentials.
+                - Public key {public_key} not found.
+                - Secret key not found.
+                - Invalid signature. Please check your Secret key.
+                example: Incorrect authentication credentials.
     documentJobSubmitResponse:
       description: Success.
       content:
@@ -717,21 +730,6 @@ components:
               - original_source: 88a51210-bd69-4411-bc72-a9952d9512cd/document/-/format/pdf/
                 token: 445630637
                 uuid: 28843a09-dd3d-4b8a-ad4f-8aa5f8f60ff2
-    authorizationProblemsResponse:
-      description: Authorization errors.
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              detail:
-                type: string
-                enum:
-                - Incorrect authentication credentials.
-                - Public key {public_key} not found.
-                - Secret key not found.
-                - Invalid signature. Please check your Secret key.
-                example: Incorrect authentication credentials.
     invalidAcceptHeader:
       description: Invalid version header `Accept` for this endpoint.
       content:
@@ -743,40 +741,50 @@ components:
                 type: string
                 example: Incorrect Accept header provided. Make sure to specify API version. Refer to REST API docs for details.
                 default: Incorrect Accept header provided. Make sure to specify API version. Refer to REST API docs for details.
-    documentJobStatusResponse:
+    documentInfoResponse:
       description: Success.
       content:
         application/json:
           schema:
             type: object
             properties:
-              status:
-                type: string
-                description: 'Conversion job status, can have one of the following values: - `pending` — a source file is being prepared for conversion. - `processing` — conversion is in progress. - `finished` — the conversion is finished. - `failed` — failed to convert the source, see `error` for details. - `canceled` — the conversion was canceled.'
-                enum:
-                - pending
-                - processing
-                - finished
-                - failed
-                - cancelled
               error:
                 type:
                 - string
                 - 'null'
-                description: Holds a conversion error if your file can't be handled.
-              result:
+                description: Holds an error if your document can't be handled.
+              format:
                 type: object
-                description: Repeats the contents of your processing output.
+                description: Document format details.
                 properties:
-                  uuid:
+                  name:
                     type: string
-                    format: uuid
-                    description: A UUID of a converted target file.
+                    description: A detected document format.
+                  conversion_formats:
+                    type: array
+                    description: The conversions that are supported for the document.
+                    items:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                          description: Supported target document format.
+              converted_groups:
+                type: object
+                description: Information about already converted groups.
+                properties:
+                  '{conversion_format}':
+                    type: string
+                    description: Converted group UUID.
             example:
-              status: processing
               error: null
-              result:
-                uuid: 500196bc-9da5-4aaf-8f3e-70a4ce86edae
+              format:
+                name: txt
+                conversion_formats:
+                - name: epub
+                - name: pdf
+              converted_groups:
+                pdf: 49732da8-1530-470c-8743-998c4c634718~5
     requestWasThrottledError:
       description: Request was throttled.
       headers:
@@ -838,6 +846,40 @@ components:
                 token: 445630637
                 thumbnails_group_uuid: be3b4d5e-179d-460e-8a5d-69112ac86cbb~1
                 uuid: 28843a09-dd3d-4b8a-ad4f-8aa5f8f60ff2
+    documentJobStatusResponse:
+      description: Success.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+                description: 'Conversion job status, can have one of the following values: - `pending` — a source file is being prepared for conversion. - `processing` — conversion is in progress. - `finished` — the conversion is finished. - `failed` — failed to convert the source, see `error` for details. - `canceled` — the conversion was canceled.'
+                enum:
+                - pending
+                - processing
+                - finished
+                - failed
+                - cancelled
+              error:
+                type:
+                - string
+                - 'null'
+                description: Holds a conversion error if your file can't be handled.
+              result:
+                type: object
+                description: Repeats the contents of your processing output.
+                properties:
+                  uuid:
+                    type: string
+                    format: uuid
+                    description: A UUID of a converted target file.
+            example:
+              status: processing
+              error: null
+              result:
+                uuid: 500196bc-9da5-4aaf-8f3e-70a4ce86edae
     videoJobStatusResponse:
       description: Success.
       content:
@@ -877,50 +919,6 @@ components:
               result:
                 thumbnails_group_uuid: 575ed4e8-f4e8-4c14-a58b-1527b6d9ee46~1
                 uuid: 500196bc-9da5-4aaf-8f3e-70a4ce86edae
-    documentInfoResponse:
-      description: Success.
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              error:
-                type:
-                - string
-                - 'null'
-                description: Holds an error if your document can't be handled.
-              format:
-                type: object
-                description: Document format details.
-                properties:
-                  name:
-                    type: string
-                    description: A detected document format.
-                  conversion_formats:
-                    type: array
-                    description: The conversions that are supported for the document.
-                    items:
-                      type: object
-                      properties:
-                        name:
-                          type: string
-                          description: Supported target document format.
-              converted_groups:
-                type: object
-                description: Information about already converted groups.
-                properties:
-                  '{conversion_format}':
-                    type: string
-                    description: Converted group UUID.
-            example:
-              error: null
-              format:
-                name: txt
-                conversion_formats:
-                - name: epub
-                - name: pdf
-              converted_groups:
-                pdf: 49732da8-1530-470c-8743-998c4c634718~5
   parameters:
     acceptHeader:
       in: header

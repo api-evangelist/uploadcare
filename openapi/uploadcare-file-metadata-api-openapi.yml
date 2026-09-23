@@ -8,14 +8,12 @@ info:
     The REST API root is `https://api.uploadcare.com/`. Send data via query strings and POST request bodies, and receive JSON responses. All URLs MUST end with a forward slash `/`.
 
 
-    Check out our [API clients](https://uploadcare.com/docs/integrations/) that cover most of the popular programming languages and frameworks.
+    Check out our API clients that cover most of the popular programming languages and frameworks.
 
 
     # Authentication
 
-    <!-- ReDoc-Inject: <security-definitions> -->
-
-    '
+    -->'
   contact:
     name: API support
     email: help@uploadcare.com
@@ -32,28 +30,15 @@ servers:
 security:
 - apiKeyAuth: []
 tags:
-- name: File metadata
-  description: 'File metadata is additional, arbitrary data, associated with uploaded file. As an example, you could store unique file identifier from your system.
-
-
-    Metadata is key-value data. You can specify up to 50 keys, with key names up to 64 characters long and values up to 512 characters long.
-
-    Read more in the [docs](https://uploadcare.com/docs/file-metadata/).
-
-
-    **Notice:** Do not store any sensitive information (bank account numbers, card details, etc.) as metadata.
-
-
-    **Notice:** File metadata is provided by the end-users uploading the files and can contain symbols unsafe in, for example, HTML context. Please escape the metadata before use according to the rules of the target runtime context (HTML browser, SQL query parameter, etc).
-
-    '
+- name: File Metadata
+  description: File metadata is additional, arbitrary data, associated with uploaded file.
 paths:
   /files/{uuid}/metadata/:
     get:
       summary: Get file's metadata
       description: Get file's metadata keys and values.
       tags:
-      - File metadata
+      - File Metadata
       operationId: _fileMetadata
       parameters:
       - $ref: '#/components/parameters/acceptHeader'
@@ -138,7 +123,7 @@ paths:
       summary: Get metadata key's value
       description: Get the value of a single metadata key.
       tags:
-      - File metadata
+      - File Metadata
       operationId: fileMetadataKey
       parameters:
       - $ref: '#/components/parameters/acceptHeader'
@@ -221,7 +206,7 @@ paths:
       summary: Update metadata key's value
       description: Update the value of a single metadata key. If the key does not exist, it will be created.
       tags:
-      - File metadata
+      - File Metadata
       operationId: updateFileMetadataKey
       parameters:
       - $ref: '#/components/parameters/acceptHeader'
@@ -314,7 +299,7 @@ paths:
       summary: Delete metadata key
       description: Delete a file's metadata key.
       tags:
-      - File metadata
+      - File Metadata
       operationId: deleteFileMetadataKey
       parameters:
       - $ref: '#/components/parameters/acceptHeader'
@@ -399,6 +384,32 @@ components:
       example:
         detail: Simple authentication over HTTP is forbidden. Please, use HTTPS or signed requests instead.
   responses:
+    simpleAuthHTTPForbiddenResponse:
+      description: Simple authentication over HTTP is forbidden. Please, use HTTPS or signed requests instead.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/simpleAuthHTTPForbidden'
+    invalidAcceptHeader:
+      description: Invalid version header `Accept` for this endpoint.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              detail:
+                type: string
+                example: Incorrect Accept header provided. Make sure to specify API version. Refer to REST API docs for details.
+                default: Incorrect Accept header provided. Make sure to specify API version. Refer to REST API docs for details.
+    fileMetadataResponse:
+      description: File metadata in JSON.
+      content:
+        application/json:
+          schema:
+            type: object
+            example:
+              subsystem: uploader
+              pet: cat
     authorizationProblemsResponse:
       description: Authorization errors.
       content:
@@ -414,42 +425,7 @@ components:
                 - Secret key not found.
                 - Invalid signature. Please check your Secret key.
                 example: Incorrect authentication credentials.
-    invalidAcceptHeader:
-      description: Invalid version header `Accept` for this endpoint.
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              detail:
-                type: string
-                example: Incorrect Accept header provided. Make sure to specify API version. Refer to REST API docs for details.
-                default: Incorrect Accept header provided. Make sure to specify API version. Refer to REST API docs for details.
-    simpleAuthHTTPForbiddenResponse:
-      description: Simple authentication over HTTP is forbidden. Please, use HTTPS or signed requests instead.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/simpleAuthHTTPForbidden'
-    fileMetadataResponse:
-      description: File metadata in JSON.
-      content:
-        application/json:
-          schema:
-            type: object
-            example:
-              subsystem: uploader
-              pet: cat
   parameters:
-    fileUUID:
-      in: path
-      name: uuid
-      description: File UUID.
-      required: true
-      schema:
-        type: string
-        format: uuid
-        example: 21975c81-7f57-4c7a-aef9-acfe28779f78
     acceptHeader:
       in: header
       name: Accept
@@ -460,6 +436,15 @@ components:
         - 'null'
         example: application/vnd.uploadcare-v0.7+json
       required: true
+    fileUUID:
+      in: path
+      name: uuid
+      description: File UUID.
+      required: true
+      schema:
+        type: string
+        format: uuid
+        example: 21975c81-7f57-4c7a-aef9-acfe28779f78
     fileMetadataKey:
       in: path
       name: key

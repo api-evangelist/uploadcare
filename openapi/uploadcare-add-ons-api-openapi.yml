@@ -8,14 +8,12 @@ info:
     The REST API root is `https://api.uploadcare.com/`. Send data via query strings and POST request bodies, and receive JSON responses. All URLs MUST end with a forward slash `/`.
 
 
-    Check out our [API clients](https://uploadcare.com/docs/integrations/) that cover most of the popular programming languages and frameworks.
+    Check out our API clients that cover most of the popular programming languages and frameworks.
 
 
     # Authentication
 
-    <!-- ReDoc-Inject: <security-definitions> -->
-
-    '
+    -->'
   contact:
     name: API support
     email: help@uploadcare.com
@@ -32,19 +30,17 @@ servers:
 security:
 - apiKeyAuth: []
 tags:
-- name: Add-Ons
+- name: Add Ons
   description: 'An `Add-On` is an application implemented by Uploadcare that accepts uploaded files as an
 
-    input and can produce other files and/or [appdata](#operation/fileInfo) as an output.
-
-    '
+    input and can produce other files and/or appdata as an output.'
 paths:
   /addons/aws_rekognition_detect_labels/execute/:
     post:
       summary: Execute AWS Rekognition
-      description: Execute [AWS Rekognition](https://docs.aws.amazon.com/rekognition/latest/dg/labels-detect-labels-image.html) Add-On for a given target to detect labels in an image. **Note:** Detected labels are stored in the file's appdata.
+      description: Execute AWS Rekognition Add-On for a given target to detect labels in an image. **Note:** Detected labels are stored in the file's appdata.
       tags:
-      - Add-Ons
+      - Add Ons
       operationId: awsRekognitionExecute
       parameters:
       - $ref: '#/components/parameters/acceptHeader'
@@ -147,11 +143,9 @@ paths:
       summary: Check AWS Rekognition execution status
       description: 'Check the status of an Add-On execution request that had been started
 
-        using the [Execute Add-On](#operation/awsRekognitionExecute) operation.
-
-        '
+        using the Execute Add-On operation.'
       tags:
-      - Add-Ons
+      - Add Ons
       operationId: awsRekognitionExecutionStatus
       parameters:
       - $ref: '#/components/parameters/acceptHeader'
@@ -247,9 +241,9 @@ paths:
   /addons/aws_rekognition_detect_moderation_labels/execute/:
     post:
       summary: Execute AWS Rekognition Moderation
-      description: Execute [AWS Rekognition Moderation](https://docs.aws.amazon.com/rekognition/latest/dg/moderation.html) Add-On for a given target to detect moderation labels in an image. **Note:** Detected moderation labels are stored in the file's appdata.
+      description: Execute AWS Rekognition Moderation Add-On for a given target to detect moderation labels in an image. **Note:** Detected moderation labels are stored in the file's appdata.
       tags:
-      - Add-Ons
+      - Add Ons
       operationId: awsRekognitionDetectModerationLabelsExecute
       parameters:
       - $ref: '#/components/parameters/acceptHeader'
@@ -352,11 +346,9 @@ paths:
       summary: Check AWS Rekognition Moderation execution status
       description: 'Check the status of an Add-On execution request that had been started
 
-        using the [Execute Add-On](#operation/awsRekognitionDetectModerationLabelsExecute) operation.
-
-        '
+        using the Execute Add-On operation.'
       tags:
-      - Add-Ons
+      - Add Ons
       operationId: awsRekognitionDetectModerationLabelsExecutionStatus
       parameters:
       - $ref: '#/components/parameters/acceptHeader'
@@ -452,9 +444,9 @@ paths:
   /addons/uc_clamav_virus_scan/execute/:
     post:
       summary: Execute ClamAV
-      description: Execute [ClamAV](https://www.clamav.net/) virus checking Add-On for a given target.
+      description: Execute ClamAV virus checking Add-On for a given target.
       tags:
-      - Add-Ons
+      - Add Ons
       operationId: ucClamavVirusScanExecute
       parameters:
       - $ref: '#/components/parameters/acceptHeader'
@@ -573,11 +565,9 @@ paths:
       summary: Check ClamAV execution status
       description: 'Check the status of an Add-On execution request that had been started
 
-        using the [Execute Add-On](#operation/ucClamavVirusScanExecute) operation.
-
-        '
+        using the Execute Add-On operation.'
       tags:
-      - Add-Ons
+      - Add Ons
       operationId: ucClamavVirusScanExecutionStatus
       parameters:
       - $ref: '#/components/parameters/acceptHeader'
@@ -676,9 +666,9 @@ paths:
   /addons/remove_bg/execute/:
     post:
       summary: Execute Remove.bg
-      description: Execute [remove.bg](https://remove.bg/) background image removal Add-On for a given target.
+      description: Execute remove.bg background image removal Add-On for a given target.
       tags:
-      - Add-Ons
+      - Add Ons
       operationId: removeBgExecute
       parameters:
       - $ref: '#/components/parameters/acceptHeader'
@@ -860,11 +850,9 @@ paths:
       summary: Check Remove.bg execution status
       description: 'Check the status of an Add-On execution request that had been started
 
-        using the [Execute Add-On](#operation/removeBgExecute) operation.
-
-        '
+        using the Execute Add-On operation.'
       tags:
-      - Add-Ons
+      - Add Ons
       operationId: removeBgExecutionStatus
       parameters:
       - $ref: '#/components/parameters/acceptHeader'
@@ -977,8 +965,14 @@ paths:
           '
 components:
   responses:
-    authorizationProblemsResponse:
-      description: Authorization errors.
+    simpleAuthHTTPForbiddenResponse:
+      description: Simple authentication over HTTP is forbidden. Please, use HTTPS or signed requests instead.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/simpleAuthHTTPForbidden'
+    invalidAcceptHeader:
+      description: Invalid version header `Accept` for this endpoint.
       content:
         application/json:
           schema:
@@ -986,12 +980,24 @@ components:
             properties:
               detail:
                 type: string
-                enum:
-                - Incorrect authentication credentials.
-                - Public key {public_key} not found.
-                - Secret key not found.
-                - Invalid signature. Please check your Secret key.
-                example: Incorrect authentication credentials.
+                example: Incorrect Accept header provided. Make sure to specify API version. Refer to REST API docs for details.
+                default: Incorrect Accept header provided. Make sure to specify API version. Refer to REST API docs for details.
+    requestWasThrottledError:
+      description: Request was throttled.
+      headers:
+        Retry-After:
+          description: Number of seconds to wait before the next request.
+          schema:
+            type: integer
+            example: 10
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              detail:
+                type: string
+                example: Request was throttled. Expected available in 10 seconds.
     addonExecutionStatusResponse:
       description: Add-On execution status response.
       content:
@@ -1009,8 +1015,8 @@ components:
                 description: 'Defines the status of an Add-On execution.
 
                   In most cases, once the status changes to `done`, [Application Data](#operation/fileInfo) of the file that had been specified as a `appdata`, will contain the result of the execution.'
-    invalidAcceptHeader:
-      description: Invalid version header `Accept` for this endpoint.
+    executeAddonConcurrentCallResponse:
+      description: Add-On concurrent call attempt.
       content:
         application/json:
           schema:
@@ -1018,14 +1024,8 @@ components:
             properties:
               detail:
                 type: string
-                example: Incorrect Accept header provided. Make sure to specify API version. Refer to REST API docs for details.
-                default: Incorrect Accept header provided. Make sure to specify API version. Refer to REST API docs for details.
-    simpleAuthHTTPForbiddenResponse:
-      description: Simple authentication over HTTP is forbidden. Please, use HTTPS or signed requests instead.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/simpleAuthHTTPForbidden'
+                example: Concurrent call attempted
+                default: Concurrent call attempted
     executeAddonResponse:
       description: Add-On execution response.
       content:
@@ -1038,8 +1038,8 @@ components:
                 format: uuid
                 description: Request ID.
                 example: 8db3c8b4-2dea-4146-bcdb-63387e2b33c1
-    executeAddonConcurrentCallResponse:
-      description: Add-On concurrent call attempt.
+    authorizationProblemsResponse:
+      description: Authorization errors.
       content:
         application/json:
           schema:
@@ -1047,24 +1047,12 @@ components:
             properties:
               detail:
                 type: string
-                example: Concurrent call attempted
-                default: Concurrent call attempted
-    requestWasThrottledError:
-      description: Request was throttled.
-      headers:
-        Retry-After:
-          description: Number of seconds to wait before the next request.
-          schema:
-            type: integer
-            example: 10
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              detail:
-                type: string
-                example: Request was throttled. Expected available in 10 seconds.
+                enum:
+                - Incorrect authentication credentials.
+                - Public key {public_key} not found.
+                - Secret key not found.
+                - Invalid signature. Please check your Secret key.
+                example: Incorrect authentication credentials.
   parameters:
     acceptHeader:
       in: header
