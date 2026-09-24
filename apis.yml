@@ -75,8 +75,6 @@ apis:
     url: openapi/uploadcare-add-ons-api-openapi.yml
   - type: Documentation
     url: https://uploadcare.com/docs/rest_api/
-  - type: GraphQL
-    url: graphql/uploadcare-graphql.md
   - type: Documentation
     url: https://uploadcare.com/docs/api_reference/cdn/
 - aid: uploadcare:uploadcare-conversion-api
@@ -91,8 +89,6 @@ apis:
     url: openapi/uploadcare-conversion-api-openapi.yml
   - type: Documentation
     url: https://uploadcare.com/docs/rest_api/
-  - type: GraphQL
-    url: graphql/uploadcare-graphql.md
   - type: Documentation
     url: https://uploadcare.com/docs/api_reference/cdn/
 - aid: uploadcare:uploadcare-file-api
@@ -107,8 +103,6 @@ apis:
     url: openapi/uploadcare-file-api-openapi.yml
   - type: Documentation
     url: https://uploadcare.com/docs/rest_api/
-  - type: GraphQL
-    url: graphql/uploadcare-graphql.md
   - type: Documentation
     url: https://uploadcare.com/docs/api_reference/cdn/
 - aid: uploadcare:uploadcare-file-information-api
@@ -133,8 +127,6 @@ apis:
     url: openapi/uploadcare-file-information-api-openapi.yml
   - type: Documentation
     url: https://uploadcare.com/docs/rest_api/
-  - type: GraphQL
-    url: graphql/uploadcare-graphql.md
   - type: Documentation
     url: https://uploadcare.com/docs/api_reference/cdn/
 - aid: uploadcare:uploadcare-file-metadata-api
@@ -167,8 +159,6 @@ apis:
     url: openapi/uploadcare-file-metadata-api-openapi.yml
   - type: Documentation
     url: https://uploadcare.com/docs/rest_api/
-  - type: GraphQL
-    url: graphql/uploadcare-graphql.md
   - type: Documentation
     url: https://uploadcare.com/docs/api_reference/cdn/
 - aid: uploadcare:uploadcare-file-names-api
@@ -242,8 +232,6 @@ apis:
     url: openapi/uploadcare-file-names-api-openapi.yml
   - type: Documentation
     url: https://uploadcare.com/docs/rest_api/
-  - type: GraphQL
-    url: graphql/uploadcare-graphql.md
   - type: Documentation
     url: https://uploadcare.com/docs/api_reference/cdn/
 - aid: uploadcare:uploadcare-group-api
@@ -258,8 +246,6 @@ apis:
     url: openapi/uploadcare-group-api-openapi.yml
   - type: Documentation
     url: https://uploadcare.com/docs/rest_api/
-  - type: GraphQL
-    url: graphql/uploadcare-graphql.md
   - type: Documentation
     url: https://uploadcare.com/docs/api_reference/cdn/
 - aid: uploadcare:uploadcare-project-api
@@ -274,8 +260,6 @@ apis:
     url: openapi/uploadcare-project-api-openapi.yml
   - type: Documentation
     url: https://uploadcare.com/docs/rest_api/
-  - type: GraphQL
-    url: graphql/uploadcare-graphql.md
   - type: Documentation
     url: https://uploadcare.com/docs/api_reference/cdn/
 - aid: uploadcare:uploadcare-webhook-api
@@ -290,8 +274,6 @@ apis:
     url: openapi/uploadcare-webhook-api-openapi.yml
   - type: Documentation
     url: https://uploadcare.com/docs/rest_api/
-  - type: GraphQL
-    url: graphql/uploadcare-graphql.md
   - type: Documentation
     url: https://uploadcare.com/docs/api_reference/cdn/
 common:
