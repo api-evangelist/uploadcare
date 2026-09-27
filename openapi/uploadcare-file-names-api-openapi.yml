@@ -47,14 +47,6 @@ paths:
           $ref: '#/components/responses/fileNotFoundError'
 components:
   parameters:
-    uuid:
-      in: path
-      description: Unique file identifier
-      name: uuid
-      required: true
-      schema:
-        type: string
-        example: d7fe74ac-65b8-4ade-875f-ccd92759a70f
     filename:
       in: path
       description: 'An optional filename that users will see instead of the original name.
@@ -65,6 +57,14 @@ components:
       schema:
         type: string
         example: cat.jpg
+    uuid:
+      in: path
+      description: Unique file identifier
+      name: uuid
+      required: true
+      schema:
+        type: string
+        example: d7fe74ac-65b8-4ade-875f-ccd92759a70f
   responses:
     fileNotFoundError:
       description: Image with "File not found" text.
