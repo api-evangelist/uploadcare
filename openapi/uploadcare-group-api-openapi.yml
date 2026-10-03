@@ -340,37 +340,180 @@ paths:
 
           '
 components:
+  responses:
+    simpleAuthHTTPForbiddenResponse:
+      description: Simple authentication over HTTP is forbidden. Please, use HTTPS or signed requests instead.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/simpleAuthHTTPForbidden'
+    paginatedGroupsResponse:
+      description: A list of groups, paginated.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              next:
+                type:
+                - string
+                - 'null'
+                format: uri
+                description: Next page URL.
+                example: https://api.uploadcare.com/groups/?limit=3&from=2018-11-27T01%3A00%3A24.296613%2B00%3A00&offset=0
+              previous:
+                type:
+                - string
+                - 'null'
+                format: uri
+                description: Previous page URL.
+                example: https://api.uploadcare.com/groups/?limit=3&to=2018-11-27T01%3A00%3A36.436838%2B00%3A00&offset=0
+              total:
+                type: integer
+                minimum: 0
+                description: Total number of groups in the project.
+                example: 26
+              per_page:
+                type: integer
+                description: Number of groups per page.
+                example: 100
+              results:
+                type: array
+                items:
+                  $ref: '#/components/schemas/group'
+          examples:
+            List:
+              $ref: '#/components/examples/group_list'
+    invalidAcceptHeader:
+      description: Invalid version header `Accept` for this endpoint.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              detail:
+                type: string
+                example: Incorrect Accept header provided. Make sure to specify API version. Refer to REST API docs for details.
+                default: Incorrect Accept header provided. Make sure to specify API version. Refer to REST API docs for details.
+    requestWasThrottledError:
+      description: Request was throttled.
+      headers:
+        Retry-After:
+          description: Number of seconds to wait before the next request.
+          schema:
+            type: integer
+            example: 10
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              detail:
+                type: string
+                example: Request was throttled. Expected available in 10 seconds.
+    groupNotFound:
+      description: Group with `uuid` not found.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              detail:
+                type: string
+                description: Group not found.
+                example: Not found.
+    authorizationProblemsResponse:
+      description: Authorization errors.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              detail:
+                type: string
+                enum:
+                - Incorrect authentication credentials.
+                - Public key {public_key} not found.
+                - Secret key not found.
+                - Invalid signature. Please check your Secret key.
+                example: Incorrect authentication credentials.
   schemas:
-    simpleAuthHTTPForbidden:
-      type: object
-      properties:
-        detail:
-          type: string
-          default: Simple authentication over HTTP is forbidden. Please, use HTTPS or signed requests instead.
-      example:
-        detail: Simple authentication over HTTP is forbidden. Please, use HTTPS or signed requests instead.
-    applicationData:
-      type: object
-      properties:
-        version:
-          type: string
-          description: An application version.
-        datetime_created:
-          type: string
-          format: date-time
-          description: Date and time when an application data was created.
-        datetime_updated:
-          type: string
-          format: date-time
-          description: Date and time when an application data was updated.
-        data:
-          type: object
-          description: Dictionary with a result of an application execution result.
-      required:
-      - version
-      - datetime_created
-      - datetime_updated
-      - data
+    ucClamavVirusScan:
+      allOf:
+      - $ref: '#/components/schemas/applicationData'
+      - type: object
+        properties:
+          version:
+            type: string
+            enum:
+            - 0.104.2
+            - 0.104.3
+            - 0.105.0
+            - 0.105.1
+          data:
+            type: object
+            description: Dictionary with a result of ClamAV execution result.
+            properties:
+              infected:
+                type: boolean
+              infected_with:
+                type: string
+            required:
+            - infected
+        example:
+          value:
+            uc_clamav_virus_scan:
+              data:
+                infected: true
+                infected_with: Win.Test.EICAR_HDB-1
+              version: 0.104.2
+              datetime_created: '2021-09-21T11:24:33.159663Z'
+              datetime_updated: '2021-09-21T11:24:33.159663Z'
+    awsRekognitionDetectModerationLabels_v2016_06_27:
+      allOf:
+      - $ref: '#/components/schemas/applicationData'
+      - type: object
+        properties:
+          version:
+            type: string
+            enum:
+            - '2016-06-27'
+          data:
+            type: object
+            description: Dictionary with a result of an aws rekognition detect moderation labels execution result.
+            properties:
+              ModerationModelVersion:
+                type: string
+              ModerationLabels:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    Confidence:
+                      type: number
+                    Name:
+                      type: string
+                    ParentName:
+                      type: string
+                  required:
+                  - Name
+                  - ParentName
+                  - Confidence
+            required:
+            - ModerationLabels
+            - ModerationModelVersion
+            example:
+              value:
+                aws_rekognition_detect_moderation_labels:
+                  data:
+                    ModerationModelVersion: '6.0'
+                    ModerationLabels:
+                    - Confidence: 93.41645812988281
+                      Name: Weapons
+                      ParentName: Violence
+                  version: '2016-06-27'
+                  datetime_created: '2023-02-21T11:25:31.259763Z'
+                  datetime_updated: '2023-02-21T11:27:33.359763Z'
     groupWithFiles:
       allOf:
       - $ref: '#/components/schemas/group'
@@ -434,6 +577,52 @@ components:
               subsystem: uploader
               pet: cat
             default_effects: resize/x800/
+    applicationData:
+      type: object
+      properties:
+        version:
+          type: string
+          description: An application version.
+        datetime_created:
+          type: string
+          format: date-time
+          description: Date and time when an application data was created.
+        datetime_updated:
+          type: string
+          format: date-time
+          description: Date and time when an application data was updated.
+        data:
+          type: object
+          description: Dictionary with a result of an application execution result.
+      required:
+      - version
+      - datetime_created
+      - datetime_updated
+      - data
+    removeBg_v1_0:
+      allOf:
+      - $ref: '#/components/schemas/applicationData'
+      - type: object
+        properties:
+          version:
+            type: string
+            enum:
+            - '1.0'
+          data:
+            type: object
+            description: Dictionary with a result of an remove.bg information about an image.
+            properties:
+              foreground_type:
+                type: string
+                description: foreground classification type (present if type_level was set)
+        example:
+          value:
+            remove_bg:
+              data:
+                foreground_type: person
+              version: '1.0'
+              datetime_created: '2021-07-25T12:24:33.159663Z'
+              datetime_updated: '2021-07-25T12:24:33.159663Z'
     group:
       type: object
       properties:
@@ -462,276 +651,6 @@ components:
         files_count: 1
         cdn_url: https://ucarecdn.com/dd43982b-5447-44b2-86f6-1c3b52afa0ff~1/
         url: https://api.uploadcare.com/groups/dd43982b-5447-44b2-86f6-1c3b52afa0ff~1/
-    metadata:
-      type:
-      - object
-      - 'null'
-      description: Arbitrary metadata associated with a file.
-    awsRekognitionDetectModerationLabels_v2016_06_27:
-      allOf:
-      - $ref: '#/components/schemas/applicationData'
-      - type: object
-        properties:
-          version:
-            type: string
-            enum:
-            - '2016-06-27'
-          data:
-            type: object
-            description: Dictionary with a result of an aws rekognition detect moderation labels execution result.
-            properties:
-              ModerationModelVersion:
-                type: string
-              ModerationLabels:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    Confidence:
-                      type: number
-                    Name:
-                      type: string
-                    ParentName:
-                      type: string
-                  required:
-                  - Name
-                  - ParentName
-                  - Confidence
-            required:
-            - ModerationLabels
-            - ModerationModelVersion
-            example:
-              value:
-                aws_rekognition_detect_moderation_labels:
-                  data:
-                    ModerationModelVersion: '6.0'
-                    ModerationLabels:
-                    - Confidence: 93.41645812988281
-                      Name: Weapons
-                      ParentName: Violence
-                  version: '2016-06-27'
-                  datetime_created: '2023-02-21T11:25:31.259763Z'
-                  datetime_updated: '2023-02-21T11:27:33.359763Z'
-    applicationDataObject:
-      type:
-      - object
-      - 'null'
-      description: Dictionary of application names and data associated with these applications.
-      properties:
-        aws_rekognition_detect_labels:
-          $ref: '#/components/schemas/awsRekognitionDetectLabels_v2016_06_27'
-        aws_rekognition_detect_moderation_labels:
-          $ref: '#/components/schemas/awsRekognitionDetectModerationLabels_v2016_06_27'
-        remove_bg:
-          $ref: '#/components/schemas/removeBg_v1_0'
-        uc_clamav_virus_scan:
-          $ref: '#/components/schemas/ucClamavVirusScan'
-    removeBg_v1_0:
-      allOf:
-      - $ref: '#/components/schemas/applicationData'
-      - type: object
-        properties:
-          version:
-            type: string
-            enum:
-            - '1.0'
-          data:
-            type: object
-            description: Dictionary with a result of an remove.bg information about an image.
-            properties:
-              foreground_type:
-                type: string
-                description: foreground classification type (present if type_level was set)
-        example:
-          value:
-            remove_bg:
-              data:
-                foreground_type: person
-              version: '1.0'
-              datetime_created: '2021-07-25T12:24:33.159663Z'
-              datetime_updated: '2021-07-25T12:24:33.159663Z'
-    imageInfo:
-      type: object
-      description: Image metadata.
-      required:
-      - color_mode
-      - orientation
-      - format
-      - height
-      - width
-      - geo_location
-      - datetime_original
-      - dpi
-      - sequence
-      properties:
-        color_mode:
-          type: string
-          description: Image color mode.
-          enum:
-          - RGB
-          - RGBA
-          - RGBa
-          - RGBX
-          - L
-          - LA
-          - La
-          - P
-          - PA
-          - CMYK
-          - YCbCr
-          - HSV
-          - LAB
-          example: RGBA
-        orientation:
-          type:
-          - integer
-          - 'null'
-          description: Image orientation from EXIF.
-          minimum: 0
-          maximum: 8
-          example: 6
-        format:
-          type: string
-          description: Image format.
-          example: JPEG
-        sequence:
-          type: boolean
-          description: Set to true if a file contains a sequence of images (GIF for example).
-          example: false
-        height:
-          type: integer
-          description: Image height in pixels.
-          example: 2352
-        width:
-          type: integer
-          description: Image width in pixels.
-          example: 2935
-        geo_location:
-          description: Geo-location of image from EXIF.
-          type:
-          - object
-          - 'null'
-          required:
-          - latitude
-          - longitude
-          properties:
-            latitude:
-              type: number
-              description: Location latitude.
-              example: -1.1884555555555556
-            longitude:
-              type: number
-              description: Location longitude.
-              example: 52.66996666666667
-        datetime_original:
-          type:
-          - string
-          - 'null'
-          description: Image date and time from EXIF. Please be aware that this data is not always formatted and displayed exactly as it appears in the EXIF.
-          format: date-time
-          example: '2018-09-13T16:23:40'
-        dpi:
-          type:
-          - array
-          - 'null'
-          description: Image DPI for two dimensions.
-          items:
-            type: number
-            example: 72
-          minItems: 2
-          maxItems: 2
-          example:
-          - 72
-          - 72
-    awsRekognitionDetectLabels_v2016_06_27:
-      allOf:
-      - $ref: '#/components/schemas/applicationData'
-      - type: object
-        properties:
-          version:
-            type: string
-            enum:
-            - '2016-06-27'
-          data:
-            type: object
-            description: Dictionary with a result of an aws rekognition detect labels execution result.
-            properties:
-              LabelModelVersion:
-                type: string
-              Labels:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    Confidence:
-                      type: number
-                    Instances:
-                      type: array
-                      items:
-                        type: object
-                        properties:
-                          BoundingBox:
-                            type: object
-                            properties:
-                              Height:
-                                type: number
-                              Left:
-                                type: number
-                              Top:
-                                type: number
-                              Width:
-                                type: number
-                          Confidence:
-                            type: number
-                    Name:
-                      type: string
-                    Parents:
-                      type: array
-                      items:
-                        type: object
-                        properties:
-                          Name:
-                            type: string
-                  required:
-                  - Name
-                  - Parents
-                  - Instances
-                  - Confidence
-            required:
-            - Labels
-            - LabelModelVersion
-            example:
-              value:
-                aws_rekognition_detect_labels:
-                  data:
-                    LabelModelVersion: '2.0'
-                    Labels:
-                    - Confidence: 93.41645812988281
-                      Instances: []
-                      Name: Home Decor
-                      Parents: []
-                    - Confidence: 70.75951385498047
-                      Instances: []
-                      Name: Linen
-                      Parents:
-                      - Name: Home Decor
-                    - Confidence: 64.7123794555664
-                      Instances: []
-                      Name: Sunlight
-                      Parents: []
-                    - Confidence: 56.264793395996094
-                      Instances: []
-                      Name: Flare
-                      Parents:
-                      - Name: Light
-                    - Confidence: 50.47153854370117
-                      Instances: []
-                      Name: Tree
-                      Parents:
-                      - Name: Plant
-                  version: '2016-06-27'
-                  datetime_created: '2021-09-21T11:25:31.259763Z'
-                  datetime_updated: '2021-09-21T11:27:33.359763Z'
     file:
       type: object
       required:
@@ -903,37 +822,126 @@ components:
             version: 0.104.2
             datetime_created: '2021-09-21T11:24:33.159663Z'
             datetime_updated: '2021-09-21T11:24:33.159663Z'
-    ucClamavVirusScan:
-      allOf:
-      - $ref: '#/components/schemas/applicationData'
-      - type: object
-        properties:
-          version:
-            type: string
-            enum:
-            - 0.104.2
-            - 0.104.3
-            - 0.105.0
-            - 0.105.1
-          data:
-            type: object
-            description: Dictionary with a result of ClamAV execution result.
-            properties:
-              infected:
-                type: boolean
-              infected_with:
-                type: string
-            required:
-            - infected
-        example:
-          value:
-            uc_clamav_virus_scan:
-              data:
-                infected: true
-                infected_with: Win.Test.EICAR_HDB-1
-              version: 0.104.2
-              datetime_created: '2021-09-21T11:24:33.159663Z'
-              datetime_updated: '2021-09-21T11:24:33.159663Z'
+    applicationDataObject:
+      type:
+      - object
+      - 'null'
+      description: Dictionary of application names and data associated with these applications.
+      properties:
+        aws_rekognition_detect_labels:
+          $ref: '#/components/schemas/awsRekognitionDetectLabels_v2016_06_27'
+        aws_rekognition_detect_moderation_labels:
+          $ref: '#/components/schemas/awsRekognitionDetectModerationLabels_v2016_06_27'
+        remove_bg:
+          $ref: '#/components/schemas/removeBg_v1_0'
+        uc_clamav_virus_scan:
+          $ref: '#/components/schemas/ucClamavVirusScan'
+    metadata:
+      type:
+      - object
+      - 'null'
+      description: Arbitrary metadata associated with a file.
+    imageInfo:
+      type: object
+      description: Image metadata.
+      required:
+      - color_mode
+      - orientation
+      - format
+      - height
+      - width
+      - geo_location
+      - datetime_original
+      - dpi
+      - sequence
+      properties:
+        color_mode:
+          type: string
+          description: Image color mode.
+          enum:
+          - RGB
+          - RGBA
+          - RGBa
+          - RGBX
+          - L
+          - LA
+          - La
+          - P
+          - PA
+          - CMYK
+          - YCbCr
+          - HSV
+          - LAB
+          example: RGBA
+        orientation:
+          type:
+          - integer
+          - 'null'
+          description: Image orientation from EXIF.
+          minimum: 0
+          maximum: 8
+          example: 6
+        format:
+          type: string
+          description: Image format.
+          example: JPEG
+        sequence:
+          type: boolean
+          description: Set to true if a file contains a sequence of images (GIF for example).
+          example: false
+        height:
+          type: integer
+          description: Image height in pixels.
+          example: 2352
+        width:
+          type: integer
+          description: Image width in pixels.
+          example: 2935
+        geo_location:
+          description: Geo-location of image from EXIF.
+          type:
+          - object
+          - 'null'
+          required:
+          - latitude
+          - longitude
+          properties:
+            latitude:
+              type: number
+              description: Location latitude.
+              example: -1.1884555555555556
+            longitude:
+              type: number
+              description: Location longitude.
+              example: 52.66996666666667
+        datetime_original:
+          type:
+          - string
+          - 'null'
+          description: Image date and time from EXIF. Please be aware that this data is not always formatted and displayed exactly as it appears in the EXIF.
+          format: date-time
+          example: '2018-09-13T16:23:40'
+        dpi:
+          type:
+          - array
+          - 'null'
+          description: Image DPI for two dimensions.
+          items:
+            type: number
+            example: 72
+          minItems: 2
+          maxItems: 2
+          example:
+          - 72
+          - 72
+    simpleAuthHTTPForbidden:
+      type: object
+      properties:
+        detail:
+          type: string
+          default: Simple authentication over HTTP is forbidden. Please, use HTTPS or signed requests instead.
+      example:
+        detail: Simple authentication over HTTP is forbidden. Please, use HTTPS or signed requests instead.
     videoInfo:
       type: object
       description: Video metadata.
@@ -1061,103 +1069,95 @@ components:
           $ref: '#/components/schemas/imageInfo'
         video:
           $ref: '#/components/schemas/videoInfo'
-  responses:
-    authorizationProblemsResponse:
-      description: Authorization errors.
-      content:
-        application/json:
-          schema:
+    awsRekognitionDetectLabels_v2016_06_27:
+      allOf:
+      - $ref: '#/components/schemas/applicationData'
+      - type: object
+        properties:
+          version:
+            type: string
+            enum:
+            - '2016-06-27'
+          data:
             type: object
+            description: Dictionary with a result of an aws rekognition detect labels execution result.
             properties:
-              detail:
+              LabelModelVersion:
                 type: string
-                enum:
-                - Incorrect authentication credentials.
-                - Public key {public_key} not found.
-                - Secret key not found.
-                - Invalid signature. Please check your Secret key.
-                example: Incorrect authentication credentials.
-    invalidAcceptHeader:
-      description: Invalid version header `Accept` for this endpoint.
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              detail:
-                type: string
-                example: Incorrect Accept header provided. Make sure to specify API version. Refer to REST API docs for details.
-                default: Incorrect Accept header provided. Make sure to specify API version. Refer to REST API docs for details.
-    paginatedGroupsResponse:
-      description: A list of groups, paginated.
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              next:
-                type:
-                - string
-                - 'null'
-                format: uri
-                description: Next page URL.
-                example: https://api.uploadcare.com/groups/?limit=3&from=2018-11-27T01%3A00%3A24.296613%2B00%3A00&offset=0
-              previous:
-                type:
-                - string
-                - 'null'
-                format: uri
-                description: Previous page URL.
-                example: https://api.uploadcare.com/groups/?limit=3&to=2018-11-27T01%3A00%3A36.436838%2B00%3A00&offset=0
-              total:
-                type: integer
-                minimum: 0
-                description: Total number of groups in the project.
-                example: 26
-              per_page:
-                type: integer
-                description: Number of groups per page.
-                example: 100
-              results:
+              Labels:
                 type: array
                 items:
-                  $ref: '#/components/schemas/group'
-          examples:
-            List:
-              $ref: '#/components/examples/group_list'
-    requestWasThrottledError:
-      description: Request was throttled.
-      headers:
-        Retry-After:
-          description: Number of seconds to wait before the next request.
-          schema:
-            type: integer
-            example: 10
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              detail:
-                type: string
-                example: Request was throttled. Expected available in 10 seconds.
-    groupNotFound:
-      description: Group with `uuid` not found.
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              detail:
-                type: string
-                description: Group not found.
-                example: Not found.
-    simpleAuthHTTPForbiddenResponse:
-      description: Simple authentication over HTTP is forbidden. Please, use HTTPS or signed requests instead.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/simpleAuthHTTPForbidden'
+                  type: object
+                  properties:
+                    Confidence:
+                      type: number
+                    Instances:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          BoundingBox:
+                            type: object
+                            properties:
+                              Height:
+                                type: number
+                              Left:
+                                type: number
+                              Top:
+                                type: number
+                              Width:
+                                type: number
+                          Confidence:
+                            type: number
+                    Name:
+                      type: string
+                    Parents:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          Name:
+                            type: string
+                  required:
+                  - Name
+                  - Parents
+                  - Instances
+                  - Confidence
+            required:
+            - Labels
+            - LabelModelVersion
+            example:
+              value:
+                aws_rekognition_detect_labels:
+                  data:
+                    LabelModelVersion: '2.0'
+                    Labels:
+                    - Confidence: 93.41645812988281
+                      Instances: []
+                      Name: Home Decor
+                      Parents: []
+                    - Confidence: 70.75951385498047
+                      Instances: []
+                      Name: Linen
+                      Parents:
+                      - Name: Home Decor
+                    - Confidence: 64.7123794555664
+                      Instances: []
+                      Name: Sunlight
+                      Parents: []
+                    - Confidence: 56.264793395996094
+                      Instances: []
+                      Name: Flare
+                      Parents:
+                      - Name: Light
+                    - Confidence: 50.47153854370117
+                      Instances: []
+                      Name: Tree
+                      Parents:
+                      - Name: Plant
+                  version: '2016-06-27'
+                  datetime_created: '2021-09-21T11:25:31.259763Z'
+                  datetime_updated: '2021-09-21T11:27:33.359763Z'
   examples:
     group_list:
       value:

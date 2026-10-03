@@ -368,21 +368,6 @@ paths:
 
           '
 components:
-  schemas:
-    simpleAuthHTTPForbidden:
-      type: object
-      properties:
-        detail:
-          type: string
-          default: Simple authentication over HTTP is forbidden. Please, use HTTPS or signed requests instead.
-      example:
-        detail: Simple authentication over HTTP is forbidden. Please, use HTTPS or signed requests instead.
-    metadataItemValue:
-      type: string
-      minLength: 1
-      maxLength: 512
-      description: Value of metadata key.
-      example: uploader
   responses:
     invalidAcceptHeader:
       description: Invalid version header `Accept` for this endpoint.
@@ -395,6 +380,21 @@ components:
                 type: string
                 example: Incorrect Accept header provided. Make sure to specify API version. Refer to REST API docs for details.
                 default: Incorrect Accept header provided. Make sure to specify API version. Refer to REST API docs for details.
+    fileMetadataResponse:
+      description: File metadata in JSON.
+      content:
+        application/json:
+          schema:
+            type: object
+            example:
+              subsystem: uploader
+              pet: cat
+    simpleAuthHTTPForbiddenResponse:
+      description: Simple authentication over HTTP is forbidden. Please, use HTTPS or signed requests instead.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/simpleAuthHTTPForbidden'
     authorizationProblemsResponse:
       description: Authorization errors.
       content:
@@ -410,21 +410,6 @@ components:
                 - Secret key not found.
                 - Invalid signature. Please check your Secret key.
                 example: Incorrect authentication credentials.
-    simpleAuthHTTPForbiddenResponse:
-      description: Simple authentication over HTTP is forbidden. Please, use HTTPS or signed requests instead.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/simpleAuthHTTPForbidden'
-    fileMetadataResponse:
-      description: File metadata in JSON.
-      content:
-        application/json:
-          schema:
-            type: object
-            example:
-              subsystem: uploader
-              pet: cat
   parameters:
     fileMetadataKey:
       in: path
@@ -456,6 +441,21 @@ components:
         type: string
         format: uuid
         example: 21975c81-7f57-4c7a-aef9-acfe28779f78
+  schemas:
+    simpleAuthHTTPForbidden:
+      type: object
+      properties:
+        detail:
+          type: string
+          default: Simple authentication over HTTP is forbidden. Please, use HTTPS or signed requests instead.
+      example:
+        detail: Simple authentication over HTTP is forbidden. Please, use HTTPS or signed requests instead.
+    metadataItemValue:
+      type: string
+      minLength: 1
+      maxLength: 512
+      description: Value of metadata key.
+      example: uploader
   securitySchemes:
     apiKeyAuth:
       type: apiKey

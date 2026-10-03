@@ -553,14 +553,43 @@ paths:
           '
 components:
   schemas:
-    simpleAuthHTTPForbidden:
+    cantUseDocsConversionError:
       type: object
       properties:
         detail:
           type: string
-          default: Simple authentication over HTTP is forbidden. Please, use HTTPS or signed requests instead.
+          default: Document conversion feature is not available for this project.
       example:
-        detail: Simple authentication over HTTP is forbidden. Please, use HTTPS or signed requests instead.
+        detail: Document conversion feature is not available for this project.
+    videoJobSubmitParameters:
+      type: object
+      properties:
+        paths:
+          description: An array of UUIDs of your video files to process together with a set of assigned operations (see [documentation](https://uploadcare.com/docs/transformations/video-encoding/)).
+          type: array
+          items:
+            type: string
+          example:
+          - https://cdn.uploadcare.com/5ffa2545-ea40-4e71-a9e4-3a8e49b7b737/video/-/format/webm/
+          - 88a51210-bd69-4411-bc72-a9952d9512cd/video/-/format/ogg/-/quality/best/
+          - 8ddbbb48-0927-4df7-afac-c6031668b01b/video/
+        store:
+          type: string
+          description: 'When `store` is set to `"0"`, the converted files will only be available for 24 hours. `"1"` makes converted files available permanently. If the parameter is omitted, it checks the `Auto file storing` setting of your Uploadcare project identified by the `public_key` provided in the `auth-param`.
+
+            '
+          enum:
+          - '0'
+          - 'false'
+          - '1'
+          - 'true'
+          example: '1'
+      example:
+        paths:
+        - d52d7136-a2e5-4338-9f45-affbf83b857d/video/
+        - d52d7136-a2e5-4338-9f45-affbf83b857d/video/-/format/ogg/-/quality/best/
+        - 28843a09-dd3d-4b8a-ad4f-8aa5f8f60ff2
+        store: '1'
     jsonObjectParseError:
       type: object
       properties:
@@ -569,6 +598,22 @@ components:
           description: Expected JSON object.
       example:
         detail: Expected JSON object.
+    cantUseVideoConversionError:
+      type: object
+      properties:
+        detail:
+          type: string
+          default: Video conversion feature is not available for this project.
+      example:
+        detail: Video conversion feature is not available for this project.
+    simpleAuthHTTPForbidden:
+      type: object
+      properties:
+        detail:
+          type: string
+          default: Simple authentication over HTTP is forbidden. Please, use HTTPS or signed requests instead.
+      example:
+        detail: Simple authentication over HTTP is forbidden. Please, use HTTPS or signed requests instead.
     documentJobSubmitParameters:
       type: object
       properties:
@@ -617,114 +662,7 @@ components:
         - 8ddbbb48-0927-4df7-afac-c6031668b01b/document/
         store: 1
         save_in_group: '1'
-    cantUseDocsConversionError:
-      type: object
-      properties:
-        detail:
-          type: string
-          default: Document conversion feature is not available for this project.
-      example:
-        detail: Document conversion feature is not available for this project.
-    videoJobSubmitParameters:
-      type: object
-      properties:
-        paths:
-          description: An array of UUIDs of your video files to process together with a set of assigned operations (see [documentation](https://uploadcare.com/docs/transformations/video-encoding/)).
-          type: array
-          items:
-            type: string
-          example:
-          - https://cdn.uploadcare.com/5ffa2545-ea40-4e71-a9e4-3a8e49b7b737/video/-/format/webm/
-          - 88a51210-bd69-4411-bc72-a9952d9512cd/video/-/format/ogg/-/quality/best/
-          - 8ddbbb48-0927-4df7-afac-c6031668b01b/video/
-        store:
-          type: string
-          description: 'When `store` is set to `"0"`, the converted files will only be available for 24 hours. `"1"` makes converted files available permanently. If the parameter is omitted, it checks the `Auto file storing` setting of your Uploadcare project identified by the `public_key` provided in the `auth-param`.
-
-            '
-          enum:
-          - '0'
-          - 'false'
-          - '1'
-          - 'true'
-          example: '1'
-      example:
-        paths:
-        - d52d7136-a2e5-4338-9f45-affbf83b857d/video/
-        - d52d7136-a2e5-4338-9f45-affbf83b857d/video/-/format/ogg/-/quality/best/
-        - 28843a09-dd3d-4b8a-ad4f-8aa5f8f60ff2
-        store: '1'
-    cantUseVideoConversionError:
-      type: object
-      properties:
-        detail:
-          type: string
-          default: Video conversion feature is not available for this project.
-      example:
-        detail: Video conversion feature is not available for this project.
-  examples:
-    cantUseDocsConversionError:
-      value:
-        detail: Document conversion feature is not available for this project.
-    cantUseVideoConversionError:
-      value:
-        detail: Video conversion feature is not available for this project.
-    jsonObjectParseError:
-      value:
-        detail: Expected JSON object.
-    simpleAuthHTTPForbidden:
-      value:
-        detail: Simple authentication over HTTP is forbidden. Please, use HTTPS or signed requests instead.
   responses:
-    documentJobStatusResponse:
-      description: Success.
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              status:
-                type: string
-                description: 'Conversion job status, can have one of the following values: - `pending` — a source file is being prepared for conversion. - `processing` — conversion is in progress. - `finished` — the conversion is finished. - `failed` — failed to convert the source, see `error` for details. - `canceled` — the conversion was canceled.'
-                enum:
-                - pending
-                - processing
-                - finished
-                - failed
-                - cancelled
-              error:
-                type:
-                - string
-                - 'null'
-                description: Holds a conversion error if your file can't be handled.
-              result:
-                type: object
-                description: Repeats the contents of your processing output.
-                properties:
-                  uuid:
-                    type: string
-                    format: uuid
-                    description: A UUID of a converted target file.
-            example:
-              status: processing
-              error: null
-              result:
-                uuid: 500196bc-9da5-4aaf-8f3e-70a4ce86edae
-    authorizationProblemsResponse:
-      description: Authorization errors.
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              detail:
-                type: string
-                enum:
-                - Incorrect authentication credentials.
-                - Public key {public_key} not found.
-                - Secret key not found.
-                - Invalid signature. Please check your Secret key.
-                example: Incorrect authentication credentials.
     videoJobSubmitResponse:
       description: Success.
       content:
@@ -770,72 +708,6 @@ components:
                 token: 445630637
                 thumbnails_group_uuid: be3b4d5e-179d-460e-8a5d-69112ac86cbb~1
                 uuid: 28843a09-dd3d-4b8a-ad4f-8aa5f8f60ff2
-    invalidAcceptHeader:
-      description: Invalid version header `Accept` for this endpoint.
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              detail:
-                type: string
-                example: Incorrect Accept header provided. Make sure to specify API version. Refer to REST API docs for details.
-                default: Incorrect Accept header provided. Make sure to specify API version. Refer to REST API docs for details.
-    documentJobSubmitResponse:
-      description: Success.
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              problems:
-                type: object
-                description: Dictionary of problems related to your processing job, if any. A key is the `path` you requested.
-                additionalProperties:
-                  type: string
-                  format: uuid
-              result:
-                type: array
-                description: Result for each requested path, in case of no errors for that path.
-                items:
-                  type: object
-                  properties:
-                    original_source:
-                      type: string
-                      description: Source file identifier including a target format, if present.
-                    uuid:
-                      type: string
-                      description: A UUID of your converted document.
-                      format: uuid
-                    token:
-                      type: integer
-                      description: A conversion job token that can be used to get a job status.
-            example:
-              problems:
-                8ddbbb48-0927-4df7-afac-c6031668b01b: Bad path "8ddbbb48-0927-4df7-afac-c6031668b01b". Use UUID or CDN URL
-              result:
-              - original_source: https://cdn.uploadcare.com/5ffa2545-ea40-4e71-a9e4-3a8e49b7b737/document/-/format/jpg/-/page/1/
-                token: 445630631
-                uuid: d52d7136-a2e5-4338-9f45-affbf83b857d
-              - original_source: 88a51210-bd69-4411-bc72-a9952d9512cd/document/-/format/pdf/
-                token: 445630637
-                uuid: 28843a09-dd3d-4b8a-ad4f-8aa5f8f60ff2
-    requestWasThrottledError:
-      description: Request was throttled.
-      headers:
-        Retry-After:
-          description: Number of seconds to wait before the next request.
-          schema:
-            type: integer
-            example: 10
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              detail:
-                type: string
-                example: Request was throttled. Expected available in 10 seconds.
     videoJobStatusResponse:
       description: Success.
       content:
@@ -919,6 +791,134 @@ components:
                 - name: pdf
               converted_groups:
                 pdf: 49732da8-1530-470c-8743-998c4c634718~5
+    documentJobSubmitResponse:
+      description: Success.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              problems:
+                type: object
+                description: Dictionary of problems related to your processing job, if any. A key is the `path` you requested.
+                additionalProperties:
+                  type: string
+                  format: uuid
+              result:
+                type: array
+                description: Result for each requested path, in case of no errors for that path.
+                items:
+                  type: object
+                  properties:
+                    original_source:
+                      type: string
+                      description: Source file identifier including a target format, if present.
+                    uuid:
+                      type: string
+                      description: A UUID of your converted document.
+                      format: uuid
+                    token:
+                      type: integer
+                      description: A conversion job token that can be used to get a job status.
+            example:
+              problems:
+                8ddbbb48-0927-4df7-afac-c6031668b01b: Bad path "8ddbbb48-0927-4df7-afac-c6031668b01b". Use UUID or CDN URL
+              result:
+              - original_source: https://cdn.uploadcare.com/5ffa2545-ea40-4e71-a9e4-3a8e49b7b737/document/-/format/jpg/-/page/1/
+                token: 445630631
+                uuid: d52d7136-a2e5-4338-9f45-affbf83b857d
+              - original_source: 88a51210-bd69-4411-bc72-a9952d9512cd/document/-/format/pdf/
+                token: 445630637
+                uuid: 28843a09-dd3d-4b8a-ad4f-8aa5f8f60ff2
+    invalidAcceptHeader:
+      description: Invalid version header `Accept` for this endpoint.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              detail:
+                type: string
+                example: Incorrect Accept header provided. Make sure to specify API version. Refer to REST API docs for details.
+                default: Incorrect Accept header provided. Make sure to specify API version. Refer to REST API docs for details.
+    requestWasThrottledError:
+      description: Request was throttled.
+      headers:
+        Retry-After:
+          description: Number of seconds to wait before the next request.
+          schema:
+            type: integer
+            example: 10
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              detail:
+                type: string
+                example: Request was throttled. Expected available in 10 seconds.
+    authorizationProblemsResponse:
+      description: Authorization errors.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              detail:
+                type: string
+                enum:
+                - Incorrect authentication credentials.
+                - Public key {public_key} not found.
+                - Secret key not found.
+                - Invalid signature. Please check your Secret key.
+                example: Incorrect authentication credentials.
+    documentJobStatusResponse:
+      description: Success.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+                description: 'Conversion job status, can have one of the following values: - `pending` — a source file is being prepared for conversion. - `processing` — conversion is in progress. - `finished` — the conversion is finished. - `failed` — failed to convert the source, see `error` for details. - `canceled` — the conversion was canceled.'
+                enum:
+                - pending
+                - processing
+                - finished
+                - failed
+                - cancelled
+              error:
+                type:
+                - string
+                - 'null'
+                description: Holds a conversion error if your file can't be handled.
+              result:
+                type: object
+                description: Repeats the contents of your processing output.
+                properties:
+                  uuid:
+                    type: string
+                    format: uuid
+                    description: A UUID of a converted target file.
+            example:
+              status: processing
+              error: null
+              result:
+                uuid: 500196bc-9da5-4aaf-8f3e-70a4ce86edae
+  examples:
+    cantUseVideoConversionError:
+      value:
+        detail: Video conversion feature is not available for this project.
+    cantUseDocsConversionError:
+      value:
+        detail: Document conversion feature is not available for this project.
+    jsonObjectParseError:
+      value:
+        detail: Expected JSON object.
+    simpleAuthHTTPForbidden:
+      value:
+        detail: Simple authentication over HTTP is forbidden. Please, use HTTPS or signed requests instead.
   parameters:
     acceptHeader:
       in: header
