@@ -499,25 +499,180 @@ paths:
           '
 components:
   schemas:
-    webhook_event:
-      type: string
-      description: An event you subscribe to.
-      enum:
-      - file.uploaded
-      - file.infected
-      - file.stored
-      - file.deleted
-      - file.info_updated
-      example: file.uploaded
+    applicationData:
+      type: object
+      properties:
+        version:
+          type: string
+          description: An application version.
+        datetime_created:
+          type: string
+          format: date-time
+          description: Date and time when an application data was created.
+        datetime_updated:
+          type: string
+          format: date-time
+          description: Date and time when an application data was updated.
+        data:
+          type: object
+          description: Dictionary with a result of an application execution result.
+      required:
+      - version
+      - datetime_created
+      - datetime_updated
+      - data
+    webhookFilePayload:
+      type: object
+      required:
+      - initiator
+      - hook
+      - data
+      - file
+      properties:
+        initiator:
+          $ref: '#/components/schemas/webhookInitiator'
+        hook:
+          $ref: '#/components/schemas/webhookPublicInfo'
+        data:
+          $ref: '#/components/schemas/file'
+        file:
+          description: File CDN URL.
+          type: string
+          format: uri
     webhook_created:
       type: string
       format: date-time
       description: date-time when a webhook was created.
       example: '2018-11-26T12:49:10.477888Z'
-    webhook_project:
-      type: integer
-      description: Project ID the webhook belongs to.
-      example: 39123
+    contentInfo:
+      type:
+      - object
+      - 'null'
+      description: Information about file content.
+      properties:
+        mime:
+          type: object
+          description: MIME type.
+          required:
+          - mime
+          - type
+          - subtype
+          properties:
+            mime:
+              type: string
+              description: Full MIME type.
+              example: image/jpeg
+            type:
+              type: string
+              description: Type of MIME type.
+              example: image
+            subtype:
+              type: string
+              description: Subtype of MIME type.
+              example: jpeg
+        image:
+          $ref: '#/components/schemas/imageInfo'
+        video:
+          $ref: '#/components/schemas/videoInfo'
+    webhook_target:
+      type: string
+      format: uri
+      maxLength: 255
+      description: A URL that is triggered by an event, for example, a file upload. A target URL MUST be unique for each `project` — `event type` combination.
+      example: http://example.com/hooks/receiver
+    webhook_is_active:
+      type: boolean
+      description: Marks a subscription as either active or not, defaults to `true`, otherwise `false`.
+      default: true
+      example: false
+    webhookInitiator:
+      description: Webhook event initiator.
+      type: object
+      required:
+      - type
+      - detail
+      properties:
+        type:
+          type: string
+          description: Initiator type name.
+          enum:
+          - api
+          - system
+          - addon
+        detail:
+          type: object
+          required:
+          - request_id
+          - addon_name
+          properties:
+            request_id:
+              type:
+              - string
+              - 'null'
+              format: uuid
+              description: Request ID.
+              example: 972654bd-a2ad-485a-bd27-c86126c1ed8c
+            addon_name:
+              type:
+              - string
+              - 'null'
+              description: Add-On name.
+              enum:
+              - aws_rekognition_detect_labels
+              - aws_rekognition_detect_moderation_labels
+              - uc_clamav_virus_scan
+              - remove_bg
+              - zamzar_convert_document
+              - zencoder_convert_video
+              example: aws_rekognition_detect_labels
+            source_file_uuid:
+              type: string
+              format: uuid
+              description: Source file UUID if the current is derivative.
+              example: 972654bd-a2ad-485a-bd27-c86126c1ed8c
+    webhook_project_pubkey:
+      type: string
+      description: Public project key the webhook belongs to.
+      example: 2d199fbf3896699a2639
+    removeBg_v1_0:
+      allOf:
+      - $ref: '#/components/schemas/applicationData'
+      - type: object
+        properties:
+          version:
+            type: string
+            enum:
+            - '1.0'
+          data:
+            type: object
+            description: Dictionary with a result of an remove.bg information about an image.
+            properties:
+              foreground_type:
+                type: string
+                description: foreground classification type (present if type_level was set)
+        example:
+          value:
+            remove_bg:
+              data:
+                foreground_type: person
+              version: '1.0'
+              datetime_created: '2021-07-25T12:24:33.159663Z'
+              datetime_updated: '2021-07-25T12:24:33.159663Z'
+    webhook_version:
+      type: string
+      description: Webhook payload's version.
+      enum:
+      - '0.7'
+      example: '0.7'
+    webhook_version_of_list_response:
+      type: string
+      description: Webhook payload's version.
+      enum:
+      - ''
+      - '0.5'
+      - '0.6'
+      - '0.7'
+      example: '0.7'
     webhook:
       description: Webhook.
       type: object
@@ -550,33 +705,99 @@ components:
         is_active: true
         signing_secret: 7kMVZivndx0ErgvhRKAr
         version: '0.7'
-    webhookFileInfoUpdatedPayload:
+    imageInfo:
       type: object
+      description: Image metadata.
       required:
-      - initiator
-      - hook
-      - data
-      - file
-      - previous_values
+      - color_mode
+      - orientation
+      - format
+      - height
+      - width
+      - geo_location
+      - datetime_original
+      - dpi
+      - sequence
       properties:
-        initiator:
-          $ref: '#/components/schemas/webhookInitiator'
-        hook:
-          $ref: '#/components/schemas/webhookPublicInfo'
-        data:
-          $ref: '#/components/schemas/file'
-        file:
-          description: File CDN URL.
+        color_mode:
           type: string
-          format: uri
-        previous_values:
-          type: object
-          description: Object containing the values of the updated file data attributes and their values prior to the event.
+          description: Image color mode.
+          enum:
+          - RGB
+          - RGBA
+          - RGBa
+          - RGBX
+          - L
+          - LA
+          - La
+          - P
+          - PA
+          - CMYK
+          - YCbCr
+          - HSV
+          - LAB
+          example: RGBA
+        orientation:
+          type:
+          - integer
+          - 'null'
+          description: Image orientation from EXIF.
+          minimum: 0
+          maximum: 8
+          example: 6
+        format:
+          type: string
+          description: Image format.
+          example: JPEG
+        sequence:
+          type: boolean
+          description: Set to true if a file contains a sequence of images (GIF for example).
+          example: false
+        height:
+          type: integer
+          description: Image height in pixels.
+          example: 2352
+        width:
+          type: integer
+          description: Image width in pixels.
+          example: 2935
+        geo_location:
+          description: Geo-location of image from EXIF.
+          type:
+          - object
+          - 'null'
+          required:
+          - latitude
+          - longitude
           properties:
-            appdata:
-              $ref: '#/components/schemas/applicationDataObject'
-            metadata:
-              $ref: '#/components/schemas/metadata'
+            latitude:
+              type: number
+              description: Location latitude.
+              example: -1.1884555555555556
+            longitude:
+              type: number
+              description: Location longitude.
+              example: 52.66996666666667
+        datetime_original:
+          type:
+          - string
+          - 'null'
+          description: Image date and time from EXIF. Please be aware that this data is not always formatted and displayed exactly as it appears in the EXIF.
+          format: date-time
+          example: '2018-09-13T16:23:40'
+        dpi:
+          type:
+          - array
+          - 'null'
+          description: Image DPI for two dimensions.
+          items:
+            type: number
+            example: 72
+          minItems: 2
+          maxItems: 2
+          example:
+          - 72
+          - 72
     cantUseWebhooksError:
       type: object
       properties:
@@ -585,60 +806,11 @@ components:
           default: You can't use webhooks
       example:
         detail: You can't use webhooks
-    webhook_version_of_list_response:
-      type: string
-      description: Webhook payload's version.
-      enum:
-      - ''
-      - '0.5'
-      - '0.6'
-      - '0.7'
-      example: '0.7'
-    webhook_is_active:
-      type: boolean
-      description: Marks a subscription as either active or not, defaults to `true`, otherwise `false`.
-      default: true
-      example: false
-    ucClamavVirusScan:
-      allOf:
-      - $ref: '#/components/schemas/applicationData'
-      - type: object
-        properties:
-          version:
-            type: string
-            enum:
-            - 0.104.2
-            - 0.104.3
-            - 0.105.0
-            - 0.105.1
-          data:
-            type: object
-            description: Dictionary with a result of ClamAV execution result.
-            properties:
-              infected:
-                type: boolean
-              infected_with:
-                type: string
-            required:
-            - infected
-        example:
-          value:
-            uc_clamav_virus_scan:
-              data:
-                infected: true
-                infected_with: Win.Test.EICAR_HDB-1
-              version: 0.104.2
-              datetime_created: '2021-09-21T11:24:33.159663Z'
-              datetime_updated: '2021-09-21T11:24:33.159663Z'
-    webhookTargetUrlError:
-      type: object
-      properties:
-        detail:
-          type: string
-          description: '`target_url` is missing.'
-          default: '`target_url` is missing.'
-      example:
-        detail: '`target_url` is missing.'
+    metadata:
+      type:
+      - object
+      - 'null'
+      description: Arbitrary metadata associated with a file.
     webhook_version_of_request:
       type: string
       description: Webhook payload's version.
@@ -646,11 +818,6 @@ components:
       - '0.7'
       example: '0.7'
       default: '0.7'
-    webhook_updated:
-      type: string
-      format: date-time
-      description: date-time when a webhook was updated.
-      example: '2018-11-26T12:49:10.477888Z'
     webhook_of_list_response:
       description: Webhook.
       type: object
@@ -683,16 +850,33 @@ components:
         is_active: true
         signing_secret: 7kMVZivndx0ErgvhRKAr
         version: '0.7'
-    webhook_version:
+    webhook_event:
       type: string
-      description: Webhook payload's version.
+      description: An event you subscribe to.
       enum:
-      - '0.7'
-      example: '0.7'
-    webhook_id:
-      type: integer
-      description: Webhook's ID.
-      example: 1234
+      - file.uploaded
+      - file.infected
+      - file.stored
+      - file.deleted
+      - file.info_updated
+      example: file.uploaded
+    webhook_signing_secret:
+      type: string
+      format: password
+      maxLength: 32
+      example: 7kMVZivndx0ErgvhRKAr
+      description: 'Optional [HMAC/SHA-256](https://en.wikipedia.org/wiki/HMAC) secret that, if set, will be used to
+
+        calculate signatures for the webhook payloads sent to the `target_url`.
+
+
+        Calculated signature will be sent to the `target_url` as a value of the `X-Uc-Signature` HTTP
+
+        header. The header will have the following format: `X-Uc-Signature: v1=<HMAC-SHA256-HEX-DIGEST>`.
+
+        See [Secure Webhooks](https://uploadcare.com/docs/webhooks/#signed-webhooks) for details.
+
+        '
     awsRekognitionDetectModerationLabels_v2016_06_27:
       allOf:
       - $ref: '#/components/schemas/applicationData'
@@ -738,29 +922,25 @@ components:
                   version: '2016-06-27'
                   datetime_created: '2023-02-21T11:25:31.259763Z'
                   datetime_updated: '2023-02-21T11:27:33.359763Z'
-    applicationData:
-      type: object
+    applicationDataObject:
+      type:
+      - object
+      - 'null'
+      description: Dictionary of application names and data associated with these applications.
       properties:
-        version:
-          type: string
-          description: An application version.
-        datetime_created:
-          type: string
-          format: date-time
-          description: Date and time when an application data was created.
-        datetime_updated:
-          type: string
-          format: date-time
-          description: Date and time when an application data was updated.
-        data:
-          type: object
-          description: Dictionary with a result of an application execution result.
-      required:
-      - version
-      - datetime_created
-      - datetime_updated
-      - data
-    removeBg_v1_0:
+        aws_rekognition_detect_labels:
+          $ref: '#/components/schemas/awsRekognitionDetectLabels_v2016_06_27'
+        aws_rekognition_detect_moderation_labels:
+          $ref: '#/components/schemas/awsRekognitionDetectModerationLabels_v2016_06_27'
+        remove_bg:
+          $ref: '#/components/schemas/removeBg_v1_0'
+        uc_clamav_virus_scan:
+          $ref: '#/components/schemas/ucClamavVirusScan'
+    webhook_id:
+      type: integer
+      description: Webhook's ID.
+      example: 1234
+    ucClamavVirusScan:
       allOf:
       - $ref: '#/components/schemas/applicationData'
       - type: object
@@ -768,40 +948,126 @@ components:
           version:
             type: string
             enum:
-            - '1.0'
+            - 0.104.2
+            - 0.104.3
+            - 0.105.0
+            - 0.105.1
           data:
             type: object
-            description: Dictionary with a result of an remove.bg information about an image.
+            description: Dictionary with a result of ClamAV execution result.
             properties:
-              foreground_type:
+              infected:
+                type: boolean
+              infected_with:
                 type: string
-                description: foreground classification type (present if type_level was set)
+            required:
+            - infected
         example:
           value:
-            remove_bg:
+            uc_clamav_virus_scan:
               data:
-                foreground_type: person
-              version: '1.0'
-              datetime_created: '2021-07-25T12:24:33.159663Z'
-              datetime_updated: '2021-07-25T12:24:33.159663Z'
-    webhookFilePayload:
+                infected: true
+                infected_with: Win.Test.EICAR_HDB-1
+              version: 0.104.2
+              datetime_created: '2021-09-21T11:24:33.159663Z'
+              datetime_updated: '2021-09-21T11:24:33.159663Z'
+    videoInfo:
       type: object
+      description: Video metadata.
       required:
-      - initiator
-      - hook
-      - data
-      - file
+      - duration
+      - format
+      - bitrate
+      - audio
+      - video
       properties:
-        initiator:
-          $ref: '#/components/schemas/webhookInitiator'
-        hook:
-          $ref: '#/components/schemas/webhookPublicInfo'
-        data:
-          $ref: '#/components/schemas/file'
-        file:
-          description: File CDN URL.
+        duration:
+          type:
+          - integer
+          - 'null'
+          description: Video file's duration in milliseconds.
+          example: 261827
+        format:
           type: string
-          format: uri
+          description: Video file's format.
+          example: mp4
+        bitrate:
+          type:
+          - integer
+          - 'null'
+          description: Video file's bitrate.
+          example: 393
+        audio:
+          type: array
+          items:
+            type: object
+            description: Audio stream's metadata.
+            required:
+            - bitrate
+            - codec
+            - sample_rate
+            - channels
+            properties:
+              bitrate:
+                type:
+                - integer
+                - 'null'
+                description: Audio stream's bitrate.
+                example: 78
+              codec:
+                type:
+                - string
+                - 'null'
+                description: Audio stream's codec.
+                example: aac
+              sample_rate:
+                type:
+                - integer
+                - 'null'
+                description: Audio stream's sample rate.
+                example: 44100
+              channels:
+                type:
+                - integer
+                - 'null'
+                description: Audio stream's number of channels.
+                example: 2
+        video:
+          type: array
+          items:
+            type: object
+            description: Video stream's metadata.
+            required:
+            - height
+            - width
+            - frame_rate
+            - bitrate
+            - codec
+            properties:
+              height:
+                type: integer
+                description: Video stream's image height.
+                example: 360
+              width:
+                type: integer
+                description: Video stream's image width.
+                example: 640
+              frame_rate:
+                type: number
+                description: Video stream's frame rate.
+                example: 30
+              bitrate:
+                type:
+                - integer
+                - 'null'
+                description: Video stream's bitrate.
+                example: 315
+              codec:
+                type:
+                - string
+                - 'null'
+                description: Video stream's codec.
+                example: h264
     webhookPublicInfo:
       description: Public Webhook information (does not include secret data like `signing_secret`)
       type: object
@@ -843,6 +1109,143 @@ components:
         target: http://example.com/hooks/receiver
         is_active: true
         version: '0.7'
+    webhook_project:
+      type: integer
+      description: Project ID the webhook belongs to.
+      example: 39123
+    webhookTargetUrlError:
+      type: object
+      properties:
+        detail:
+          type: string
+          description: '`target_url` is missing.'
+          default: '`target_url` is missing.'
+      example:
+        detail: '`target_url` is missing.'
+    webhookFileInfoUpdatedPayload:
+      type: object
+      required:
+      - initiator
+      - hook
+      - data
+      - file
+      - previous_values
+      properties:
+        initiator:
+          $ref: '#/components/schemas/webhookInitiator'
+        hook:
+          $ref: '#/components/schemas/webhookPublicInfo'
+        data:
+          $ref: '#/components/schemas/file'
+        file:
+          description: File CDN URL.
+          type: string
+          format: uri
+        previous_values:
+          type: object
+          description: Object containing the values of the updated file data attributes and their values prior to the event.
+          properties:
+            appdata:
+              $ref: '#/components/schemas/applicationDataObject'
+            metadata:
+              $ref: '#/components/schemas/metadata'
+    simpleAuthHTTPForbidden:
+      type: object
+      properties:
+        detail:
+          type: string
+          default: Simple authentication over HTTP is forbidden. Please, use HTTPS or signed requests instead.
+      example:
+        detail: Simple authentication over HTTP is forbidden. Please, use HTTPS or signed requests instead.
+    awsRekognitionDetectLabels_v2016_06_27:
+      allOf:
+      - $ref: '#/components/schemas/applicationData'
+      - type: object
+        properties:
+          version:
+            type: string
+            enum:
+            - '2016-06-27'
+          data:
+            type: object
+            description: Dictionary with a result of an aws rekognition detect labels execution result.
+            properties:
+              LabelModelVersion:
+                type: string
+              Labels:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    Confidence:
+                      type: number
+                    Instances:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          BoundingBox:
+                            type: object
+                            properties:
+                              Height:
+                                type: number
+                              Left:
+                                type: number
+                              Top:
+                                type: number
+                              Width:
+                                type: number
+                          Confidence:
+                            type: number
+                    Name:
+                      type: string
+                    Parents:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          Name:
+                            type: string
+                  required:
+                  - Name
+                  - Parents
+                  - Instances
+                  - Confidence
+            required:
+            - Labels
+            - LabelModelVersion
+            example:
+              value:
+                aws_rekognition_detect_labels:
+                  data:
+                    LabelModelVersion: '2.0'
+                    Labels:
+                    - Confidence: 93.41645812988281
+                      Instances: []
+                      Name: Home Decor
+                      Parents: []
+                    - Confidence: 70.75951385498047
+                      Instances: []
+                      Name: Linen
+                      Parents:
+                      - Name: Home Decor
+                    - Confidence: 64.7123794555664
+                      Instances: []
+                      Name: Sunlight
+                      Parents: []
+                    - Confidence: 56.264793395996094
+                      Instances: []
+                      Name: Flare
+                      Parents:
+                      - Name: Light
+                    - Confidence: 50.47153854370117
+                      Instances: []
+                      Name: Tree
+                      Parents:
+                      - Name: Plant
+                  version: '2016-06-27'
+                  datetime_created: '2021-09-21T11:25:31.259763Z'
+                  datetime_updated: '2021-09-21T11:27:33.359763Z'
     file:
       type: object
       required:
@@ -1014,436 +1417,11 @@ components:
             version: 0.104.2
             datetime_created: '2021-09-21T11:24:33.159663Z'
             datetime_updated: '2021-09-21T11:24:33.159663Z'
-    applicationDataObject:
-      type:
-      - object
-      - 'null'
-      description: Dictionary of application names and data associated with these applications.
-      properties:
-        aws_rekognition_detect_labels:
-          $ref: '#/components/schemas/awsRekognitionDetectLabels_v2016_06_27'
-        aws_rekognition_detect_moderation_labels:
-          $ref: '#/components/schemas/awsRekognitionDetectModerationLabels_v2016_06_27'
-        remove_bg:
-          $ref: '#/components/schemas/removeBg_v1_0'
-        uc_clamav_virus_scan:
-          $ref: '#/components/schemas/ucClamavVirusScan'
-    metadata:
-      type:
-      - object
-      - 'null'
-      description: Arbitrary metadata associated with a file.
-    imageInfo:
-      type: object
-      description: Image metadata.
-      required:
-      - color_mode
-      - orientation
-      - format
-      - height
-      - width
-      - geo_location
-      - datetime_original
-      - dpi
-      - sequence
-      properties:
-        color_mode:
-          type: string
-          description: Image color mode.
-          enum:
-          - RGB
-          - RGBA
-          - RGBa
-          - RGBX
-          - L
-          - LA
-          - La
-          - P
-          - PA
-          - CMYK
-          - YCbCr
-          - HSV
-          - LAB
-          example: RGBA
-        orientation:
-          type:
-          - integer
-          - 'null'
-          description: Image orientation from EXIF.
-          minimum: 0
-          maximum: 8
-          example: 6
-        format:
-          type: string
-          description: Image format.
-          example: JPEG
-        sequence:
-          type: boolean
-          description: Set to true if a file contains a sequence of images (GIF for example).
-          example: false
-        height:
-          type: integer
-          description: Image height in pixels.
-          example: 2352
-        width:
-          type: integer
-          description: Image width in pixels.
-          example: 2935
-        geo_location:
-          description: Geo-location of image from EXIF.
-          type:
-          - object
-          - 'null'
-          required:
-          - latitude
-          - longitude
-          properties:
-            latitude:
-              type: number
-              description: Location latitude.
-              example: -1.1884555555555556
-            longitude:
-              type: number
-              description: Location longitude.
-              example: 52.66996666666667
-        datetime_original:
-          type:
-          - string
-          - 'null'
-          description: Image date and time from EXIF. Please be aware that this data is not always formatted and displayed exactly as it appears in the EXIF.
-          format: date-time
-          example: '2018-09-13T16:23:40'
-        dpi:
-          type:
-          - array
-          - 'null'
-          description: Image DPI for two dimensions.
-          items:
-            type: number
-            example: 72
-          minItems: 2
-          maxItems: 2
-          example:
-          - 72
-          - 72
-    webhook_target:
+    webhook_updated:
       type: string
-      format: uri
-      maxLength: 255
-      description: A URL that is triggered by an event, for example, a file upload. A target URL MUST be unique for each `project` — `event type` combination.
-      example: http://example.com/hooks/receiver
-    webhook_project_pubkey:
-      type: string
-      description: Public project key the webhook belongs to.
-      example: 2d199fbf3896699a2639
-    webhookInitiator:
-      description: Webhook event initiator.
-      type: object
-      required:
-      - type
-      - detail
-      properties:
-        type:
-          type: string
-          description: Initiator type name.
-          enum:
-          - api
-          - system
-          - addon
-        detail:
-          type: object
-          required:
-          - request_id
-          - addon_name
-          properties:
-            request_id:
-              type:
-              - string
-              - 'null'
-              format: uuid
-              description: Request ID.
-              example: 972654bd-a2ad-485a-bd27-c86126c1ed8c
-            addon_name:
-              type:
-              - string
-              - 'null'
-              description: Add-On name.
-              enum:
-              - aws_rekognition_detect_labels
-              - aws_rekognition_detect_moderation_labels
-              - uc_clamav_virus_scan
-              - remove_bg
-              - zamzar_convert_document
-              - zencoder_convert_video
-              example: aws_rekognition_detect_labels
-            source_file_uuid:
-              type: string
-              format: uuid
-              description: Source file UUID if the current is derivative.
-              example: 972654bd-a2ad-485a-bd27-c86126c1ed8c
-    simpleAuthHTTPForbidden:
-      type: object
-      properties:
-        detail:
-          type: string
-          default: Simple authentication over HTTP is forbidden. Please, use HTTPS or signed requests instead.
-      example:
-        detail: Simple authentication over HTTP is forbidden. Please, use HTTPS or signed requests instead.
-    videoInfo:
-      type: object
-      description: Video metadata.
-      required:
-      - duration
-      - format
-      - bitrate
-      - audio
-      - video
-      properties:
-        duration:
-          type:
-          - integer
-          - 'null'
-          description: Video file's duration in milliseconds.
-          example: 261827
-        format:
-          type: string
-          description: Video file's format.
-          example: mp4
-        bitrate:
-          type:
-          - integer
-          - 'null'
-          description: Video file's bitrate.
-          example: 393
-        audio:
-          type: array
-          items:
-            type: object
-            description: Audio stream's metadata.
-            required:
-            - bitrate
-            - codec
-            - sample_rate
-            - channels
-            properties:
-              bitrate:
-                type:
-                - integer
-                - 'null'
-                description: Audio stream's bitrate.
-                example: 78
-              codec:
-                type:
-                - string
-                - 'null'
-                description: Audio stream's codec.
-                example: aac
-              sample_rate:
-                type:
-                - integer
-                - 'null'
-                description: Audio stream's sample rate.
-                example: 44100
-              channels:
-                type:
-                - integer
-                - 'null'
-                description: Audio stream's number of channels.
-                example: 2
-        video:
-          type: array
-          items:
-            type: object
-            description: Video stream's metadata.
-            required:
-            - height
-            - width
-            - frame_rate
-            - bitrate
-            - codec
-            properties:
-              height:
-                type: integer
-                description: Video stream's image height.
-                example: 360
-              width:
-                type: integer
-                description: Video stream's image width.
-                example: 640
-              frame_rate:
-                type: number
-                description: Video stream's frame rate.
-                example: 30
-              bitrate:
-                type:
-                - integer
-                - 'null'
-                description: Video stream's bitrate.
-                example: 315
-              codec:
-                type:
-                - string
-                - 'null'
-                description: Video stream's codec.
-                example: h264
-    webhook_signing_secret:
-      type: string
-      format: password
-      maxLength: 32
-      example: 7kMVZivndx0ErgvhRKAr
-      description: 'Optional [HMAC/SHA-256](https://en.wikipedia.org/wiki/HMAC) secret that, if set, will be used to
-
-        calculate signatures for the webhook payloads sent to the `target_url`.
-
-
-        Calculated signature will be sent to the `target_url` as a value of the `X-Uc-Signature` HTTP
-
-        header. The header will have the following format: `X-Uc-Signature: v1=<HMAC-SHA256-HEX-DIGEST>`.
-
-        See [Secure Webhooks](https://uploadcare.com/docs/webhooks/#signed-webhooks) for details.
-
-        '
-    contentInfo:
-      type:
-      - object
-      - 'null'
-      description: Information about file content.
-      properties:
-        mime:
-          type: object
-          description: MIME type.
-          required:
-          - mime
-          - type
-          - subtype
-          properties:
-            mime:
-              type: string
-              description: Full MIME type.
-              example: image/jpeg
-            type:
-              type: string
-              description: Type of MIME type.
-              example: image
-            subtype:
-              type: string
-              description: Subtype of MIME type.
-              example: jpeg
-        image:
-          $ref: '#/components/schemas/imageInfo'
-        video:
-          $ref: '#/components/schemas/videoInfo'
-    awsRekognitionDetectLabels_v2016_06_27:
-      allOf:
-      - $ref: '#/components/schemas/applicationData'
-      - type: object
-        properties:
-          version:
-            type: string
-            enum:
-            - '2016-06-27'
-          data:
-            type: object
-            description: Dictionary with a result of an aws rekognition detect labels execution result.
-            properties:
-              LabelModelVersion:
-                type: string
-              Labels:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    Confidence:
-                      type: number
-                    Instances:
-                      type: array
-                      items:
-                        type: object
-                        properties:
-                          BoundingBox:
-                            type: object
-                            properties:
-                              Height:
-                                type: number
-                              Left:
-                                type: number
-                              Top:
-                                type: number
-                              Width:
-                                type: number
-                          Confidence:
-                            type: number
-                    Name:
-                      type: string
-                    Parents:
-                      type: array
-                      items:
-                        type: object
-                        properties:
-                          Name:
-                            type: string
-                  required:
-                  - Name
-                  - Parents
-                  - Instances
-                  - Confidence
-            required:
-            - Labels
-            - LabelModelVersion
-            example:
-              value:
-                aws_rekognition_detect_labels:
-                  data:
-                    LabelModelVersion: '2.0'
-                    Labels:
-                    - Confidence: 93.41645812988281
-                      Instances: []
-                      Name: Home Decor
-                      Parents: []
-                    - Confidence: 70.75951385498047
-                      Instances: []
-                      Name: Linen
-                      Parents:
-                      - Name: Home Decor
-                    - Confidence: 64.7123794555664
-                      Instances: []
-                      Name: Sunlight
-                      Parents: []
-                    - Confidence: 56.264793395996094
-                      Instances: []
-                      Name: Flare
-                      Parents:
-                      - Name: Light
-                    - Confidence: 50.47153854370117
-                      Instances: []
-                      Name: Tree
-                      Parents:
-                      - Name: Plant
-                  version: '2016-06-27'
-                  datetime_created: '2021-09-21T11:25:31.259763Z'
-                  datetime_updated: '2021-09-21T11:27:33.359763Z'
-  parameters:
-    webhookSignature:
-      in: header
-      name: X-Uc-Signature
-      description: 'Optional header with an HMAC-SHA256 signature that is sent to the `target_url`,
-
-        if the webhook has a `signing_secret` associated with it.
-
-        '
-      schema:
-        type: string
-        example: v1=01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b
-    acceptHeader:
-      in: header
-      name: Accept
-      description: Version header.
-      schema:
-        type:
-        - string
-        - 'null'
-        example: application/vnd.uploadcare-v0.7+json
-      required: true
+      format: date-time
+      description: date-time when a webhook was updated.
+      example: '2018-11-26T12:49:10.477888Z'
   responses:
     invalidAcceptHeader:
       description: Invalid version header `Accept` for this endpoint.
@@ -1456,6 +1434,21 @@ components:
                 type: string
                 example: Incorrect Accept header provided. Make sure to specify API version. Refer to REST API docs for details.
                 default: Incorrect Accept header provided. Make sure to specify API version. Refer to REST API docs for details.
+    authorizationProblemsResponse:
+      description: Authorization errors.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              detail:
+                type: string
+                enum:
+                - Incorrect authentication credentials.
+                - Public key {public_key} not found.
+                - Secret key not found.
+                - Invalid signature. Please check your Secret key.
+                example: Incorrect authentication credentials.
     requestWasThrottledError:
       description: Request was throttled.
       headers:
@@ -1472,31 +1465,38 @@ components:
               detail:
                 type: string
                 example: Request was throttled. Expected available in 10 seconds.
-    authorizationProblemsResponse:
-      description: Authorization errors.
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              detail:
-                type: string
-                enum:
-                - Incorrect authentication credentials.
-                - Public key {public_key} not found.
-                - Secret key not found.
-                - Invalid signature. Please check your Secret key.
-                example: Incorrect authentication credentials.
+  parameters:
+    acceptHeader:
+      in: header
+      name: Accept
+      description: Version header.
+      schema:
+        type:
+        - string
+        - 'null'
+        example: application/vnd.uploadcare-v0.7+json
+      required: true
+    webhookSignature:
+      in: header
+      name: X-Uc-Signature
+      description: 'Optional header with an HMAC-SHA256 signature that is sent to the `target_url`,
+
+        if the webhook has a `signing_secret` associated with it.
+
+        '
+      schema:
+        type: string
+        example: v1=01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b
   examples:
+    webhookTargetUrlError:
+      value:
+        detail: '`target_url` is missing.'
     cantUseWebhooksError:
       value:
         detail: You can't use webhooks
     simpleAuthHTTPForbidden:
       value:
         detail: Simple authentication over HTTP is forbidden. Please, use HTTPS or signed requests instead.
-    webhookTargetUrlError:
-      value:
-        detail: '`target_url` is missing.'
   securitySchemes:
     apiKeyAuth:
       type: apiKey

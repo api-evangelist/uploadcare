@@ -976,20 +976,8 @@ components:
                 type: string
                 example: Concurrent call attempted
                 default: Concurrent call attempted
-    executeAddonResponse:
-      description: Add-On execution response.
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              request_id:
-                type: string
-                format: uuid
-                description: Request ID.
-                example: 8db3c8b4-2dea-4146-bcdb-63387e2b33c1
-    invalidAcceptHeader:
-      description: Invalid version header `Accept` for this endpoint.
+    authorizationProblemsResponse:
+      description: Authorization errors.
       content:
         application/json:
           schema:
@@ -997,8 +985,12 @@ components:
             properties:
               detail:
                 type: string
-                example: Incorrect Accept header provided. Make sure to specify API version. Refer to REST API docs for details.
-                default: Incorrect Accept header provided. Make sure to specify API version. Refer to REST API docs for details.
+                enum:
+                - Incorrect authentication credentials.
+                - Public key {public_key} not found.
+                - Secret key not found.
+                - Invalid signature. Please check your Secret key.
+                example: Incorrect authentication credentials.
     requestWasThrottledError:
       description: Request was throttled.
       headers:
@@ -1015,6 +1007,23 @@ components:
               detail:
                 type: string
                 example: Request was throttled. Expected available in 10 seconds.
+    invalidAcceptHeader:
+      description: Invalid version header `Accept` for this endpoint.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              detail:
+                type: string
+                example: Incorrect Accept header provided. Make sure to specify API version. Refer to REST API docs for details.
+                default: Incorrect Accept header provided. Make sure to specify API version. Refer to REST API docs for details.
+    simpleAuthHTTPForbiddenResponse:
+      description: Simple authentication over HTTP is forbidden. Please, use HTTPS or signed requests instead.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/simpleAuthHTTPForbidden'
     addonExecutionStatusResponse:
       description: Add-On execution status response.
       content:
@@ -1032,36 +1041,19 @@ components:
                 description: 'Defines the status of an Add-On execution.
 
                   In most cases, once the status changes to `done`, [Application Data](#operation/fileInfo) of the file that had been specified as a `appdata`, will contain the result of the execution.'
-    simpleAuthHTTPForbiddenResponse:
-      description: Simple authentication over HTTP is forbidden. Please, use HTTPS or signed requests instead.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/simpleAuthHTTPForbidden'
-    authorizationProblemsResponse:
-      description: Authorization errors.
+    executeAddonResponse:
+      description: Add-On execution response.
       content:
         application/json:
           schema:
             type: object
             properties:
-              detail:
+              request_id:
                 type: string
-                enum:
-                - Incorrect authentication credentials.
-                - Public key {public_key} not found.
-                - Secret key not found.
-                - Invalid signature. Please check your Secret key.
-                example: Incorrect authentication credentials.
+                format: uuid
+                description: Request ID.
+                example: 8db3c8b4-2dea-4146-bcdb-63387e2b33c1
   schemas:
-    simpleAuthHTTPForbidden:
-      type: object
-      properties:
-        detail:
-          type: string
-          default: Simple authentication over HTTP is forbidden. Please, use HTTPS or signed requests instead.
-      example:
-        detail: Simple authentication over HTTP is forbidden. Please, use HTTPS or signed requests instead.
     addonExecutionStatus:
       type: object
       properties:
@@ -1075,6 +1067,14 @@ components:
           description: 'Defines the status of an Add-On execution.
 
             In most cases, once the status changes to `done`, [Application Data](#operation/fileInfo) of the file that had been specified as a `appdata`, will contain the result of the execution.'
+    simpleAuthHTTPForbidden:
+      type: object
+      properties:
+        detail:
+          type: string
+          default: Simple authentication over HTTP is forbidden. Please, use HTTPS or signed requests instead.
+      example:
+        detail: Simple authentication over HTTP is forbidden. Please, use HTTPS or signed requests instead.
   parameters:
     acceptHeader:
       in: header

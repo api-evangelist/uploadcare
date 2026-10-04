@@ -898,475 +898,83 @@ paths:
         label: Kotlin
         source: "import com.uploadcare.android.library.api.UploadcareClient\n\nval uploadcare = UploadcareClient(publicKey = \"YOUR_PUBLIC_KEY\", secretKey = \"YOUR_SECRET_KEY\")\n\nval copyFile = uploadcare.copyFileRemoteStorage(\n    source = \"1bac376c-aa7e-4356-861b-dd2657b5bfd2\",\n    target = \"custom_storage_connected_to_the_project\"\n)\nLog.d(\"TAG\", copyFile.toString())\n"
 components:
-  examples:
-    file_list_w_appdata:
-      value:
-        next: https://api.uploadcare.com/files/?limit=1&from=2018-11-27T01%3A00%3A43.001705%2B00%3A00&offset=0
-        previous: https://api.uploadcare.com/files/?limit=1&to=2018-11-27T01%3A00%3A36.436838%2B00%3A00&offset=0
-        total: 2484
-        totals:
-          removed: 0
-          stored: 2480
-          unstored: 4
-        per_page: 1
-        results:
-        - datetime_removed: null
-          datetime_stored: '2018-11-26T12:49:10.477888Z'
-          datetime_uploaded: '2018-11-26T12:49:09.945335Z'
-          variations: null
-          is_image: true
-          is_ready: true
-          mime_type: image/jpeg
-          original_file_url: https://ucarecdn.com/22240276-2f06-41f8-9411-755c8ce926ed/pineapple.jpg
-          original_filename: pineapple.jpg
-          size: 642
-          url: https://api.uploadcare.com/files/22240276-2f06-41f8-9411-755c8ce926ed/
-          uuid: 22240276-2f06-41f8-9411-755c8ce926ed
-          content_info:
-            mime:
-              mime: image/jpeg
-              type: image
-              subtype: jpeg
-            image:
-              format: JPEG
-              width: 500
-              height: 500
-              sequence: false
-              color_mode: RGB
-              orientation: 6
-              geo_location:
-                latitude: 55.62013611111111
-                longitude: 37.66299166666666
-              datetime_original: '2018-08-20T08:59:50'
-              dpi:
-              - 72
-              - 72
-          metadata:
-            subsystem: uploader
-            pet: cat
-          appdata:
-            uc_clamav_virus_scan:
-              data:
-                infected: true
-                infected_with: Win.Test.EICAR_HDB-1
-              version: 0.104.2
-              datetime_created: '2021-09-21T11:24:33.159663Z'
-              datetime_updated: '2021-09-21T11:24:33.159663Z'
-    file_video:
-      value:
-        datetime_removed: null
-        datetime_stored: '2021-09-21T11:24:33.159663Z'
-        datetime_uploaded: '2021-09-21T11:24:33.159663Z'
-        is_image: false
-        is_ready: true
-        mime_type: video/mp4
-        original_file_url: https://ucarecdn.com/7ed2aed0-0482-4c13-921b-0557b193edc2/16317390663260.mp4
-        original_filename: 16317390663260.mp4
-        size: 14479722
-        url: https://api.uploadcare.com/files/7ed2aed0-0482-4c13-921b-0557b193edc2/
-        uuid: 7ed2aed0-0482-4c13-921b-0557b193edc2
-        variations: null
-        content_info:
-          mime:
-            mime: video/mp4
-            type: video
-            subtype: mp4
-          video:
-            audio:
-            - codec: aac
-              bitrate: 129
-              channels: 2
-              sample_rate: 44100
-            video:
-            - codec: h264
-              width: 640
-              height: 480
-              bitrate: 433
-              frame_rate: 30
-            format: mp4
-            bitrate: 579
-            duration: 200044
-        metadata:
-          subsystem: tester
-          pet: dog
-    file:
-      value:
-        datetime_removed: null
-        datetime_stored: '2018-11-26T12:49:10.477888Z'
-        datetime_uploaded: '2018-11-26T12:49:09.945335Z'
-        variations: null
-        is_image: true
-        is_ready: true
-        mime_type: image/jpeg
-        original_file_url: https://ucarecdn.com/22240276-2f06-41f8-9411-755c8ce926ed/pineapple.jpg
-        original_filename: pineapple.jpg
-        size: 642
-        url: https://api.uploadcare.com/files/22240276-2f06-41f8-9411-755c8ce926ed/
-        uuid: 22240276-2f06-41f8-9411-755c8ce926ed
-        content_info:
-          mime:
-            mime: image/jpeg
-            type: image
-            subtype: jpeg
-          image:
-            format: JPEG
-            width: 500
-            height: 500
-            sequence: false
-            color_mode: RGB
-            orientation: 6
-            geo_location:
-              latitude: 55.62013611111111
-              longitude: 37.66299166666666
-            datetime_original: '2018-08-20T08:59:50'
-            dpi:
-            - 72
-            - 72
-        metadata:
-          subsystem: uploader
-          pet: cat
-        appdata:
-          aws_rekognition_detect_labels:
-            data:
-              LabelModelVersion: '2.0'
-              Labels:
-              - Confidence: 93.41645812988281
-                Instances: []
-                Name: Home Decor
-                Parents: []
-              - Confidence: 70.75951385498047
-                Instances: []
-                Name: Linen
-                Parents:
-                - Name: Home Decor
-              - Confidence: 64.7123794555664
-                Instances: []
-                Name: Sunlight
-                Parents: []
-              - Confidence: 56.264793395996094
-                Instances: []
-                Name: Flare
-                Parents:
-                - Name: Light
-              - Confidence: 50.47153854370117
-                Instances: []
-                Name: Tree
-                Parents:
-                - Name: Plant
-            version: '2016-06-27'
-            datetime_created: '2021-09-21T11:25:31.259763Z'
-            datetime_updated: '2021-09-21T11:27:33.359763Z'
-          aws_rekognition_detect_moderation_labels:
-            data:
-              ModerationModelVersion: '6.0'
-              ModerationLabels:
-              - Confidence: 93.41645812988281
-                Name: Weapons
-                ParentName: Violence
-            version: '2016-06-27'
-            datetime_created: '2023-02-21T11:25:31.259763Z'
-            datetime_updated: '2023-02-21T11:27:33.359763Z'
-          remove_bg:
-            data:
-              foreground_type: person
-            version: '1.0'
-            datetime_created: '2021-07-25T12:24:33.159663Z'
-            datetime_updated: '2021-07-25T12:24:33.159663Z'
-          uc_clamav_virus_scan:
-            data:
-              infected: true
-              infected_with: Win.Test.EICAR_HDB-1
-            version: 0.104.2
-            datetime_created: '2021-09-21T11:24:33.159663Z'
-            datetime_updated: '2021-09-21T11:24:33.159663Z'
-    file_list:
-      value:
-        next: https://api.uploadcare.com/files/?limit=1&from=2018-11-27T01%3A00%3A43.001705%2B00%3A00&offset=0
-        previous: https://api.uploadcare.com/files/?limit=1&to=2018-11-27T01%3A00%3A36.436838%2B00%3A00&offset=0
-        total: 2484
-        totals:
-          removed: 0
-          stored: 2480
-          unstored: 4
-        per_page: 1
-        results:
-        - datetime_removed: null
-          datetime_stored: '2021-09-21T11:24:33.159663Z'
-          datetime_uploaded: '2021-09-21T11:24:33.159663Z'
-          is_image: false
-          is_ready: true
-          mime_type: video/mp4
-          original_file_url: https://ucarecdn.com/7ed2aed0-0482-4c13-921b-0557b193edc2/16317390663260.mp4
-          original_filename: 16317390663260.mp4
-          size: 14479722
-          url: https://api.uploadcare.com/files/7ed2aed0-0482-4c13-921b-0557b193edc2/
-          uuid: 7ed2aed0-0482-4c13-921b-0557b193edc2
-          variations: null
-          content_info:
-            mime:
-              mime: video/mp4
-              type: video
-              subtype: mp4
-            video:
-              audio:
-              - codec: aac
-                bitrate: 129
-                channels: 2
-                sample_rate: 44100
-              video:
-              - codec: h264
-                width: 640
-                height: 480
-                bitrate: 433
-                frame_rate: 30
-              format: mp4
-              bitrate: 579
-              duration: 200044
-          metadata:
-            subsystem: tester
-            pet: dog
-    file_removed:
-      value:
-        datetime_removed: '2018-11-26T12:49:11.477888Z'
-        datetime_stored: null
-        datetime_uploaded: '2018-11-26T12:49:09.945335Z'
-        variations: null
-        is_image: true
-        is_ready: true
-        mime_type: image/jpeg
-        original_file_url: https://ucarecdn.com/22240276-2f06-41f8-9411-755c8ce926ed/pineapple.jpg
-        original_filename: pineapple.jpg
-        size: 642
-        url: https://api.uploadcare.com/files/22240276-2f06-41f8-9411-755c8ce926ed/
-        uuid: 22240276-2f06-41f8-9411-755c8ce926ed
-        content_info:
-          mime:
-            mime: image/jpeg
-            type: image
-            subtype: jpeg
-          image:
-            format: JPEG
-            width: 500
-            height: 500
-            sequence: false
-            color_mode: RGB
-            orientation: 6
-            geo_location:
-              latitude: 55.62013611111111
-              longitude: 37.66299166666666
-            datetime_original: '2018-08-20T08:59:50'
-            dpi:
-            - 72
-            - 72
-        metadata:
-          subsystem: uploader
-          pet: cat
-        appdata:
-          uc_clamav_virus_scan:
-            data:
-              infected: true
-              infected_with: Win.Test.EICAR_HDB-1
-            version: 0.104.2
-            datetime_created: '2021-09-21T11:24:33.159663Z'
-            datetime_updated: '2021-09-21T11:24:33.159663Z'
-    simpleAuthHTTPForbidden:
-      value:
-        detail: Simple authentication over HTTP is forbidden. Please, use HTTPS or signed requests instead.
-  responses:
-    filesStorageResponse:
-      description: OK. See `problems` and `result` fields in the response. In case a file list provided in a request holds invalid UUIDs, they'll be included in the `problems` structure. Invalid UUIDs can be incomplete, associated with files that no longer exist, etc.
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              status:
-                type: string
-                example: ok
-              problems:
-                type: object
-                description: Dictionary of passed files UUIDs and problems associated with these UUIDs.
-                example:
-                  21975c81-7f57-4c7a-aef9-acfe28779f78: Missing in the project
-                  4j334o01-8bs3: Invalid
-              result:
-                description: List of file objects that have been stored/deleted.
-                type: array
-                items:
-                  $ref: '#/components/schemas/file'
-    simpleAuthHTTPForbiddenResponse:
-      description: Simple authentication over HTTP is forbidden. Please, use HTTPS or signed requests instead.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/simpleAuthHTTPForbidden'
-    remoteCopyResponse:
-      description: Destination file with that name already exists. Check the `pattern` parameter.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/copiedFileURL'
-    fileCopyErrors:
-      description: Possible errors for file copy endpoint.
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              detail:
-                type: string
-                enum:
-                - Bad `source` parameter. Use UUID or CDN URL.
-                - '`source` parameter is required.'
-                - Project has no storage with provided name.
-                - '`store` parameter should be `true` or `false`.'
-                - 'Invalid pattern provided: `pattern_value`'
-                - 'Invalid pattern provided: Invalid character in a pattern.'
-                - File is not ready yet.
-                - Copying of large files is not supported at the moment.
-                - Not allowed on your current plan.
-                example: File is not ready yet.
-    fileNotFoundError:
-      description: File not found.
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              detail:
-                type: string
-                description: Not found.
-                example: Not found.
-    invalidAcceptHeader:
-      description: Invalid version header `Accept` for this endpoint.
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              detail:
-                type: string
-                example: Incorrect Accept header provided. Make sure to specify API version. Refer to REST API docs for details.
-                default: Incorrect Accept header provided. Make sure to specify API version. Refer to REST API docs for details.
-    requestWasThrottledError:
-      description: Request was throttled.
-      headers:
-        Retry-After:
-          description: Number of seconds to wait before the next request.
-          schema:
-            type: integer
-            example: 10
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              detail:
-                type: string
-                example: Request was throttled. Expected available in 10 seconds.
-    authorizationProblemsResponse:
-      description: Authorization errors.
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              detail:
-                type: string
-                enum:
-                - Incorrect authentication credentials.
-                - Public key {public_key} not found.
-                - Secret key not found.
-                - Invalid signature. Please check your Secret key.
-                example: Incorrect authentication credentials.
-    paginatedFilesResponse:
-      description: A list of files, paginated.
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              next:
-                type:
-                - string
-                - 'null'
-                format: uri
-                description: Next page URL.
-                example: https://api.uploadcare.com/files/?from=2018-11-27T01%3A00%3A24.296613%2B00%3A00&limit=3&offset=0
-              previous:
-                type:
-                - string
-                - 'null'
-                format: uri
-                description: Previous page URL.
-                example: https://api.uploadcare.com/files/?limit=3&to=2018-11-27T01%3A00%3A36.436838%2B00%3A00&offset=0
-              total:
-                type: integer
-                minimum: 0
-                description: Total number of the files of the queried type. The queried type depends on the stored and removed query parameters.
-                example: 26
-              totals:
-                type: object
-                properties:
-                  removed:
-                    type: integer
-                    minimum: 0
-                    description: Total number of the files that are marked as removed.
-                    default: 0
-                    example: 0
-                  stored:
-                    type: integer
-                    minimum: 0
-                    description: Total number of the files that are marked as stored.
-                    default: 0
-                    example: 25
-                  unstored:
-                    type: integer
-                    minimum: 0
-                    description: Total number of the files that are not marked as stored.
-                    default: 0
-                    example: 1
-                required:
-                - removed
-                - stored
-                - unstored
-              per_page:
-                type: integer
-                description: Number of the files per page.
-                example: 100
-              results:
-                type: array
-                items:
-                  $ref: '#/components/schemas/file'
-          examples:
-            With App Data:
-              $ref: '#/components/examples/file_list_w_appdata'
-            Without App Data:
-              $ref: '#/components/examples/file_list'
-    remoteCopyResponse201:
-      description: The file was copied successfully. HTTP response contains `result` field with the URL of the file on the remote storage.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/copiedFileURL'
-    filesStoreUUIDSError:
-      description: File UUIDs list validation errors.
-      content:
-        application/json:
-          schema:
-            oneOf:
-            - $ref: '#/components/schemas/simpleAuthHTTPForbidden'
-            - type: object
-              description: File UUIDs list validation errors.
-              properties:
-                detail:
-                  type: string
-                  enum:
-                  - Expected list of UUIDs
-                  - List of UUIDs can not be empty
-                  - Maximum UUIDs per request is exceeded. The limit is 100
-                  example: Expected list of UUIDs
   schemas:
+    applicationData:
+      type: object
+      properties:
+        version:
+          type: string
+          description: An application version.
+        datetime_created:
+          type: string
+          format: date-time
+          description: Date and time when an application data was created.
+        datetime_updated:
+          type: string
+          format: date-time
+          description: Date and time when an application data was updated.
+        data:
+          type: object
+          description: Dictionary with a result of an application execution result.
+      required:
+      - version
+      - datetime_created
+      - datetime_updated
+      - data
+    contentInfo:
+      type:
+      - object
+      - 'null'
+      description: Information about file content.
+      properties:
+        mime:
+          type: object
+          description: MIME type.
+          required:
+          - mime
+          - type
+          - subtype
+          properties:
+            mime:
+              type: string
+              description: Full MIME type.
+              example: image/jpeg
+            type:
+              type: string
+              description: Type of MIME type.
+              example: image
+            subtype:
+              type: string
+              description: Subtype of MIME type.
+              example: jpeg
+        image:
+          $ref: '#/components/schemas/imageInfo'
+        video:
+          $ref: '#/components/schemas/videoInfo'
+    removeBg_v1_0:
+      allOf:
+      - $ref: '#/components/schemas/applicationData'
+      - type: object
+        properties:
+          version:
+            type: string
+            enum:
+            - '1.0'
+          data:
+            type: object
+            description: Dictionary with a result of an remove.bg information about an image.
+            properties:
+              foreground_type:
+                type: string
+                description: foreground classification type (present if type_level was set)
+        example:
+          value:
+            remove_bg:
+              data:
+                foreground_type: person
+              version: '1.0'
+              datetime_created: '2021-07-25T12:24:33.159663Z'
+              datetime_updated: '2021-07-25T12:24:33.159663Z'
     copiedFileURL:
       type: object
       properties:
@@ -1379,116 +987,113 @@ components:
           format: url
           description: URL with an s3 scheme. Your bucket name is put as a host, and an s3 object path follows.
           example: s3://mybucket/03ccf9ab-f266-43fb-973d-a6529c55c2ae/image.png
-    fileCopy:
+    localCopyResponse:
       type: object
-      required:
-      - datetime_removed
-      - datetime_stored
-      - datetime_uploaded
-      - is_image
-      - is_ready
-      - mime_type
-      - original_file_url
-      - original_filename
-      - size
-      - url
-      - uuid
-      - variations
-      - content_info
-      - metadata
       properties:
-        datetime_removed:
-          type:
-          - string
-          - 'null'
-          format: date-time
-          description: Date and time when a file was removed, if any.
-        datetime_stored:
-          type:
-          - string
-          - 'null'
-          format: date-time
-          description: Date and time of the last store request, if any.
-        datetime_uploaded:
+        type:
           type: string
-          format: date-time
-          description: Date and time when a file was uploaded.
-        is_image:
+          default: file
+          example: file
+        result:
+          $ref: '#/components/schemas/fileCopy'
+    imageInfo:
+      type: object
+      description: Image metadata.
+      required:
+      - color_mode
+      - orientation
+      - format
+      - height
+      - width
+      - geo_location
+      - datetime_original
+      - dpi
+      - sequence
+      properties:
+        color_mode:
+          type: string
+          description: Image color mode.
+          enum:
+          - RGB
+          - RGBA
+          - RGBa
+          - RGBX
+          - L
+          - LA
+          - La
+          - P
+          - PA
+          - CMYK
+          - YCbCr
+          - HSV
+          - LAB
+          example: RGBA
+        orientation:
+          type:
+          - integer
+          - 'null'
+          description: Image orientation from EXIF.
+          minimum: 0
+          maximum: 8
+          example: 6
+        format:
+          type: string
+          description: Image format.
+          example: JPEG
+        sequence:
           type: boolean
-          description: Is file is image.
-          example: true
-        is_ready:
-          type: boolean
-          description: Is file is ready to be used after upload.
-          example: true
-        mime_type:
-          type: string
-          description: File MIME-type. In the immediate response after starting a local copy, it can be `application/octet-stream` until the copy completes.
-          example: image/jpeg
-        original_file_url:
-          type:
-          - string
-          - 'null'
-          format: uri
-          description: Publicly available file CDN URL. Available if a file is not deleted.
-        original_filename:
-          type: string
-          description: Original file name taken from uploaded file.
-          example: EU_4.jpg
-        size:
+          description: Set to true if a file contains a sequence of images (GIF for example).
+          example: false
+        height:
           type: integer
-          enum:
-          - 0
-          description: File size in bytes. In the immediate response after starting a local copy, it can be `0` until the copy completes.
-          example: 0
-        url:
-          type: string
-          format: uri
-          description: API resource URL for a particular file.
-        uuid:
-          type: string
-          format: uuid
-          description: File UUID.
-          example: 575ed4e8-f4e8-4c14-a58b-1527b6d9ee46
-        variations:
-          enum:
-          - null
-        content_info:
-          enum:
-          - null
-        metadata:
-          $ref: '#/components/schemas/metadata'
-    ucClamavVirusScan:
-      allOf:
-      - $ref: '#/components/schemas/applicationData'
-      - type: object
-        properties:
-          version:
-            type: string
-            enum:
-            - 0.104.2
-            - 0.104.3
-            - 0.105.0
-            - 0.105.1
-          data:
-            type: object
-            description: Dictionary with a result of ClamAV execution result.
-            properties:
-              infected:
-                type: boolean
-              infected_with:
-                type: string
-            required:
-            - infected
-        example:
-          value:
-            uc_clamav_virus_scan:
-              data:
-                infected: true
-                infected_with: Win.Test.EICAR_HDB-1
-              version: 0.104.2
-              datetime_created: '2021-09-21T11:24:33.159663Z'
-              datetime_updated: '2021-09-21T11:24:33.159663Z'
+          description: Image height in pixels.
+          example: 2352
+        width:
+          type: integer
+          description: Image width in pixels.
+          example: 2935
+        geo_location:
+          description: Geo-location of image from EXIF.
+          type:
+          - object
+          - 'null'
+          required:
+          - latitude
+          - longitude
+          properties:
+            latitude:
+              type: number
+              description: Location latitude.
+              example: -1.1884555555555556
+            longitude:
+              type: number
+              description: Location longitude.
+              example: 52.66996666666667
+        datetime_original:
+          type:
+          - string
+          - 'null'
+          description: Image date and time from EXIF. Please be aware that this data is not always formatted and displayed exactly as it appears in the EXIF.
+          format: date-time
+          example: '2018-09-13T16:23:40'
+        dpi:
+          type:
+          - array
+          - 'null'
+          description: Image DPI for two dimensions.
+          items:
+            type: number
+            example: 72
+          minItems: 2
+          maxItems: 2
+          example:
+          - 72
+          - 72
+    metadata:
+      type:
+      - object
+      - 'null'
+      description: Arbitrary metadata associated with a file.
     awsRekognitionDetectModerationLabels_v2016_06_27:
       allOf:
       - $ref: '#/components/schemas/applicationData'
@@ -1534,29 +1139,21 @@ components:
                   version: '2016-06-27'
                   datetime_created: '2023-02-21T11:25:31.259763Z'
                   datetime_updated: '2023-02-21T11:27:33.359763Z'
-    applicationData:
-      type: object
+    applicationDataObject:
+      type:
+      - object
+      - 'null'
+      description: Dictionary of application names and data associated with these applications.
       properties:
-        version:
-          type: string
-          description: An application version.
-        datetime_created:
-          type: string
-          format: date-time
-          description: Date and time when an application data was created.
-        datetime_updated:
-          type: string
-          format: date-time
-          description: Date and time when an application data was updated.
-        data:
-          type: object
-          description: Dictionary with a result of an application execution result.
-      required:
-      - version
-      - datetime_created
-      - datetime_updated
-      - data
-    removeBg_v1_0:
+        aws_rekognition_detect_labels:
+          $ref: '#/components/schemas/awsRekognitionDetectLabels_v2016_06_27'
+        aws_rekognition_detect_moderation_labels:
+          $ref: '#/components/schemas/awsRekognitionDetectModerationLabels_v2016_06_27'
+        remove_bg:
+          $ref: '#/components/schemas/removeBg_v1_0'
+        uc_clamav_virus_scan:
+          $ref: '#/components/schemas/ucClamavVirusScan'
+    ucClamavVirusScan:
       allOf:
       - $ref: '#/components/schemas/applicationData'
       - type: object
@@ -1564,31 +1161,223 @@ components:
           version:
             type: string
             enum:
-            - '1.0'
+            - 0.104.2
+            - 0.104.3
+            - 0.105.0
+            - 0.105.1
           data:
             type: object
-            description: Dictionary with a result of an remove.bg information about an image.
+            description: Dictionary with a result of ClamAV execution result.
             properties:
-              foreground_type:
+              infected:
+                type: boolean
+              infected_with:
                 type: string
-                description: foreground classification type (present if type_level was set)
+            required:
+            - infected
         example:
           value:
-            remove_bg:
+            uc_clamav_virus_scan:
               data:
-                foreground_type: person
-              version: '1.0'
-              datetime_created: '2021-07-25T12:24:33.159663Z'
-              datetime_updated: '2021-07-25T12:24:33.159663Z'
-    localCopyResponse:
+                infected: true
+                infected_with: Win.Test.EICAR_HDB-1
+              version: 0.104.2
+              datetime_created: '2021-09-21T11:24:33.159663Z'
+              datetime_updated: '2021-09-21T11:24:33.159663Z'
+    videoInfo:
+      type: object
+      description: Video metadata.
+      required:
+      - duration
+      - format
+      - bitrate
+      - audio
+      - video
+      properties:
+        duration:
+          type:
+          - integer
+          - 'null'
+          description: Video file's duration in milliseconds.
+          example: 261827
+        format:
+          type: string
+          description: Video file's format.
+          example: mp4
+        bitrate:
+          type:
+          - integer
+          - 'null'
+          description: Video file's bitrate.
+          example: 393
+        audio:
+          type: array
+          items:
+            type: object
+            description: Audio stream's metadata.
+            required:
+            - bitrate
+            - codec
+            - sample_rate
+            - channels
+            properties:
+              bitrate:
+                type:
+                - integer
+                - 'null'
+                description: Audio stream's bitrate.
+                example: 78
+              codec:
+                type:
+                - string
+                - 'null'
+                description: Audio stream's codec.
+                example: aac
+              sample_rate:
+                type:
+                - integer
+                - 'null'
+                description: Audio stream's sample rate.
+                example: 44100
+              channels:
+                type:
+                - integer
+                - 'null'
+                description: Audio stream's number of channels.
+                example: 2
+        video:
+          type: array
+          items:
+            type: object
+            description: Video stream's metadata.
+            required:
+            - height
+            - width
+            - frame_rate
+            - bitrate
+            - codec
+            properties:
+              height:
+                type: integer
+                description: Video stream's image height.
+                example: 360
+              width:
+                type: integer
+                description: Video stream's image width.
+                example: 640
+              frame_rate:
+                type: number
+                description: Video stream's frame rate.
+                example: 30
+              bitrate:
+                type:
+                - integer
+                - 'null'
+                description: Video stream's bitrate.
+                example: 315
+              codec:
+                type:
+                - string
+                - 'null'
+                description: Video stream's codec.
+                example: h264
+    simpleAuthHTTPForbidden:
       type: object
       properties:
-        type:
+        detail:
           type: string
-          default: file
-          example: file
-        result:
-          $ref: '#/components/schemas/fileCopy'
+          default: Simple authentication over HTTP is forbidden. Please, use HTTPS or signed requests instead.
+      example:
+        detail: Simple authentication over HTTP is forbidden. Please, use HTTPS or signed requests instead.
+    awsRekognitionDetectLabels_v2016_06_27:
+      allOf:
+      - $ref: '#/components/schemas/applicationData'
+      - type: object
+        properties:
+          version:
+            type: string
+            enum:
+            - '2016-06-27'
+          data:
+            type: object
+            description: Dictionary with a result of an aws rekognition detect labels execution result.
+            properties:
+              LabelModelVersion:
+                type: string
+              Labels:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    Confidence:
+                      type: number
+                    Instances:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          BoundingBox:
+                            type: object
+                            properties:
+                              Height:
+                                type: number
+                              Left:
+                                type: number
+                              Top:
+                                type: number
+                              Width:
+                                type: number
+                          Confidence:
+                            type: number
+                    Name:
+                      type: string
+                    Parents:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          Name:
+                            type: string
+                  required:
+                  - Name
+                  - Parents
+                  - Instances
+                  - Confidence
+            required:
+            - Labels
+            - LabelModelVersion
+            example:
+              value:
+                aws_rekognition_detect_labels:
+                  data:
+                    LabelModelVersion: '2.0'
+                    Labels:
+                    - Confidence: 93.41645812988281
+                      Instances: []
+                      Name: Home Decor
+                      Parents: []
+                    - Confidence: 70.75951385498047
+                      Instances: []
+                      Name: Linen
+                      Parents:
+                      - Name: Home Decor
+                    - Confidence: 64.7123794555664
+                      Instances: []
+                      Name: Sunlight
+                      Parents: []
+                    - Confidence: 56.264793395996094
+                      Instances: []
+                      Name: Flare
+                      Parents:
+                      - Name: Light
+                    - Confidence: 50.47153854370117
+                      Instances: []
+                      Name: Tree
+                      Parents:
+                      - Name: Plant
+                  version: '2016-06-27'
+                  datetime_created: '2021-09-21T11:25:31.259763Z'
+                  datetime_updated: '2021-09-21T11:27:33.359763Z'
     file:
       type: object
       required:
@@ -1760,342 +1549,553 @@ components:
             version: 0.104.2
             datetime_created: '2021-09-21T11:24:33.159663Z'
             datetime_updated: '2021-09-21T11:24:33.159663Z'
-    applicationDataObject:
-      type:
-      - object
-      - 'null'
-      description: Dictionary of application names and data associated with these applications.
-      properties:
-        aws_rekognition_detect_labels:
-          $ref: '#/components/schemas/awsRekognitionDetectLabels_v2016_06_27'
-        aws_rekognition_detect_moderation_labels:
-          $ref: '#/components/schemas/awsRekognitionDetectModerationLabels_v2016_06_27'
-        remove_bg:
-          $ref: '#/components/schemas/removeBg_v1_0'
-        uc_clamav_virus_scan:
-          $ref: '#/components/schemas/ucClamavVirusScan'
-    metadata:
-      type:
-      - object
-      - 'null'
-      description: Arbitrary metadata associated with a file.
-    imageInfo:
+    fileCopy:
       type: object
-      description: Image metadata.
       required:
-      - color_mode
-      - orientation
-      - format
-      - height
-      - width
-      - geo_location
-      - datetime_original
-      - dpi
-      - sequence
+      - datetime_removed
+      - datetime_stored
+      - datetime_uploaded
+      - is_image
+      - is_ready
+      - mime_type
+      - original_file_url
+      - original_filename
+      - size
+      - url
+      - uuid
+      - variations
+      - content_info
+      - metadata
       properties:
-        color_mode:
-          type: string
-          description: Image color mode.
-          enum:
-          - RGB
-          - RGBA
-          - RGBa
-          - RGBX
-          - L
-          - LA
-          - La
-          - P
-          - PA
-          - CMYK
-          - YCbCr
-          - HSV
-          - LAB
-          example: RGBA
-        orientation:
-          type:
-          - integer
-          - 'null'
-          description: Image orientation from EXIF.
-          minimum: 0
-          maximum: 8
-          example: 6
-        format:
-          type: string
-          description: Image format.
-          example: JPEG
-        sequence:
-          type: boolean
-          description: Set to true if a file contains a sequence of images (GIF for example).
-          example: false
-        height:
-          type: integer
-          description: Image height in pixels.
-          example: 2352
-        width:
-          type: integer
-          description: Image width in pixels.
-          example: 2935
-        geo_location:
-          description: Geo-location of image from EXIF.
-          type:
-          - object
-          - 'null'
-          required:
-          - latitude
-          - longitude
-          properties:
-            latitude:
-              type: number
-              description: Location latitude.
-              example: -1.1884555555555556
-            longitude:
-              type: number
-              description: Location longitude.
-              example: 52.66996666666667
-        datetime_original:
+        datetime_removed:
           type:
           - string
           - 'null'
-          description: Image date and time from EXIF. Please be aware that this data is not always formatted and displayed exactly as it appears in the EXIF.
           format: date-time
-          example: '2018-09-13T16:23:40'
-        dpi:
+          description: Date and time when a file was removed, if any.
+        datetime_stored:
           type:
-          - array
+          - string
           - 'null'
-          description: Image DPI for two dimensions.
-          items:
-            type: number
-            example: 72
-          minItems: 2
-          maxItems: 2
-          example:
-          - 72
-          - 72
-    simpleAuthHTTPForbidden:
-      type: object
-      properties:
-        detail:
+          format: date-time
+          description: Date and time of the last store request, if any.
+        datetime_uploaded:
           type: string
-          default: Simple authentication over HTTP is forbidden. Please, use HTTPS or signed requests instead.
-      example:
-        detail: Simple authentication over HTTP is forbidden. Please, use HTTPS or signed requests instead.
-    videoInfo:
-      type: object
-      description: Video metadata.
-      required:
-      - duration
-      - format
-      - bitrate
-      - audio
-      - video
-      properties:
-        duration:
-          type:
-          - integer
-          - 'null'
-          description: Video file's duration in milliseconds.
-          example: 261827
-        format:
+          format: date-time
+          description: Date and time when a file was uploaded.
+        is_image:
+          type: boolean
+          description: Is file is image.
+          example: true
+        is_ready:
+          type: boolean
+          description: Is file is ready to be used after upload.
+          example: true
+        mime_type:
           type: string
-          description: Video file's format.
-          example: mp4
-        bitrate:
+          description: File MIME-type. In the immediate response after starting a local copy, it can be `application/octet-stream` until the copy completes.
+          example: image/jpeg
+        original_file_url:
           type:
-          - integer
+          - string
           - 'null'
-          description: Video file's bitrate.
-          example: 393
-        audio:
-          type: array
-          items:
-            type: object
-            description: Audio stream's metadata.
-            required:
-            - bitrate
-            - codec
-            - sample_rate
-            - channels
-            properties:
-              bitrate:
-                type:
-                - integer
-                - 'null'
-                description: Audio stream's bitrate.
-                example: 78
-              codec:
-                type:
-                - string
-                - 'null'
-                description: Audio stream's codec.
-                example: aac
-              sample_rate:
-                type:
-                - integer
-                - 'null'
-                description: Audio stream's sample rate.
-                example: 44100
-              channels:
-                type:
-                - integer
-                - 'null'
-                description: Audio stream's number of channels.
-                example: 2
-        video:
-          type: array
-          items:
-            type: object
-            description: Video stream's metadata.
-            required:
-            - height
-            - width
-            - frame_rate
-            - bitrate
-            - codec
-            properties:
-              height:
-                type: integer
-                description: Video stream's image height.
-                example: 360
-              width:
-                type: integer
-                description: Video stream's image width.
-                example: 640
-              frame_rate:
-                type: number
-                description: Video stream's frame rate.
-                example: 30
-              bitrate:
-                type:
-                - integer
-                - 'null'
-                description: Video stream's bitrate.
-                example: 315
-              codec:
-                type:
-                - string
-                - 'null'
-                description: Video stream's codec.
-                example: h264
-    contentInfo:
-      type:
-      - object
-      - 'null'
-      description: Information about file content.
-      properties:
-        mime:
-          type: object
-          description: MIME type.
-          required:
-          - mime
-          - type
-          - subtype
-          properties:
+          format: uri
+          description: Publicly available file CDN URL. Available if a file is not deleted.
+        original_filename:
+          type: string
+          description: Original file name taken from uploaded file.
+          example: EU_4.jpg
+        size:
+          type: integer
+          enum:
+          - 0
+          description: File size in bytes. In the immediate response after starting a local copy, it can be `0` until the copy completes.
+          example: 0
+        url:
+          type: string
+          format: uri
+          description: API resource URL for a particular file.
+        uuid:
+          type: string
+          format: uuid
+          description: File UUID.
+          example: 575ed4e8-f4e8-4c14-a58b-1527b6d9ee46
+        variations:
+          enum:
+          - null
+        content_info:
+          enum:
+          - null
+        metadata:
+          $ref: '#/components/schemas/metadata'
+  examples:
+    file_list:
+      value:
+        next: https://api.uploadcare.com/files/?limit=1&from=2018-11-27T01%3A00%3A43.001705%2B00%3A00&offset=0
+        previous: https://api.uploadcare.com/files/?limit=1&to=2018-11-27T01%3A00%3A36.436838%2B00%3A00&offset=0
+        total: 2484
+        totals:
+          removed: 0
+          stored: 2480
+          unstored: 4
+        per_page: 1
+        results:
+        - datetime_removed: null
+          datetime_stored: '2021-09-21T11:24:33.159663Z'
+          datetime_uploaded: '2021-09-21T11:24:33.159663Z'
+          is_image: false
+          is_ready: true
+          mime_type: video/mp4
+          original_file_url: https://ucarecdn.com/7ed2aed0-0482-4c13-921b-0557b193edc2/16317390663260.mp4
+          original_filename: 16317390663260.mp4
+          size: 14479722
+          url: https://api.uploadcare.com/files/7ed2aed0-0482-4c13-921b-0557b193edc2/
+          uuid: 7ed2aed0-0482-4c13-921b-0557b193edc2
+          variations: null
+          content_info:
             mime:
-              type: string
-              description: Full MIME type.
-              example: image/jpeg
-            type:
-              type: string
-              description: Type of MIME type.
-              example: image
-            subtype:
-              type: string
-              description: Subtype of MIME type.
-              example: jpeg
-        image:
-          $ref: '#/components/schemas/imageInfo'
-        video:
-          $ref: '#/components/schemas/videoInfo'
-    awsRekognitionDetectLabels_v2016_06_27:
-      allOf:
-      - $ref: '#/components/schemas/applicationData'
-      - type: object
-        properties:
-          version:
-            type: string
-            enum:
-            - '2016-06-27'
-          data:
-            type: object
-            description: Dictionary with a result of an aws rekognition detect labels execution result.
-            properties:
-              LabelModelVersion:
-                type: string
+              mime: video/mp4
+              type: video
+              subtype: mp4
+            video:
+              audio:
+              - codec: aac
+                bitrate: 129
+                channels: 2
+                sample_rate: 44100
+              video:
+              - codec: h264
+                width: 640
+                height: 480
+                bitrate: 433
+                frame_rate: 30
+              format: mp4
+              bitrate: 579
+              duration: 200044
+          metadata:
+            subsystem: tester
+            pet: dog
+    file:
+      value:
+        datetime_removed: null
+        datetime_stored: '2018-11-26T12:49:10.477888Z'
+        datetime_uploaded: '2018-11-26T12:49:09.945335Z'
+        variations: null
+        is_image: true
+        is_ready: true
+        mime_type: image/jpeg
+        original_file_url: https://ucarecdn.com/22240276-2f06-41f8-9411-755c8ce926ed/pineapple.jpg
+        original_filename: pineapple.jpg
+        size: 642
+        url: https://api.uploadcare.com/files/22240276-2f06-41f8-9411-755c8ce926ed/
+        uuid: 22240276-2f06-41f8-9411-755c8ce926ed
+        content_info:
+          mime:
+            mime: image/jpeg
+            type: image
+            subtype: jpeg
+          image:
+            format: JPEG
+            width: 500
+            height: 500
+            sequence: false
+            color_mode: RGB
+            orientation: 6
+            geo_location:
+              latitude: 55.62013611111111
+              longitude: 37.66299166666666
+            datetime_original: '2018-08-20T08:59:50'
+            dpi:
+            - 72
+            - 72
+        metadata:
+          subsystem: uploader
+          pet: cat
+        appdata:
+          aws_rekognition_detect_labels:
+            data:
+              LabelModelVersion: '2.0'
               Labels:
+              - Confidence: 93.41645812988281
+                Instances: []
+                Name: Home Decor
+                Parents: []
+              - Confidence: 70.75951385498047
+                Instances: []
+                Name: Linen
+                Parents:
+                - Name: Home Decor
+              - Confidence: 64.7123794555664
+                Instances: []
+                Name: Sunlight
+                Parents: []
+              - Confidence: 56.264793395996094
+                Instances: []
+                Name: Flare
+                Parents:
+                - Name: Light
+              - Confidence: 50.47153854370117
+                Instances: []
+                Name: Tree
+                Parents:
+                - Name: Plant
+            version: '2016-06-27'
+            datetime_created: '2021-09-21T11:25:31.259763Z'
+            datetime_updated: '2021-09-21T11:27:33.359763Z'
+          aws_rekognition_detect_moderation_labels:
+            data:
+              ModerationModelVersion: '6.0'
+              ModerationLabels:
+              - Confidence: 93.41645812988281
+                Name: Weapons
+                ParentName: Violence
+            version: '2016-06-27'
+            datetime_created: '2023-02-21T11:25:31.259763Z'
+            datetime_updated: '2023-02-21T11:27:33.359763Z'
+          remove_bg:
+            data:
+              foreground_type: person
+            version: '1.0'
+            datetime_created: '2021-07-25T12:24:33.159663Z'
+            datetime_updated: '2021-07-25T12:24:33.159663Z'
+          uc_clamav_virus_scan:
+            data:
+              infected: true
+              infected_with: Win.Test.EICAR_HDB-1
+            version: 0.104.2
+            datetime_created: '2021-09-21T11:24:33.159663Z'
+            datetime_updated: '2021-09-21T11:24:33.159663Z'
+    file_removed:
+      value:
+        datetime_removed: '2018-11-26T12:49:11.477888Z'
+        datetime_stored: null
+        datetime_uploaded: '2018-11-26T12:49:09.945335Z'
+        variations: null
+        is_image: true
+        is_ready: true
+        mime_type: image/jpeg
+        original_file_url: https://ucarecdn.com/22240276-2f06-41f8-9411-755c8ce926ed/pineapple.jpg
+        original_filename: pineapple.jpg
+        size: 642
+        url: https://api.uploadcare.com/files/22240276-2f06-41f8-9411-755c8ce926ed/
+        uuid: 22240276-2f06-41f8-9411-755c8ce926ed
+        content_info:
+          mime:
+            mime: image/jpeg
+            type: image
+            subtype: jpeg
+          image:
+            format: JPEG
+            width: 500
+            height: 500
+            sequence: false
+            color_mode: RGB
+            orientation: 6
+            geo_location:
+              latitude: 55.62013611111111
+              longitude: 37.66299166666666
+            datetime_original: '2018-08-20T08:59:50'
+            dpi:
+            - 72
+            - 72
+        metadata:
+          subsystem: uploader
+          pet: cat
+        appdata:
+          uc_clamav_virus_scan:
+            data:
+              infected: true
+              infected_with: Win.Test.EICAR_HDB-1
+            version: 0.104.2
+            datetime_created: '2021-09-21T11:24:33.159663Z'
+            datetime_updated: '2021-09-21T11:24:33.159663Z'
+    file_video:
+      value:
+        datetime_removed: null
+        datetime_stored: '2021-09-21T11:24:33.159663Z'
+        datetime_uploaded: '2021-09-21T11:24:33.159663Z'
+        is_image: false
+        is_ready: true
+        mime_type: video/mp4
+        original_file_url: https://ucarecdn.com/7ed2aed0-0482-4c13-921b-0557b193edc2/16317390663260.mp4
+        original_filename: 16317390663260.mp4
+        size: 14479722
+        url: https://api.uploadcare.com/files/7ed2aed0-0482-4c13-921b-0557b193edc2/
+        uuid: 7ed2aed0-0482-4c13-921b-0557b193edc2
+        variations: null
+        content_info:
+          mime:
+            mime: video/mp4
+            type: video
+            subtype: mp4
+          video:
+            audio:
+            - codec: aac
+              bitrate: 129
+              channels: 2
+              sample_rate: 44100
+            video:
+            - codec: h264
+              width: 640
+              height: 480
+              bitrate: 433
+              frame_rate: 30
+            format: mp4
+            bitrate: 579
+            duration: 200044
+        metadata:
+          subsystem: tester
+          pet: dog
+    file_list_w_appdata:
+      value:
+        next: https://api.uploadcare.com/files/?limit=1&from=2018-11-27T01%3A00%3A43.001705%2B00%3A00&offset=0
+        previous: https://api.uploadcare.com/files/?limit=1&to=2018-11-27T01%3A00%3A36.436838%2B00%3A00&offset=0
+        total: 2484
+        totals:
+          removed: 0
+          stored: 2480
+          unstored: 4
+        per_page: 1
+        results:
+        - datetime_removed: null
+          datetime_stored: '2018-11-26T12:49:10.477888Z'
+          datetime_uploaded: '2018-11-26T12:49:09.945335Z'
+          variations: null
+          is_image: true
+          is_ready: true
+          mime_type: image/jpeg
+          original_file_url: https://ucarecdn.com/22240276-2f06-41f8-9411-755c8ce926ed/pineapple.jpg
+          original_filename: pineapple.jpg
+          size: 642
+          url: https://api.uploadcare.com/files/22240276-2f06-41f8-9411-755c8ce926ed/
+          uuid: 22240276-2f06-41f8-9411-755c8ce926ed
+          content_info:
+            mime:
+              mime: image/jpeg
+              type: image
+              subtype: jpeg
+            image:
+              format: JPEG
+              width: 500
+              height: 500
+              sequence: false
+              color_mode: RGB
+              orientation: 6
+              geo_location:
+                latitude: 55.62013611111111
+                longitude: 37.66299166666666
+              datetime_original: '2018-08-20T08:59:50'
+              dpi:
+              - 72
+              - 72
+          metadata:
+            subsystem: uploader
+            pet: cat
+          appdata:
+            uc_clamav_virus_scan:
+              data:
+                infected: true
+                infected_with: Win.Test.EICAR_HDB-1
+              version: 0.104.2
+              datetime_created: '2021-09-21T11:24:33.159663Z'
+              datetime_updated: '2021-09-21T11:24:33.159663Z'
+    simpleAuthHTTPForbidden:
+      value:
+        detail: Simple authentication over HTTP is forbidden. Please, use HTTPS or signed requests instead.
+  responses:
+    invalidAcceptHeader:
+      description: Invalid version header `Accept` for this endpoint.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              detail:
+                type: string
+                example: Incorrect Accept header provided. Make sure to specify API version. Refer to REST API docs for details.
+                default: Incorrect Accept header provided. Make sure to specify API version. Refer to REST API docs for details.
+    simpleAuthHTTPForbiddenResponse:
+      description: Simple authentication over HTTP is forbidden. Please, use HTTPS or signed requests instead.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/simpleAuthHTTPForbidden'
+    filesStorageResponse:
+      description: OK. See `problems` and `result` fields in the response. In case a file list provided in a request holds invalid UUIDs, they'll be included in the `problems` structure. Invalid UUIDs can be incomplete, associated with files that no longer exist, etc.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+                example: ok
+              problems:
+                type: object
+                description: Dictionary of passed files UUIDs and problems associated with these UUIDs.
+                example:
+                  21975c81-7f57-4c7a-aef9-acfe28779f78: Missing in the project
+                  4j334o01-8bs3: Invalid
+              result:
+                description: List of file objects that have been stored/deleted.
                 type: array
                 items:
-                  type: object
-                  properties:
-                    Confidence:
-                      type: number
-                    Instances:
-                      type: array
-                      items:
-                        type: object
-                        properties:
-                          BoundingBox:
-                            type: object
-                            properties:
-                              Height:
-                                type: number
-                              Left:
-                                type: number
-                              Top:
-                                type: number
-                              Width:
-                                type: number
-                          Confidence:
-                            type: number
-                    Name:
-                      type: string
-                    Parents:
-                      type: array
-                      items:
-                        type: object
-                        properties:
-                          Name:
-                            type: string
-                  required:
-                  - Name
-                  - Parents
-                  - Instances
-                  - Confidence
-            required:
-            - Labels
-            - LabelModelVersion
-            example:
-              value:
-                aws_rekognition_detect_labels:
-                  data:
-                    LabelModelVersion: '2.0'
-                    Labels:
-                    - Confidence: 93.41645812988281
-                      Instances: []
-                      Name: Home Decor
-                      Parents: []
-                    - Confidence: 70.75951385498047
-                      Instances: []
-                      Name: Linen
-                      Parents:
-                      - Name: Home Decor
-                    - Confidence: 64.7123794555664
-                      Instances: []
-                      Name: Sunlight
-                      Parents: []
-                    - Confidence: 56.264793395996094
-                      Instances: []
-                      Name: Flare
-                      Parents:
-                      - Name: Light
-                    - Confidence: 50.47153854370117
-                      Instances: []
-                      Name: Tree
-                      Parents:
-                      - Name: Plant
-                  version: '2016-06-27'
-                  datetime_created: '2021-09-21T11:25:31.259763Z'
-                  datetime_updated: '2021-09-21T11:27:33.359763Z'
+                  $ref: '#/components/schemas/file'
+    authorizationProblemsResponse:
+      description: Authorization errors.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              detail:
+                type: string
+                enum:
+                - Incorrect authentication credentials.
+                - Public key {public_key} not found.
+                - Secret key not found.
+                - Invalid signature. Please check your Secret key.
+                example: Incorrect authentication credentials.
+    paginatedFilesResponse:
+      description: A list of files, paginated.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              next:
+                type:
+                - string
+                - 'null'
+                format: uri
+                description: Next page URL.
+                example: https://api.uploadcare.com/files/?from=2018-11-27T01%3A00%3A24.296613%2B00%3A00&limit=3&offset=0
+              previous:
+                type:
+                - string
+                - 'null'
+                format: uri
+                description: Previous page URL.
+                example: https://api.uploadcare.com/files/?limit=3&to=2018-11-27T01%3A00%3A36.436838%2B00%3A00&offset=0
+              total:
+                type: integer
+                minimum: 0
+                description: Total number of the files of the queried type. The queried type depends on the stored and removed query parameters.
+                example: 26
+              totals:
+                type: object
+                properties:
+                  removed:
+                    type: integer
+                    minimum: 0
+                    description: Total number of the files that are marked as removed.
+                    default: 0
+                    example: 0
+                  stored:
+                    type: integer
+                    minimum: 0
+                    description: Total number of the files that are marked as stored.
+                    default: 0
+                    example: 25
+                  unstored:
+                    type: integer
+                    minimum: 0
+                    description: Total number of the files that are not marked as stored.
+                    default: 0
+                    example: 1
+                required:
+                - removed
+                - stored
+                - unstored
+              per_page:
+                type: integer
+                description: Number of the files per page.
+                example: 100
+              results:
+                type: array
+                items:
+                  $ref: '#/components/schemas/file'
+          examples:
+            With App Data:
+              $ref: '#/components/examples/file_list_w_appdata'
+            Without App Data:
+              $ref: '#/components/examples/file_list'
+    remoteCopyResponse:
+      description: Destination file with that name already exists. Check the `pattern` parameter.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/copiedFileURL'
+    filesStoreUUIDSError:
+      description: File UUIDs list validation errors.
+      content:
+        application/json:
+          schema:
+            oneOf:
+            - $ref: '#/components/schemas/simpleAuthHTTPForbidden'
+            - type: object
+              description: File UUIDs list validation errors.
+              properties:
+                detail:
+                  type: string
+                  enum:
+                  - Expected list of UUIDs
+                  - List of UUIDs can not be empty
+                  - Maximum UUIDs per request is exceeded. The limit is 100
+                  example: Expected list of UUIDs
+    requestWasThrottledError:
+      description: Request was throttled.
+      headers:
+        Retry-After:
+          description: Number of seconds to wait before the next request.
+          schema:
+            type: integer
+            example: 10
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              detail:
+                type: string
+                example: Request was throttled. Expected available in 10 seconds.
+    fileCopyErrors:
+      description: Possible errors for file copy endpoint.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              detail:
+                type: string
+                enum:
+                - Bad `source` parameter. Use UUID or CDN URL.
+                - '`source` parameter is required.'
+                - Project has no storage with provided name.
+                - '`store` parameter should be `true` or `false`.'
+                - 'Invalid pattern provided: `pattern_value`'
+                - 'Invalid pattern provided: Invalid character in a pattern.'
+                - File is not ready yet.
+                - Copying of large files is not supported at the moment.
+                - Not allowed on your current plan.
+                example: File is not ready yet.
+    fileNotFoundError:
+      description: File not found.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              detail:
+                type: string
+                description: Not found.
+                example: Not found.
+    remoteCopyResponse201:
+      description: The file was copied successfully. HTTP response contains `result` field with the URL of the file on the remote storage.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/copiedFileURL'
   parameters:
     acceptHeader:
       in: header

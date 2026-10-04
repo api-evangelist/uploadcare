@@ -46,11 +46,22 @@ paths:
         '404':
           $ref: '#/components/responses/fileNotFoundError'
 components:
+  responses:
+    fileNotFoundError:
+      description: Image with "File not found" text.
+      content:
+        image/jpeg:
+          schema:
+            type: string
+            format: binary
+          examples:
+            imageNotFound:
+              $ref: '#/components/examples/imageNotFound'
   examples:
-    imageNotFound:
-      externalValue: https://ucarecdn.com/d7fe74ac-65b8-4ade-875f-ccd92759a700/imageNotFound.jpg
     image:
       externalValue: https://ucarecdn.com/d7fe74ac-65b8-4ade-875f-ccd92759a70f/cat.jpg
+    imageNotFound:
+      externalValue: https://ucarecdn.com/d7fe74ac-65b8-4ade-875f-ccd92759a700/imageNotFound.jpg
   parameters:
     uuid:
       in: path
@@ -70,14 +81,3 @@ components:
       schema:
         type: string
         example: cat.jpg
-  responses:
-    fileNotFoundError:
-      description: Image with "File not found" text.
-      content:
-        image/jpeg:
-          schema:
-            type: string
-            format: binary
-          examples:
-            imageNotFound:
-              $ref: '#/components/examples/imageNotFound'

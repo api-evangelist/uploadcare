@@ -369,6 +369,21 @@ paths:
           '
 components:
   responses:
+    authorizationProblemsResponse:
+      description: Authorization errors.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              detail:
+                type: string
+                enum:
+                - Incorrect authentication credentials.
+                - Public key {public_key} not found.
+                - Secret key not found.
+                - Invalid signature. Please check your Secret key.
+                example: Incorrect authentication credentials.
     invalidAcceptHeader:
       description: Invalid version header `Accept` for this endpoint.
       content:
@@ -395,22 +410,16 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/simpleAuthHTTPForbidden'
-    authorizationProblemsResponse:
-      description: Authorization errors.
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              detail:
-                type: string
-                enum:
-                - Incorrect authentication credentials.
-                - Public key {public_key} not found.
-                - Secret key not found.
-                - Invalid signature. Please check your Secret key.
-                example: Incorrect authentication credentials.
   parameters:
+    fileUUID:
+      in: path
+      name: uuid
+      description: File UUID.
+      required: true
+      schema:
+        type: string
+        format: uuid
+        example: 21975c81-7f57-4c7a-aef9-acfe28779f78
     fileMetadataKey:
       in: path
       name: key
@@ -432,15 +441,6 @@ components:
         - 'null'
         example: application/vnd.uploadcare-v0.7+json
       required: true
-    fileUUID:
-      in: path
-      name: uuid
-      description: File UUID.
-      required: true
-      schema:
-        type: string
-        format: uuid
-        example: 21975c81-7f57-4c7a-aef9-acfe28779f78
   schemas:
     simpleAuthHTTPForbidden:
       type: object
