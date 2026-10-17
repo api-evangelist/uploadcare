@@ -965,17 +965,24 @@ paths:
           '
 components:
   responses:
-    executeAddonConcurrentCallResponse:
-      description: Add-On concurrent call attempt.
+    simpleAuthHTTPForbiddenResponse:
+      description: Simple authentication over HTTP is forbidden. Please, use HTTPS or signed requests instead.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/simpleAuthHTTPForbidden'
+    executeAddonResponse:
+      description: Add-On execution response.
       content:
         application/json:
           schema:
             type: object
             properties:
-              detail:
+              request_id:
                 type: string
-                example: Concurrent call attempted
-                default: Concurrent call attempted
+                format: uuid
+                description: Request ID.
+                example: 8db3c8b4-2dea-4146-bcdb-63387e2b33c1
     authorizationProblemsResponse:
       description: Authorization errors.
       content:
@@ -991,6 +998,17 @@ components:
                 - Secret key not found.
                 - Invalid signature. Please check your Secret key.
                 example: Incorrect authentication credentials.
+    invalidAcceptHeader:
+      description: Invalid version header `Accept` for this endpoint.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              detail:
+                type: string
+                example: Incorrect Accept header provided. Make sure to specify API version. Refer to REST API docs for details.
+                default: Incorrect Accept header provided. Make sure to specify API version. Refer to REST API docs for details.
     requestWasThrottledError:
       description: Request was throttled.
       headers:
@@ -1007,8 +1025,8 @@ components:
               detail:
                 type: string
                 example: Request was throttled. Expected available in 10 seconds.
-    invalidAcceptHeader:
-      description: Invalid version header `Accept` for this endpoint.
+    executeAddonConcurrentCallResponse:
+      description: Add-On concurrent call attempt.
       content:
         application/json:
           schema:
@@ -1016,14 +1034,8 @@ components:
             properties:
               detail:
                 type: string
-                example: Incorrect Accept header provided. Make sure to specify API version. Refer to REST API docs for details.
-                default: Incorrect Accept header provided. Make sure to specify API version. Refer to REST API docs for details.
-    simpleAuthHTTPForbiddenResponse:
-      description: Simple authentication over HTTP is forbidden. Please, use HTTPS or signed requests instead.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/simpleAuthHTTPForbidden'
+                example: Concurrent call attempted
+                default: Concurrent call attempted
     addonExecutionStatusResponse:
       description: Add-On execution status response.
       content:
@@ -1041,18 +1053,17 @@ components:
                 description: 'Defines the status of an Add-On execution.
 
                   In most cases, once the status changes to `done`, [Application Data](#operation/fileInfo) of the file that had been specified as a `appdata`, will contain the result of the execution.'
-    executeAddonResponse:
-      description: Add-On execution response.
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              request_id:
-                type: string
-                format: uuid
-                description: Request ID.
-                example: 8db3c8b4-2dea-4146-bcdb-63387e2b33c1
+  parameters:
+    acceptHeader:
+      in: header
+      name: Accept
+      description: Version header.
+      schema:
+        type:
+        - string
+        - 'null'
+        example: application/vnd.uploadcare-v0.7+json
+      required: true
   schemas:
     addonExecutionStatus:
       type: object
@@ -1075,17 +1086,6 @@ components:
           default: Simple authentication over HTTP is forbidden. Please, use HTTPS or signed requests instead.
       example:
         detail: Simple authentication over HTTP is forbidden. Please, use HTTPS or signed requests instead.
-  parameters:
-    acceptHeader:
-      in: header
-      name: Accept
-      description: Version header.
-      schema:
-        type:
-        - string
-        - 'null'
-        example: application/vnd.uploadcare-v0.7+json
-      required: true
   securitySchemes:
     apiKeyAuth:
       type: apiKey
